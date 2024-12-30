@@ -20,6 +20,7 @@ export interface userType {
   emailVerificationCodeExpires?: Date | unknown | any
   emailVerified: boolean
   active: boolean
+  access : string
 }
 
 export interface eventType {

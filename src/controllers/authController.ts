@@ -65,7 +65,7 @@ export const registerUser = catchAsync(
       return next(
         new AppError(
           "User already exist with this email. If you are the one kindly login.",
-          700
+          400
         )
       );
     }
@@ -81,31 +81,10 @@ export const registerUser = catchAsync(
       confirmPassword,
     });
 
-    const verificationCode = await generatEmailVerificationCode();
-    const verificationMessage =
-      "Thank you for signing up for The Uevent! To start booking your favorite events, please verify your email using the verification code below. Note: This code will expire in 30 minutes.";
-
-    user.emailVerificationCode = verificationCode;
-    user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
-
-    await user.save({
-      validateBeforeSave: false,
-    });
-
-    sendEmail({
-      name: user.fullName,
-      email: user.email,
-      subject: "VERIFY YOUR EMAIL",
-      message: verificationMessage,
-      vCode: verificationCode,
-      link: ORIGIN_URL,
-      linkName: "Visit our website",
-    });
-
     res.status(201).json({
       status: "success",
       message:
-        "user registration successful. Kindly verify your account using the code that was sent to the email you provided.",
+        "Registration successful! Your account is under review. Once approved, we will send you an email with instructions to access your dashboard.",
     });
   }
 );
@@ -123,10 +102,19 @@ export const loginUser = catchAsync(
       );
     }
 
+    if (user.access !== "approved") {
+      return next(
+        new AppError(
+          "You are not yet approved to login. Kindly wait for approval",
+          400
+        )
+      );
+    }
+
     if (!user.emailVerified) {
       const verificationCode = await generatEmailVerificationCode();
       const verificationMessage =
-        "You haven't verified your email since signing up for The Uevent. Please verify your email using the code below to start booking your favorite events. Note, the code expires in 30 minutes.";
+        "You have not verified your password since you were approved. kindly verify your email th";
 
       user.emailVerificationCode = verificationCode;
       user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
