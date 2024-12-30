@@ -133,7 +133,7 @@ export const loginUser = catchAsync(
     }
 
     if (user.emailVerified) {
-      createAndSendTokenToUser(user, 200, "Login successful", res);
+      createAndSendTokenToUser(user, 200, "Login successful.", res);
     } else {
       return AppResponse(
         res,

@@ -23,31 +23,9 @@ export interface userType {
   access : string
 }
 
-export interface eventType {
-  title: string;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
-  date: string;
-  price: number;
-  location: string;
-  status: string;
-  totalTicket: number;
-  availableTicket: number;
-  bookedTicket : number;
-  bookieEmail: string[];
-  bookieId: mongoose.ObjectId[];
-  image: string
-  id?: ObjectId
-} 
-
-export interface bookingType {
-  user: userType
-  event: eventType
-  paymentStatus: string
-  ticketQuantity: number
-  dateBooked: Date
-  paymentReference: string
-  dateConfirmed: Date
-  receiptUrl: string
+export interface courseType {
+  courseTitle: string
+  courseCode: string
+  semester: string
+  level: string
 }
