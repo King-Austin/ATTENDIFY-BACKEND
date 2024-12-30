@@ -53,7 +53,7 @@ exports.registerUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
     const { fullName, email, password, confirmPassword } = req.body;
     const userExist = yield userModel_1.default.findOne({ email: email });
     if (userExist) {
-        return next(new appError_1.AppError("User already exist with this email. If you are the one kindly login.", 700));
+        return next(new appError_1.AppError("User already exist with this email. If you are the one kindly login.", 400));
     }
     if (!fullName || !email || !password || !confirmPassword) {
         return next(new appError_1.AppError("Kindly fill in the required field", 400));
@@ -64,25 +64,9 @@ exports.registerUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
         password,
         confirmPassword,
     });
-    const verificationCode = yield (0, emailVerificationCode_1.generatEmailVerificationCode)();
-    const verificationMessage = "Thank you for signing up for The Uevent! To start booking your favorite events, please verify your email using the verification code below. Note: This code will expire in 30 minutes.";
-    user.emailVerificationCode = verificationCode;
-    user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
-    yield user.save({
-        validateBeforeSave: false,
-    });
-    (0, sendEmail_1.sendEmail)({
-        name: user.fullName,
-        email: user.email,
-        subject: "VERIFY YOUR EMAIL",
-        message: verificationMessage,
-        vCode: verificationCode,
-        link: ORIGIN_URL,
-        linkName: "Visit our website",
-    });
     res.status(201).json({
         status: "success",
-        message: "user registration successful. Kindly verify your account using the code that was sent to the email you provided.",
+        message: "Registration successful! Your account is under review. Once approved, we will send you an email with instructions to access your dashboard.",
     });
 }));
 //LOGIN USER
@@ -92,9 +76,12 @@ exports.loginUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void
     if (!user || !(yield user.correctPassword(password, user.password))) {
         return next(new appError_1.AppError("invalid email or password. Kindly try again", 400));
     }
+    if (user.access !== "approved") {
+        return next(new appError_1.AppError("You are not yet approved to login. Kindly wait for approval", 400));
+    }
     if (!user.emailVerified) {
         const verificationCode = yield (0, emailVerificationCode_1.generatEmailVerificationCode)();
-        const verificationMessage = "You haven't verified your email since signing up for The Uevent. Please verify your email using the code below to start booking your favorite events. Note, the code expires in 30 minutes.";
+        const verificationMessage = "You have not verified your password since you were approved. kindly verify your email th";
         user.emailVerificationCode = verificationCode;
         user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
         yield user.save({ validateBeforeSave: false });
@@ -109,7 +96,7 @@ exports.loginUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void
         });
     }
     if (user.emailVerified) {
-        createAndSendTokenToUser(user, 200, "Login successful", res);
+        createAndSendTokenToUser(user, 200, "Login successful.", res);
     }
     else {
         return (0, appResponse_1.AppResponse)(res, 200, "success", "Login successful. Kindly verify your email to access your dashboard", user.id);

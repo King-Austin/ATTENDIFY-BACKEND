@@ -57,6 +57,12 @@ const userSchema = new Schema({
         enum: ["admin", "user", "super-admin"],
         default: "user",
     },
+    access: {
+        type: String,
+        required: true,
+        enum: ["approved", "pending", "denied"],
+        default: "pending",
+    },
     password: {
         type: String,
         required: [true, "Kindly provide your password"],
