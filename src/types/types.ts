@@ -29,3 +29,12 @@ export interface courseType {
   semester: string
   level: string
 }
+
+export interface studentType{
+  name: string
+  regNo: number | string
+  level: number | string
+  course: string[] | ObjectId[]
+  fingerPrint: string
+  addmissionYear: string
+}
