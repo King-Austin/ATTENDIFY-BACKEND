@@ -66,7 +66,7 @@ export const fetchAllAcedemicSession = catchAsync(async (req, res, next) => {
 
 
 //DELETE A PARTICULAR ACEDEMIC SESSION USING ITS ID
-export const deleteACourse = catchAsync(async (req, res, next) => {
+export const deleteAcedemicSession = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   await AcedemicSession.findByIdAndDelete(id);

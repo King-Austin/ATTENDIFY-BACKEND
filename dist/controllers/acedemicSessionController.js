@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteACourse = exports.fetchAllAcedemicSession = exports.createAcedemicSession = void 0;
+exports.deleteAcedemicSession = exports.fetchAllAcedemicSession = exports.createAcedemicSession = void 0;
 const appError_1 = require("src/errors/appError");
 const acedemicSessionModel_1 = require("src/models/acedemicSessionModel");
 const appResponse_1 = require("src/utils/appResponse");
@@ -42,7 +42,7 @@ exports.fetchAllAcedemicSession = (0, catchAsync_1.default)((req, res, next) => 
     return (0, appResponse_1.AppResponse)(res, 200, "success", "all acedemic session successfully fteched", allAcedemicSession);
 }));
 //DELETE A PARTICULAR ACEDEMIC SESSION USING ITS ID
-exports.deleteACourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     yield acedemicSessionModel_1.AcedemicSession.findByIdAndDelete(id);
     return (0, appResponse_1.AppResponse)(res, 200, "success", "An Acedemic session successfully deleted.", null);
