@@ -47,18 +47,35 @@ export const createAcedemicSession = catchAsync(async (req, res, next) => {
 
 
 //FETCH COURSES OFFERED ACCROSS ALL LEVEL
-export const fetchAllSession = catchAsync(async (req, res, next) => {
+export const fetchAllAcedemicSession = catchAsync(async (req, res, next) => {
     const allAcedemicSession = await AcedemicSession.find();
   
     if (!allAcedemicSession) {
-      return next(new AppError("Could Not fetch all session.", 400));
+      return next(new AppError("Could Not fetch all acedemic session.", 400));
     }
   
     return AppResponse(
       res,
       200,
       "success",
-      "Course successfully fetched",
+      "all acedemic session successfully fteched",
       allAcedemicSession
     );
-  });
+});
+  
+
+
+//DELETE A PARTICULAR ACEDEMIC SESSION USING ITS ID
+export const deleteACourse = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  await AcedemicSession.findByIdAndDelete(id);
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "An Acedemic session successfully deleted.",
+    null
+  );
+});
