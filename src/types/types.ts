@@ -38,3 +38,10 @@ export interface studentType{
   fingerPrint: string
   addmissionYear: string
 }
+
+export interface sessionType{
+  name: string | Date | number
+  start: string | Date | number
+  end: string | Date | number
+ semesters: string[]
+}
