@@ -43,5 +43,6 @@ export interface sessionType{
   name: string | Date | number
   start: string | Date | number
   end: string | Date | number
- semesters: string[]
+  semesters: string[]
+  attendance: string[] | ObjectId[] | any[]
 }

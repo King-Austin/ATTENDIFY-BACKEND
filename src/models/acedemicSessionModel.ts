@@ -25,6 +25,11 @@ const sessionSchema = new Schema<sessionType>({
         type: [String],
         required: [true, "Please provide the semesters in this session"],
         default: ["first semester", "second semester"]
+    },
+    attendance: {
+        type: [Schema.ObjectId],
+        default: [],
+       ref: 'Attendance'
     }
 })
 
