@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
 import { studentType } from "src/types/types";
 
 
@@ -31,3 +31,5 @@ const StudentSchema = new Schema<studentType>({
         required: [true, "Please input the student name"]
     },
 })
+
+export const Students = model("students", StudentSchema)
