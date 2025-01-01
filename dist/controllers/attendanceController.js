@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivateAttendance = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
+exports.fetchAttendanceBySession = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
 const appError_1 = require("src/errors/appError");
 const acedemicSessionModel_1 = require("src/models/acedemicSessionModel");
 const attendanceModel_1 = require("src/models/attendanceModel");
@@ -20,6 +20,7 @@ const courseModel_1 = require("src/models/courseModel");
 const studentModel_1 = require("src/models/studentModel");
 const appResponse_1 = require("src/utils/appResponse");
 const catchAsync_1 = __importDefault(require("src/utils/catchAsync"));
+//CREATE ATTENDANCE
 exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { course, acedemicSession, semester, level } = req.body;
     // Step 1: Validate inputs and fetch related data
@@ -137,3 +138,61 @@ exports.deactivateAttendance = (0, catchAsync_1.default)((req, res, next) => __a
     yield attendance.save();
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance deactivated successfully.`, attendance);
 }));
+//FETCH ATTENDANCE BY SESSION
+exports.fetchAllAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // Fetch all attendance records for the specified academic session
+    const attendanceRecords = yield attendanceModel_1.Attendance.find()
+        .populate("course")
+        .populate("acedemicSession");
+    return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance fetched successfully.`, attendanceRecords);
+}));
+//FETCH ATTENDANCE BY SESSION
+exports.fetchAttendanceBySession = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { sessionId } = req.params; // Academic session ID passed as parameter
+    // Find the academic session by ID
+    const academicSession = yield acedemicSessionModel_1.AcedemicSession.findById(sessionId);
+    if (!academicSession) {
+        return next(new appError_1.AppError("Academic session not found.", 404));
+    }
+    // Fetch all attendance records for the specified academic session
+    const attendanceRecords = yield attendanceModel_1.Attendance.find({
+        acedemicSession: sessionId,
+    }).populate("course"); // populate the course details
+    if (!attendanceRecords || attendanceRecords.length === 0) {
+        return next(new appError_1.AppError("No attendance records found for this academic session.", 404));
+    }
+    return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance fetched successfully.`, attendanceRecords);
+}));
+// export const getAttendanceWithPagination = catchAsync(async (req, res, next) => {
+//   const { sessionId } = req.params; // Academic session ID passed as parameter
+//   const { page = 1, limit = 10 } = req.query; // Pagination parameters with default values
+//   // Validate academic session existence
+//   const academicSession = await AcedemicSession.findById(sessionId);
+//   if (!academicSession) {
+//     return next(new AppError("Academic session not found.", 404));
+//   }
+//   // Pagination calculation
+//   const skip = (page - 1) * limit;
+//   // Fetch attendance records with pagination
+//   const attendanceRecords = await Attendance.find({ acedemicSession: sessionId })
+//     .skip(skip)
+//     .limit(Number(limit))
+//     .populate('course') // Optional: populate the course details
+//     .populate('students.studentId'); // Optional: populate student details
+//   // Count total records for pagination metadata
+//   const totalRecords = await Attendance.countDocuments({ acedemicSession: sessionId });
+//   // Handle case when no records are found
+//   if (!attendanceRecords || attendanceRecords.length === 0) {
+//     return next(new AppError("No attendance records found for this academic session.", 404));
+//   }
+//   res.status(200).json({
+//     status: "success",
+//     data: attendanceRecords,
+//     pagination: {
+//       totalRecords,
+//       totalPages: Math.ceil(totalRecords / limit),
+//       currentPage: Number(page),
+//       pageSize: Number(limit),
+//     },
+//   });
+// });
