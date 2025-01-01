@@ -67,3 +67,143 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     newAttendance
   );
 });
+
+// Activate attendance and mark all students as absent for the day
+export const activateAttendance = catchAsync(async (req, res, next) => {
+  const { attendanceId } = req.params;
+  const { courseId, sessionId } = req.body;
+
+  // Find the attendance record for the specific course
+  const attendanceRecord = await Attendance.findOne({
+    course: courseId,
+    acedemicSession: sessionId,
+  })
+    .populate("course")
+    .populate("acedemicSession");
+
+  if (!attendanceRecord) {
+    return next(
+      new AppError("Attendance record not found for the course.", 404)
+    );
+  }
+
+  if (attendanceRecord.active) {
+    return next(
+      new AppError("Attendance is already active for this course.", 400)
+    );
+  }
+
+  const today = new Date();
+
+  // Mark all students as absent for today
+  attendanceRecord.students.forEach((student) => {
+    student.attendanceStatus.push({
+      date: today,
+      status: "absent",
+    });
+  });
+
+  // Activate the attendance
+  attendanceRecord.active = true;
+  await attendanceRecord.save();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance activated for students to mark`,
+    attendanceRecord
+  );
+});
+
+//MARK ATTENDANCE
+export const markAttendance = catchAsync(async (req, res, next) => {
+  const { attendanceId } = req.params;
+  const { fingerprint, level, regNo } = req.body; // Include level in the request body
+
+  // Find the attendance record
+  const attendance = await Attendance.findById(attendanceId);
+
+  if (!attendance) {
+    return next(new AppError("Attendance not found.", 404));
+  }
+
+  // Check if the attendance is active
+  if (!attendance.active) {
+    return next(new AppError("Attendance is not active.", 400));
+  }
+
+  // Check if the level in the request matches the level in the attendance record
+  if (attendance.level !== level) {
+    return next(
+      new AppError("Attendance cannot be marked for this level.", 400)
+    );
+  }
+
+  // Find the student by matching the fingerprint
+  const student = attendance.students.find(
+    (student) => student.fingerPrint === fingerprint || student.regNo === regNo
+  );
+
+  if (!student) {
+    return next(
+      new AppError(
+        "Student not found with the reg no or fingerprint mismatch.",
+        404
+      )
+    );
+  }
+
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+  // Check if attendance is already marked for today
+  const alreadyMarked = student.attendanceStatus.some(
+    (record: any) => record.date.toISOString().split("T")[0] === today
+  );
+
+  if (alreadyMarked) {
+    return next(new AppError("Attendance already marked for today.", 400));
+  }
+
+  // Mark the student as present for today
+  student.attendanceStatus.push({
+    date: new Date(),
+    status: "present",
+  });
+
+  // Save the updated attendance record
+  await attendance.save();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance successfully taken.`,
+    student
+  );
+});
+
+//DEACTIVATE ATTENDANCE
+export const deactivateAttendance = catchAsync(async (req, res, next) => {
+  const { attendanceId } = req.params;
+
+  const attendance = await Attendance.findById(attendanceId);
+  if (!attendance) {
+    return next(new AppError("Attendance not found.", 404));
+  }
+
+  if (!attendance.active) {
+    return next(new AppError("Attendance is already inactive.", 400));
+  }
+
+  attendance.active = false;
+  await attendance.save();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance deactivated successfully.`,
+    attendance
+  );
+});
