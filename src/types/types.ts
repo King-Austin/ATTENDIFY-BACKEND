@@ -46,3 +46,12 @@ export interface sessionType{
   semesters: string[]
   attendance: string[] | ObjectId[] | any[]
 }
+
+export interface attendanceType{
+  course: string | ObjectId
+  acedemicSession: ObjectId | string
+  semester: string 
+  students: any[] | studentType[]
+  status: string | boolean
+  level: string | number
+}
