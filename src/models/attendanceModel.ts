@@ -24,15 +24,28 @@ const attendanceSchema = new Schema<attendanceType>(
       type: String,
       required: [true, "Level is required."],
     },
+    active: {
+      type: Boolean,
+      default: false, // Indicates if attendance is active for the course
+    },
     students: [
       {
         studentId: { type: Schema.ObjectId, required: true },
-        attendanceCount: { type: Number, default: 0 },
         name: { type: String, required: true },
         regNo: { type: String, required: true },
         level: { type: String, required: true },
         fingerPrint: { type: String, required: true },
         addmissionYear: { type: String, required: true },
+        attendanceStatus: [
+          {
+            date: { type: Date, required: true },
+            status: {
+              type: String,
+              enum: ["present", "absent"],
+              default: "absent",
+            },
+          },
+        ],
       },
     ],
   },

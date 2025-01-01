@@ -52,6 +52,6 @@ export interface attendanceType{
   acedemicSession: ObjectId | string
   semester: string 
   students: any[] | studentType[]
-  status: string | boolean
+  active: boolean
   level: string | number
 }
