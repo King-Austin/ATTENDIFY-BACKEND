@@ -6,6 +6,7 @@ import { Students } from "src/models/studentModel";
 import { AppResponse } from "src/utils/appResponse";
 import catchAsync from "src/utils/catchAsync";
 
+//CREATE ATTENDANCE
 export const createAttendance = catchAsync(async (req, res, next) => {
   const { course, acedemicSession, semester, level } = req.body;
 
@@ -207,3 +208,92 @@ export const deactivateAttendance = catchAsync(async (req, res, next) => {
     attendance
   );
 });
+
+//FETCH ATTENDANCE BY SESSION
+export const fetchAllAttendance = catchAsync(async (req, res, next) => {
+  // Fetch all attendance records for the specified academic session
+  const attendanceRecords = await Attendance.find()
+    .populate("course")
+    .populate("acedemicSession");
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance fetched successfully.`,
+    attendanceRecords
+  );
+});
+
+//FETCH ATTENDANCE BY SESSION
+export const fetchAttendanceBySession = catchAsync(async (req, res, next) => {
+  const { sessionId } = req.params; // Academic session ID passed as parameter
+
+  // Find the academic session by ID
+  const academicSession = await AcedemicSession.findById(sessionId);
+  if (!academicSession) {
+    return next(new AppError("Academic session not found.", 404));
+  }
+
+  // Fetch all attendance records for the specified academic session
+  const attendanceRecords = await Attendance.find({
+    acedemicSession: sessionId,
+  }).populate("course"); // populate the course details
+
+  if (!attendanceRecords || attendanceRecords.length === 0) {
+    return next(
+      new AppError(
+        "No attendance records found for this academic session.",
+        404
+      )
+    );
+  }
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance fetched successfully.`,
+    attendanceRecords
+  );
+});
+
+// export const getAttendanceWithPagination = catchAsync(async (req, res, next) => {
+//   const { sessionId } = req.params; // Academic session ID passed as parameter
+//   const { page = 1, limit = 10 } = req.query; // Pagination parameters with default values
+
+//   // Validate academic session existence
+//   const academicSession = await AcedemicSession.findById(sessionId);
+//   if (!academicSession) {
+//     return next(new AppError("Academic session not found.", 404));
+//   }
+
+//   // Pagination calculation
+//   const skip = (page - 1) * limit;
+
+//   // Fetch attendance records with pagination
+//   const attendanceRecords = await Attendance.find({ acedemicSession: sessionId })
+//     .skip(skip)
+//     .limit(Number(limit))
+//     .populate('course') // Optional: populate the course details
+//     .populate('students.studentId'); // Optional: populate student details
+
+//   // Count total records for pagination metadata
+//   const totalRecords = await Attendance.countDocuments({ acedemicSession: sessionId });
+
+//   // Handle case when no records are found
+//   if (!attendanceRecords || attendanceRecords.length === 0) {
+//     return next(new AppError("No attendance records found for this academic session.", 404));
+//   }
+
+//   res.status(200).json({
+//     status: "success",
+//     data: attendanceRecords,
+//     pagination: {
+//       totalRecords,
+//       totalPages: Math.ceil(totalRecords / limit),
+//       currentPage: Number(page),
+//       pageSize: Number(limit),
+//     },
+//   });
+// });
