@@ -1,6 +1,10 @@
 import express, { Response, Request, NextFunction } from "express";
 import globalErrorHandler from "./errors/errorController";
 import authRoute from "./routes/authRoute";
+import acedemicRoute from "./routes/acedemicSessionRoute";
+import attendanceRoute from "./routes/attendanceRoute";
+import courseRoute from "./routes/courseRoute";
+import studentRoute from "./routes/studentsRoute";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import swaggerJsDoc from "swagger-jsdoc";
@@ -285,6 +289,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/acedemicSession", acedemicRoute);
+app.use("/api/v1/attendance", attendanceRoute);
+app.use("/api/v1/course", courseRoute);
+app.use("/api/v1/student", studentRoute);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   throw new Error("This route does not exist");
