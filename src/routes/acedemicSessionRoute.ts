@@ -20,3 +20,5 @@ router.route("/fetchallAcedemicSession").get(fetchAllAcedemicSession);
 router
   .route("/deleteAcedemicSession")
   .delete(protectedRoute, restrictedRoute(["admin"]), deleteAcedemicSession);
+
+export default router;

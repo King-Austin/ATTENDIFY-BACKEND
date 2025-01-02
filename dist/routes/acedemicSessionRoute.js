@@ -14,3 +14,4 @@ router.route("/fetchallAcedemicSession").get(acedemicSessionController_1.fetchAl
 router
     .route("/deleteAcedemicSession")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAcedemicSession);
+exports.default = router;

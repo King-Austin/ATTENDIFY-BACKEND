@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const errorController_1 = __importDefault(require("./errors/errorController"));
 const authRoute_1 = __importDefault(require("./routes/authRoute"));
+const acedemicSessionRoute_1 = __importDefault(require("./routes/acedemicSessionRoute"));
+const attendanceRoute_1 = __importDefault(require("./routes/attendanceRoute"));
+const courseRoute_1 = __importDefault(require("./routes/courseRoute"));
+const studentsRoute_1 = __importDefault(require("./routes/studentsRoute"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
@@ -244,6 +248,10 @@ app.use((req, res, next) => {
     next();
 });
 app.use("/api/v1/auth", authRoute_1.default);
+app.use("/api/v1/acedemicSession", acedemicSessionRoute_1.default);
+app.use("/api/v1/attendance", attendanceRoute_1.default);
+app.use("/api/v1/course", courseRoute_1.default);
+app.use("/api/v1/student", studentsRoute_1.default);
 app.all("*", (req, res, next) => {
     throw new Error("This route does not exist");
 });
