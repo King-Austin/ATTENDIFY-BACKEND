@@ -41,97 +41,17 @@ const swaggerOptions = {
     swaggerDefinition: {
         openapi: "3.0.0",
         info: {
-            title: "EVENT BOOKING SYSTEM API",
+            title: "Academic Management System API",
             version: "1.0.0",
-            description: "API for managing events, bookings, and users in an event booking platform.",
+            description: "API for managing users, courses, attendance, and sessions.",
         },
         servers: [
             {
-                url: process.env.backendUrl,
+                url: process.env.backendUrl || "http://localhost:3000",
             },
         ],
         components: {
             schemas: {
-                event: {
-                    type: "object",
-                    required: [
-                        "title",
-                        "description",
-                        "date",
-                        "price",
-                        "location",
-                        "status",
-                        "totalTicket",
-                        "availableTicket",
-                        "bookedTicket",
-                    ],
-                    properties: {
-                        title: { type: "string", description: "Title of the event" },
-                        description: {
-                            type: "string",
-                            description: "Detailed description of the event",
-                        },
-                        createdAt: {
-                            type: "string",
-                            format: "date-time",
-                            description: "Event creation timestamp",
-                        },
-                        updatedAt: {
-                            type: "string",
-                            format: "date-time",
-                            description: "Last update timestamp of the event",
-                        },
-                        date: {
-                            type: "string",
-                            format: "date",
-                            description: "Date of the event",
-                        },
-                        price: {
-                            type: "number",
-                            description: "Ticket price for the event",
-                        },
-                        location: {
-                            type: "string",
-                            description: "Location where the event is held",
-                        },
-                        status: {
-                            type: "string",
-                            description: "Status of the event (e.g., active, canceled)",
-                        },
-                        totalTicket: {
-                            type: "integer",
-                            description: "Total number of tickets available for the event",
-                        },
-                        availableTicket: {
-                            type: "integer",
-                            description: "Number of tickets still available",
-                        },
-                        bookedTicket: {
-                            type: "integer",
-                            description: "Number of tickets already booked",
-                        },
-                        bookieEmail: {
-                            type: "array",
-                            items: { type: "string", format: "email" },
-                            description: "List of emails of users who booked the event",
-                        },
-                        bookieId: {
-                            type: "array",
-                            items: { type: "string", format: "objectId" },
-                            description: "List of user IDs who booked the event",
-                        },
-                        image: {
-                            type: "string",
-                            format: "uri",
-                            description: "URL to the event image",
-                        },
-                        id: {
-                            type: "string",
-                            format: "objectId",
-                            description: "Unique identifier for the event",
-                        },
-                    },
-                },
                 user: {
                     type: "object",
                     required: [
@@ -144,82 +64,74 @@ const swaggerOptions = {
                     ],
                     properties: {
                         fullName: { type: "string", description: "Full name of the user" },
-                        email: {
-                            type: "string",
-                            format: "email",
-                            description: "User email address",
+                        email: { type: "string", format: "email", description: "User email address" },
+                        password: { type: "string", format: "password", description: "User password" },
+                        role: { type: "string", description: "Role of the user (e.g., admin, student)" },
+                        id: { type: "string", format: "objectId", description: "Unique identifier for the user" },
+                        emailVerified: { type: "boolean", description: "Indicates if the user email is verified" },
+                        active: { type: "boolean", description: "Indicates if the user account is active" },
+                        access: { type: "string", description: "Access level of the user" },
+                    },
+                },
+                course: {
+                    type: "object",
+                    required: ["courseTitle", "courseCode", "semester", "level"],
+                    properties: {
+                        courseTitle: { type: "string", description: "Title of the course" },
+                        courseCode: { type: "string", description: "Code of the course" },
+                        semester: { type: "string", description: "Semester the course is offered" },
+                        level: { type: "string", description: "Academic level for the course" },
+                    },
+                },
+                student: {
+                    type: "object",
+                    required: ["name", "regNo", "level", "course", "fingerPrint", "addmissionYear"],
+                    properties: {
+                        name: { type: "string", description: "Full name of the student" },
+                        regNo: { type: "string", description: "Registration number of the student" },
+                        level: { type: "string", description: "Academic level of the student" },
+                        course: {
+                            type: "array",
+                            items: { type: "string", format: "objectId" },
+                            description: "Courses the student is enrolled in",
                         },
-                        password: {
-                            type: "string",
-                            format: "password",
-                            description: "User password",
+                        fingerPrint: { type: "string", description: "Fingerprint data of the student" },
+                        addmissionYear: { type: "string", description: "Year of admission" },
+                    },
+                },
+                session: {
+                    type: "object",
+                    required: ["name", "start", "end", "semesters", "attendance"],
+                    properties: {
+                        name: { type: "string", description: "Name of the session" },
+                        start: { type: "string", format: "date", description: "Start date of the session" },
+                        end: { type: "string", format: "date", description: "End date of the session" },
+                        semesters: {
+                            type: "array",
+                            items: { type: "string" },
+                            description: "Semesters included in the session",
                         },
-                        role: {
-                            type: "string",
-                            description: "Role of the user (e.g., admin, user)",
-                        },
-                        id: {
-                            type: "string",
-                            format: "objectId",
-                            description: "Unique identifier for the user",
-                        },
-                        emailVerified: {
-                            type: "boolean",
-                            description: "Indicates if the user email is verified",
-                        },
-                        active: {
-                            type: "boolean",
-                            description: "Indicates if the user account is active",
+                        attendance: {
+                            type: "array",
+                            items: { type: "string", format: "objectId" },
+                            description: "Attendance records for the session",
                         },
                     },
                 },
-                booking: {
+                attendance: {
                     type: "object",
-                    required: [
-                        "user",
-                        "event",
-                        "paymentStatus",
-                        "ticketQuantity",
-                        "dateBooked",
-                        "paymentReference",
-                        "receiptUrl",
-                    ],
+                    required: ["course", "acedemicSession", "semester", "students", "active", "level"],
                     properties: {
-                        user: {
-                            $ref: "#/components/schemas/user",
-                            description: "User who made the booking",
+                        course: { type: "string", format: "objectId", description: "Course associated with attendance" },
+                        acedemicSession: { type: "string", format: "objectId", description: "Academic session of attendance" },
+                        semester: { type: "string", description: "Semester for the attendance record" },
+                        students: {
+                            type: "array",
+                            items: { $ref: "#/components/schemas/student" },
+                            description: "Students associated with the attendance record",
                         },
-                        event: {
-                            $ref: "#/components/schemas/event",
-                            description: "Event being booked",
-                        },
-                        paymentStatus: {
-                            type: "string",
-                            description: "Payment status of the booking (e.g., pending, confirmed)",
-                        },
-                        ticketQuantity: {
-                            type: "integer",
-                            description: "Number of tickets booked",
-                        },
-                        dateBooked: {
-                            type: "string",
-                            format: "date-time",
-                            description: "Date and time the booking was made",
-                        },
-                        paymentReference: {
-                            type: "string",
-                            description: "Reference code for the payment",
-                        },
-                        dateConfirmed: {
-                            type: "string",
-                            format: "date-time",
-                            description: "Date and time the payment was confirmed",
-                        },
-                        receiptUrl: {
-                            type: "string",
-                            format: "uri",
-                            description: "URL to the payment receipt",
-                        },
+                        active: { type: "boolean", description: "Indicates if attendance is active" },
+                        level: { type: "string", description: "Level of students in the attendance record" },
                     },
                 },
             },
