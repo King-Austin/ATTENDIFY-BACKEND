@@ -69,6 +69,51 @@ export const createAttendance = catchAsync(async (req, res, next) => {
   );
 });
 
+// // Activate attendance and mark all students as absent for the day
+// export const activateAttendance = catchAsync(async (req, res, next) => {
+//   const { attendanceId } = req.params;
+//   const { courseId, sessionId } = req.body;
+
+//   // Find the attendance record for the specific course
+//   const attendanceRecord = await Attendance.findById(attendanceId)
+//     .populate("course")
+//     .populate("acedemicSession");
+
+//   if (!attendanceRecord) {
+//     return next(
+//       new AppError("Attendance record not found for the course.", 404)
+//     );
+//   }
+
+//   if (attendanceRecord.active) {
+//     return next(
+//       new AppError("Attendance is already active for this course.", 400)
+//     );
+//   }
+
+//   const today = new Date();
+
+//   // Mark all students as absent for today
+//   attendanceRecord.students.forEach((student) => {
+//     student.attendanceStatus.push({
+//       date: today,
+//       status: "absent",
+//     });
+//   });
+
+//   // Activate the attendance
+//   attendanceRecord.active = true;
+//   await attendanceRecord.save();
+
+//   return AppResponse(
+//     res,
+//     200,
+//     "success",
+//     `Attendance activated for students to mark`,
+//     attendanceRecord
+//   );
+// });
+
 // Activate attendance and mark all students as absent for the day
 export const activateAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
@@ -91,14 +136,20 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
     );
   }
 
-  const today = new Date();
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
-  // Mark all students as absent for today
+  // Mark all students as absent for today, but only if they don't already have an attendance record for today
   attendanceRecord.students.forEach((student) => {
-    student.attendanceStatus.push({
-      date: today,
-      status: "absent",
-    });
+    const alreadyMarked = student.attendanceStatus.some(
+      (record: any) => record.date.toISOString().split("T")[0] === today
+    );
+
+    if (!alreadyMarked) {
+      student.attendanceStatus.push({
+        date: new Date(),
+        status: "absent",
+      });
+    }
   });
 
   // Activate the attendance
@@ -113,6 +164,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
     attendanceRecord
   );
 });
+
 
 //MARK ATTENDANCE
 export const markAttendance = catchAsync(async (req, res, next) => {
@@ -189,7 +241,6 @@ student.attendanceStatus[attendanceRecordIndex].status = "present";
 
 // Save the updated attendance record
 await attendance.save();
-
 
   return AppResponse(
     res,
