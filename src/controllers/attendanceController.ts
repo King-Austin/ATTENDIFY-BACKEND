@@ -152,25 +152,44 @@ export const markAttendance = catchAsync(async (req, res, next) => {
     );
   }
 
-  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+  // const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
-  // Check if attendance is already marked for today
-  const alreadyMarked = student.attendanceStatus.some(
-    (record: any) => record.date.toISOString().split("T")[0] === today
-  );
+  // // Check if attendance is already marked for today
+  // const alreadyMarked = student.attendanceStatus.some(
+  //   (record: any) => record.date.toISOString().split("T")[0] === today && record.status === "present"
+  // );
 
-  if (alreadyMarked) {
-    return next(new AppError("Attendance already marked for today.", 400));
-  }
+  // if (alreadyMarked) {
+  //   return next(new AppError("Attendance already marked for today.", 400));
+  // }
 
-  // Mark the student as present for today
-  student.attendanceStatus.push({
-    date: new Date(),
-    status: "present",
-  });
+  // // Mark the student as present for today
+  // student.attendanceStatus.push({
+  //   date: new Date(),
+  //   status: "present",
+  // });
 
-  // Save the updated attendance record
-  await attendance.save();
+  // // Save the updated attendance record
+  // await attendance.save();
+
+  // Get today's date in YYYY-MM-DD format
+const today = new Date().toISOString().split("T")[0];
+
+// Check if the student is marked absent for today
+const attendanceRecordIndex = student.attendanceStatus.findIndex(
+  (record: any) => record.date.toISOString().split("T")[0] === today && record.status === "absent"
+);
+
+if (attendanceRecordIndex === -1) {
+  return next(new AppError("No absent record found for today to update.", 400));
+}
+
+// Update the status to "present"
+student.attendanceStatus[attendanceRecordIndex].status = "present";
+
+// Save the updated attendance record
+await attendance.save();
+
 
   return AppResponse(
     res,
@@ -219,6 +238,29 @@ export const fetchAllAttendance = catchAsync(async (req, res, next) => {
     "success",
     `Attendance fetched successfully.`,
     attendanceRecords
+  );
+});
+
+
+//FETCH ATTENDANCE BY SESSION
+export const deleteAttendanceByID = catchAsync(async (req, res, next) => {
+
+  const { attendanceId } = req.params;
+
+
+  const attendance = await Attendance.findById(attendanceId);
+  if (!attendance) {
+    return next(new AppError("Attendance not found.", 404));
+  }
+
+  await Attendance.findByIdAndDelete(attendanceId)
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance deleted successfully.`,
+    null
   );
 });
 

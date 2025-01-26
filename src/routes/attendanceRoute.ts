@@ -3,6 +3,7 @@ import {
   activateAttendance,
   createAttendance,
   deactivateAttendance,
+  deleteAttendanceByID,
   fetchAllAttendance,
   fetchAttendanceBySession,
   markAttendance,
@@ -153,5 +154,8 @@ router.get("/fetchAllAttendance", fetchAllAttendance);
  *         description: Access forbidden
  */
 router.get("/fetchAttendanceBySession/:sessionId", fetchAttendanceBySession);
+
+router.delete("/deleteAttendance/:attendanceId", deleteAttendanceByID);
+
 
 export default router;
