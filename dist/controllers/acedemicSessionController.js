@@ -33,7 +33,7 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
     }
     return (0, appResponse_1.AppResponse)(res, 200, "success", "New session successfully created", newSession);
 }));
-//FETCH COURSES OFFERED ACCROSS ALL LEVEL
+//FETCH ALL ACEDEMIC SESSION
 exports.fetchAllAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const allAcedemicSession = yield acedemicSessionModel_1.AcedemicSession.find();
     if (!allAcedemicSession) {

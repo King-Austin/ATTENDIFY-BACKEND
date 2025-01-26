@@ -1,9 +1,10 @@
 import express from "express";
+
 import {
   createAcedemicSession,
   deleteAcedemicSession,
   fetchAllAcedemicSession,
-} from "src/controllers/acedemicSessionController"; 
+} from "../controllers/acedemicSessionController"; 
 
 import {
   protectedRoute,
@@ -11,7 +12,7 @@ import {
 } from "src/controllers/authController";
 
 const router = express.Router();
-
+ 
 /**
  * @swagger
  * /api/v1/acedemicSession/createAcedemicSession:

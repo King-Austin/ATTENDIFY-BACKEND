@@ -81,7 +81,7 @@ exports.loginUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void
     }
     if (!user.emailVerified) {
         const verificationCode = yield (0, emailVerificationCode_1.generatEmailVerificationCode)();
-        const verificationMessage = "You have not verified your password since you were approved. kindly verify your email th";
+        const verificationMessage = "You have not verified your email since you were approved. kindly verify your email th";
         user.emailVerificationCode = verificationCode;
         user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
         yield user.save({ validateBeforeSave: false });
