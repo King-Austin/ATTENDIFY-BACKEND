@@ -114,7 +114,7 @@ export const loginUser = catchAsync(
     if (!user.emailVerified) {
       const verificationCode = await generatEmailVerificationCode();
       const verificationMessage =
-        "You have not verified your password since you were approved. kindly verify your email th";
+        "You have not verified your email since you were approved. kindly verify your email th";
 
       user.emailVerificationCode = verificationCode;
       user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;

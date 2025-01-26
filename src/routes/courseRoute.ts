@@ -12,7 +12,7 @@ import {
 } from "src/controllers/courseController";
 
 const router = express.Router();
-
+  
 /**
  * @swagger
  * /api/v1/course/addANewCourse:

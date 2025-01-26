@@ -3,7 +3,8 @@ import {
   createAcedemicSession,
   deleteAcedemicSession,
   fetchAllAcedemicSession,
-} from "src/controllers/acedemicSessionController";
+} from "src/controllers/acedemicSessionController"; 
+
 import {
   protectedRoute,
   restrictedRoute,

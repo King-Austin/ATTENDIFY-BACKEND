@@ -46,7 +46,7 @@ export const createAcedemicSession = catchAsync(async (req, res, next) => {
 });
 
 
-//FETCH COURSES OFFERED ACCROSS ALL LEVEL
+//FETCH ALL ACEDEMIC SESSION
 export const fetchAllAcedemicSession = catchAsync(async (req, res, next) => {
     const allAcedemicSession = await AcedemicSession.find();
   

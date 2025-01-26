@@ -48,7 +48,7 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     addmissionYear: student.addmissionYear,
     attendanceStatus: [], // Initially empty; will be updated when attendance is activated
   }));
-
+ 
   // Step 3: Create the attendance record
   const newAttendance = await Attendance.create({
     course,
