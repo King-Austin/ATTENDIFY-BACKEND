@@ -144,4 +144,5 @@ router.get("/fetchAllAttendance", attendanceController_1.fetchAllAttendance);
  *         description: Access forbidden
  */
 router.get("/fetchAttendanceBySession/:sessionId", attendanceController_1.fetchAttendanceBySession);
+router.delete("/deleteAttendance/:attendanceId", attendanceController_1.deleteAttendanceByID);
 exports.default = router;

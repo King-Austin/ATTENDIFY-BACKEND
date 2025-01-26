@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const acedemicSessionController_1 = require("src/controllers/acedemicSessionController");
+const acedemicSessionController_1 = require("../controllers/acedemicSessionController");
 const authController_1 = require("src/controllers/authController");
 const router = express_1.default.Router();
 /**
@@ -41,7 +41,7 @@ const router = express_1.default.Router();
  */
 router
     .route("/createAcedemicSession")
-    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.createAcedemicSession);
+    .post(/*protectedRoute, restrictedRoute(["admin"]), */ acedemicSessionController_1.createAcedemicSession);
 /**
  * @swagger
  * /api/v1/acedemicSession/fetchallAcedemicSession:

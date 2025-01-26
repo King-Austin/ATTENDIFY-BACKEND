@@ -19,15 +19,14 @@ const appResponse_1 = require("src/utils/appResponse");
 const catchAsync_1 = __importDefault(require("src/utils/catchAsync"));
 //CREATE A NEW STUDENT
 exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, regNo, level, course, fingerPrint, addmissionYear } = req.body;
-    if (!name || !regNo || !level || !course || !fingerPrint || !addmissionYear) {
+    const { name, regNo, level, fingerPrint, addmissionYear } = req.body;
+    if (!name || !regNo || !level || !fingerPrint || !addmissionYear) {
         return next(new appError_1.AppError("Please fill in the required field", 422));
     }
     const newStudent = yield studentModel_1.Students.create({
         name,
         regNo,
         level,
-        course,
         fingerPrint,
         addmissionYear,
     });

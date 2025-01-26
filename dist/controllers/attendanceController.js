@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAttendanceBySession = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
+exports.fetchAttendanceBySession = exports.deleteAttendanceByID = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
 const appError_1 = require("src/errors/appError");
 const acedemicSessionModel_1 = require("src/models/acedemicSessionModel");
 const attendanceModel_1 = require("src/models/attendanceModel");
@@ -57,15 +57,49 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
     // Step 4: Send a success response
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance for ${theCourse.courseCode} successfully created.`, newAttendance);
 }));
+// // Activate attendance and mark all students as absent for the day
+// export const activateAttendance = catchAsync(async (req, res, next) => {
+//   const { attendanceId } = req.params;
+//   const { courseId, sessionId } = req.body;
+//   // Find the attendance record for the specific course
+//   const attendanceRecord = await Attendance.findById(attendanceId)
+//     .populate("course")
+//     .populate("acedemicSession");
+//   if (!attendanceRecord) {
+//     return next(
+//       new AppError("Attendance record not found for the course.", 404)
+//     );
+//   }
+//   if (attendanceRecord.active) {
+//     return next(
+//       new AppError("Attendance is already active for this course.", 400)
+//     );
+//   }
+//   const today = new Date();
+//   // Mark all students as absent for today
+//   attendanceRecord.students.forEach((student) => {
+//     student.attendanceStatus.push({
+//       date: today,
+//       status: "absent",
+//     });
+//   });
+//   // Activate the attendance
+//   attendanceRecord.active = true;
+//   await attendanceRecord.save();
+//   return AppResponse(
+//     res,
+//     200,
+//     "success",
+//     `Attendance activated for students to mark`,
+//     attendanceRecord
+//   );
+// });
 // Activate attendance and mark all students as absent for the day
 exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
     const { courseId, sessionId } = req.body;
     // Find the attendance record for the specific course
-    const attendanceRecord = yield attendanceModel_1.Attendance.findOne({
-        course: courseId,
-        acedemicSession: sessionId,
-    })
+    const attendanceRecord = yield attendanceModel_1.Attendance.findById(attendanceId)
         .populate("course")
         .populate("acedemicSession");
     if (!attendanceRecord) {
@@ -74,13 +108,16 @@ exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
     if (attendanceRecord.active) {
         return next(new appError_1.AppError("Attendance is already active for this course.", 400));
     }
-    const today = new Date();
-    // Mark all students as absent for today
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+    // Mark all students as absent for today, but only if they don't already have an attendance record for today
     attendanceRecord.students.forEach((student) => {
-        student.attendanceStatus.push({
-            date: today,
-            status: "absent",
-        });
+        const alreadyMarked = student.attendanceStatus.some((record) => record.date.toISOString().split("T")[0] === today);
+        if (!alreadyMarked) {
+            student.attendanceStatus.push({
+                date: new Date(),
+                status: "absent",
+            });
+        }
     });
     // Activate the attendance
     attendanceRecord.active = true;
@@ -109,17 +146,30 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
     if (!student) {
         return next(new appError_1.AppError("Student not found with the reg no or fingerprint mismatch.", 404));
     }
-    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
-    // Check if attendance is already marked for today
-    const alreadyMarked = student.attendanceStatus.some((record) => record.date.toISOString().split("T")[0] === today);
-    if (alreadyMarked) {
-        return next(new appError_1.AppError("Attendance already marked for today.", 400));
+    // const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+    // // Check if attendance is already marked for today
+    // const alreadyMarked = student.attendanceStatus.some(
+    //   (record: any) => record.date.toISOString().split("T")[0] === today && record.status === "present"
+    // );
+    // if (alreadyMarked) {
+    //   return next(new AppError("Attendance already marked for today.", 400));
+    // }
+    // // Mark the student as present for today
+    // student.attendanceStatus.push({
+    //   date: new Date(),
+    //   status: "present",
+    // });
+    // // Save the updated attendance record
+    // await attendance.save();
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split("T")[0];
+    // Check if the student is marked absent for today
+    const attendanceRecordIndex = student.attendanceStatus.findIndex((record) => record.date.toISOString().split("T")[0] === today && record.status === "absent");
+    if (attendanceRecordIndex === -1) {
+        return next(new appError_1.AppError("No absent record found for today to update.", 400));
     }
-    // Mark the student as present for today
-    student.attendanceStatus.push({
-        date: new Date(),
-        status: "present",
-    });
+    // Update the status to "present"
+    student.attendanceStatus[attendanceRecordIndex].status = "present";
     // Save the updated attendance record
     yield attendance.save();
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance successfully taken.`, student);
@@ -145,6 +195,16 @@ exports.fetchAllAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
         .populate("course")
         .populate("acedemicSession");
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance fetched successfully.`, attendanceRecords);
+}));
+//FETCH ATTENDANCE BY SESSION
+exports.deleteAttendanceByID = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { attendanceId } = req.params;
+    const attendance = yield attendanceModel_1.Attendance.findById(attendanceId);
+    if (!attendance) {
+        return next(new appError_1.AppError("Attendance not found.", 404));
+    }
+    yield attendanceModel_1.Attendance.findByIdAndDelete(attendanceId);
+    return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance deleted successfully.`, null);
 }));
 //FETCH ATTENDANCE BY SESSION
 exports.fetchAttendanceBySession = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
