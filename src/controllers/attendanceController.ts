@@ -5,7 +5,7 @@ import { Course } from "src/models/courseModel";
 import { Students } from "src/models/studentModel";
 import { AppResponse } from "src/utils/appResponse";
 import catchAsync from "src/utils/catchAsync";
-
+ 
 //CREATE ATTENDANCE
 export const createAttendance = catchAsync(async (req, res, next) => {
   const { course, acedemicSession, semester, level } = req.body;
@@ -75,10 +75,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   const { courseId, sessionId } = req.body;
 
   // Find the attendance record for the specific course
-  const attendanceRecord = await Attendance.findOne({
-    course: courseId,
-    acedemicSession: sessionId,
-  })
+  const attendanceRecord = await Attendance.findById(attendanceId)
     .populate("course")
     .populate("acedemicSession");
 

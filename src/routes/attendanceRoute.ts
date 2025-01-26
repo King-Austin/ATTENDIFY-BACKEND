@@ -39,7 +39,7 @@ const router = express.Router();
  *         description: Access forbidden
  */
 router.post("/createAttendance", createAttendance);
- 
+  
 /**
  * @swagger
  * /api/v1/attendance/activateAttendance/{attendanceId}:

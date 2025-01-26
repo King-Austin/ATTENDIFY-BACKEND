@@ -7,12 +7,12 @@ const attendanceSchema = new Schema<attendanceType>(
   {
     course: {
       type: Schema.ObjectId,
-      ref: "Course",
+      ref: "courses",
       required: [true, "Course is required."],
     },
     acedemicSession: {
       type: Schema.ObjectId,
-      ref: "acedemicSession",
+      ref: "AcedemicSession",
       required: [true, "Session is required."],
     },
     semester: {
