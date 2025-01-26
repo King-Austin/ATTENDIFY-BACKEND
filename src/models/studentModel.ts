@@ -22,10 +22,6 @@ const StudentSchema = new Schema<studentType>({
         type: String,
         required: [true, "Please input the student year of admission"]
     },
-    course: {
-        type: [Schema.ObjectId],
-        required: [true, "Please input the student name"]
-    },
     fingerPrint: {
         type: String,
         required: [true, "Please input the student name"]

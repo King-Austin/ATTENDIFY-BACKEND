@@ -2,7 +2,7 @@ import { AppError } from "src/errors/appError";
 import { AcedemicSession } from "src/models/acedemicSessionModel";
 import { AppResponse } from "src/utils/appResponse";
 import catchAsync from "src/utils/catchAsync";
-
+ 
 
 //CREATE A NEW SESSION
 export const createAcedemicSession = catchAsync(async (req, res, next) => {

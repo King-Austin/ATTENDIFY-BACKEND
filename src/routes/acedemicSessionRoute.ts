@@ -12,7 +12,7 @@ import {
 } from "src/controllers/authController";
 
 const router = express.Router();
- 
+  
 /**
  * @swagger
  * /api/v1/acedemicSession/createAcedemicSession:
@@ -47,7 +47,7 @@ const router = express.Router();
  */
 router
   .route("/createAcedemicSession")
-  .post(protectedRoute, restrictedRoute(["admin"]), createAcedemicSession);
+  .post(/*protectedRoute, restrictedRoute(["admin"]), */createAcedemicSession);
 
 /**
  * @swagger

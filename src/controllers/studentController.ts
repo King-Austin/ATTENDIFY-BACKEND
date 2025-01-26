@@ -5,9 +5,9 @@ import catchAsync from "src/utils/catchAsync";
 
 //CREATE A NEW STUDENT
 export const createStudent = catchAsync(async (req, res, next) => {
-  const { name, regNo, level, course, fingerPrint, addmissionYear } = req.body;
+  const { name, regNo, level, fingerPrint, addmissionYear } = req.body;
 
-  if (!name || !regNo || !level || !course || !fingerPrint || !addmissionYear) {
+  if (!name || !regNo || !level || !fingerPrint || !addmissionYear) {
     return next(new AppError("Please fill in the required field", 422));
   }
 
@@ -15,7 +15,6 @@ export const createStudent = catchAsync(async (req, res, next) => {
     name,
     regNo,
     level,
-    course,
     fingerPrint,
     addmissionYear,
   });

@@ -17,8 +17,7 @@ const courseSchema = new Schema<courseType>({
     semester: {
         type: String,
         required: [true, "Kindly provide the semester this course is offer"],
-        enum: ["first semester", "second semester"],
-        unique: true
+        enum: ["first semester", "second semester"]
     },
     level: {
         type: String,
