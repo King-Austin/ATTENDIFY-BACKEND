@@ -44,20 +44,20 @@ export const createAcedemicSession = catchAsync(async (req, res, next) => {
 
   // Promote students to the next level
   for (const student of students) {
-    if (student.level === 100) {
-      student.level = 200;
-    } else if (student.level === 200) {
-      student.level = 300;
-    } else if (student.level === 300) {
-      student.level = 400;
-    } else if (student.level === 400) {
-      student.level = 500;
-    } else if (student.level === 500) {
+    if (student.level === "100") {
+      student.level = "200";
+    } else if (student.level === "200") {
+      student.level = "300";
+    } else if (student.level === "300") {
+      student.level = "400";
+    } else if (student.level === "400") {
+      student.level = "500";
+    } else if (student.level === "500") {
       student.level = "graduated"; // Mark students as graduated
     }
 
     await student.save(); // Save the updated student level
-  }
+  }  
 
   return AppResponse(
     res,
