@@ -157,5 +157,7 @@ router.get("/fetchAttendanceBySession/:sessionId", fetchAttendanceBySession);
 
 router.delete("/deleteAttendance/:attendanceId", deleteAttendanceByID);
 
+router.patch("/addStudentToTheAttendance/:attendanceId", deleteAttendanceByID);
+
 
 export default router;

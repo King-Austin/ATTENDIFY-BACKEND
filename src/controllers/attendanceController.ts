@@ -284,12 +284,12 @@ export const fetchAttendanceBySession = catchAsync(async (req, res, next) => {
 });
 
 export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
-  const { id } = req.params; // Attendance ID
+  const { attendanceId } = req.params; // Attendance ID
   const { studentId } = req.body;
 
   // Find the attendance record
-  const theAttendance = await Attendance.findById(id);
-  const theStudent = await Students.findById(id);
+  const theAttendance = await Attendance.findById(attendanceId);
+  const theStudent = await Students.findById(studentId);
 
   if (!theAttendance) {
     return next(new AppError("This attendance does not exist.", 404));
