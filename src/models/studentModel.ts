@@ -1,8 +1,6 @@
 import mongoose, { model } from "mongoose";
 import { studentType } from "src/types/types";
 
-
-
 const { Schema } = mongoose;
 
 const StudentSchema = new Schema<studentType>({
