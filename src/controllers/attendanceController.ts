@@ -58,6 +58,8 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     students,
   });
 
+
+
   // Step 4: Send a success response
 
   return AppResponse(
@@ -137,12 +139,12 @@ export const markAttendance = catchAsync(async (req, res, next) => {
     return next(new AppError("Attendance is not active.", 400));
   }
 
-  // Check if the level in the request matches the level in the attendance record
-  if (attendance.level !== level) {
-    return next(
-      new AppError("Attendance cannot be marked for this level.", 400)
-    );
-  }
+  // // Check if the level in the request matches the level in the attendance record
+  // if (attendance.level !== level) {
+  //   return next(
+  //     new AppError("Attendance cannot be marked for this level.", 400)
+  //   );
+  // }
 
   // Find the student by matching the fingerprint
   const student = attendance.students.find(
@@ -185,6 +187,79 @@ export const markAttendance = catchAsync(async (req, res, next) => {
     200,
     "success",
     `Attendance successfully taken.`,
+    student
+  );
+});
+
+
+//MARK ABSENT
+export const markAbsent = catchAsync(async (req, res, next) => {
+  const { attendanceId } = req.params;
+  const { fingerprint, level, regNo } = req.body; // Include level in the request body
+
+  // Find the attendance record
+  const attendance = await Attendance.findById(attendanceId);
+
+  if (!attendance) {
+    return next(new AppError("Attendance not found.", 404));
+  }
+
+  // Check if the attendance is active
+  if (!attendance.active) {
+    return next(new AppError("Attendance is not active.", 400));
+  }
+
+  // // Check if the level in the request matches the level in the attendance record
+  // if (attendance.level !== level) {
+  //   return next(
+  //     new AppError("Attendance cannot be marked for this level.", 400)
+  //   );
+  // }
+
+  // Find the student by matching the fingerprint
+  const student = attendance.students.find(
+    (student) => student.fingerPrint === fingerprint || student.regNo === regNo
+  );
+
+  if (!student) {
+    return next(
+      new AppError(
+        "Student not found with the reg no or fingerprint mismatch.",
+        404
+      )
+    );
+  }
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
+  // Check if the student is already marked as absent for today
+  const attendanceRecordIndex = student.attendanceStatus.findIndex(
+    (record: any) =>
+      record.date.toISOString().split("T")[0] === today &&
+      record.status === "absent"
+  );
+
+  if (attendanceRecordIndex !== -1) {
+    return next(
+      new AppError("Student is already marked as absent for today.", 400)
+    );
+  }
+
+  // Add a new record to mark the student as "absent"
+  student.attendanceStatus.push({
+    date: new Date(),
+    status: "absent",
+  });
+
+  // Save the updated attendance record
+  await attendance.save();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Attendance successfully marked as absent.`,
     student
   );
 });
@@ -342,7 +417,6 @@ export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
 });
 
 //DELETE ALL ATTENDANCE
-
 export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {
   
   await Attendance.deleteMany();

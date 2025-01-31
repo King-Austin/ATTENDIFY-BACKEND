@@ -7,6 +7,7 @@ import {
   deleteAttendanceByID,
   fetchAllAttendance,
   fetchAttendanceBySession,
+  markAbsent,
   markAttendance,
 } from "src/controllers/attendanceController";
 
@@ -161,5 +162,8 @@ router.delete("/deleteAttendance/:attendanceId", deleteAttendanceByID);
 router.delete("/deleteAllTheAttendance", deleteAllAcedemicSessions);
 
 router.patch("/addStudentToTheAttendance/:attendanceId", deleteAttendanceByID);
+
+router.patch("/markAbsent/:attendanceId", markAbsent);
+
 
 export default router;
