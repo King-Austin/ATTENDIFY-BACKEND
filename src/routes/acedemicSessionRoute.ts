@@ -3,6 +3,7 @@ import express from "express";
 import {
   createAcedemicSession,
   deleteAcedemicSession,
+  deleteAllAcedemicSessions,
   fetchAcedemicSessionByID,
   fetchAllAcedemicSession,
 } from "../controllers/acedemicSessionController";
@@ -89,9 +90,17 @@ router.route("/fetchallAcedemicSession").get(fetchAllAcedemicSession);
  *         description: Access forbidden
  */
 router
-  .route("/deleteAcedemicSession")
+  .route("/deleteAcedemicSession/:id")
   .delete(protectedRoute, restrictedRoute(["admin"]), deleteAcedemicSession);
 
+
+  //DELETE ALL ACEDEMIC SESSION ROUTE
+  router
+  .route("/deleteAllAcedemicSessions")
+  .delete(deleteAllAcedemicSessions);
+
+
+  //FECH ACEDEMIC SESSION BY ID
 router.route("/fetchAcedemicSessionByID/:id").get(fetchAcedemicSessionByID);
 
 export default router;

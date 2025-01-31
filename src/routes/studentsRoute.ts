@@ -5,6 +5,7 @@ import {
 } from "src/controllers/authController";
 import {
   createStudent,
+  deleteAllTheStudent,
   deleteAStudent,
   fetchAllTheStudents,
   fetchStudentByLevel,
@@ -155,7 +156,9 @@ router.route("/updateStudentData").patch(updateStudentData);
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAStudent").post(deleteAStudent);
+router.route("/deleteAStudent/:id").delete(deleteAStudent);
+
+router.route("/deleteAllTheStudent").delete(deleteAllTheStudent);
 
 router.route("/fetchStudentByID/:id").get(fetchStudentByYearOfAdmission);
 

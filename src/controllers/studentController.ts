@@ -193,3 +193,17 @@ export const deleteAStudent = catchAsync(async (req, res, next) => {
     null
   );
 });
+
+//DELETE ALL THE STUDENTS
+export const deleteAllTheStudent = catchAsync(async (req, res, next) => {
+
+  await Students.deleteMany();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "Student data successfully deleted",
+    null
+  );
+});

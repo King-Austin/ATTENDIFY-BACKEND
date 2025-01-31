@@ -123,3 +123,17 @@ export const deleteAcedemicSession = catchAsync(async (req, res, next) => {
   );
 });
    
+
+//DELETE ALL ACEDEMIC SESSION
+export const deleteAllAcedemicSessions = catchAsync(async (req, res, next) => {
+
+  await AcedemicSession.deleteMany();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "An Acedemic session successfully deleted.",
+    null
+  );
+});
