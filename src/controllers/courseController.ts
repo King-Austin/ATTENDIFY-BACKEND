@@ -113,3 +113,17 @@ export const deleteACourse = catchAsync(async (req, res, next) => {
     null
   );
 });
+
+//DELETE A PARTICULAR COURSE USING ITS ID
+export const deleteAllCourses = catchAsync(async (req, res, next) => {
+
+  await Course.deleteMany();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "A course successfully deleted",
+    null
+  );
+});

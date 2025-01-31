@@ -6,13 +6,14 @@ import {
 import {
   addNewCourse,
   deleteACourse,
+  deleteAllCourses,
   fetchAllCourse,
   fetchCourseByLevel,
   fetchCourseBySemester,
 } from "src/controllers/courseController";
 
 const router = express.Router();
-  
+
 /**
  * @swagger
  * /api/v1/course/addANewCourse:
@@ -130,5 +131,7 @@ router.route("/fetchCoursesBySemester/:semester").get(fetchCourseBySemester);
 router
   .route("/deleteACourse/:id")
   .delete(protectedRoute, restrictedRoute(["admin"]), deleteACourse);
+
+router.route("/deleteAllCourses").delete(deleteAllCourses);
 
 export default router;

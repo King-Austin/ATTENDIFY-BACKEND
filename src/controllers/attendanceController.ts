@@ -341,6 +341,21 @@ export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
   );
 });
 
+//DELETE ALL ATTENDANCE
+
+export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {
+  
+  await Attendance.deleteMany();
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "An Acedemic session successfully deleted.",
+    null
+  );
+})
+
 // export const getAttendanceWithPagination = catchAsync(async (req, res, next) => {
 //   const { sessionId } = req.params; // Academic session ID passed as parameter
 //   const { page = 1, limit = 10 } = req.query; // Pagination parameters with default values

@@ -1,4 +1,5 @@
 import express from "express";
+import { deleteAllAcedemicSessions } from "src/controllers/acedemicSessionController";
 import {
   activateAttendance,
   createAttendance,
@@ -40,7 +41,7 @@ const router = express.Router();
  *         description: Access forbidden
  */
 router.post("/createAttendance", createAttendance);
-  
+
 /**
  * @swagger
  * /api/v1/attendance/activateAttendance/{attendanceId}:
@@ -157,7 +158,8 @@ router.get("/fetchAttendanceBySession/:sessionId", fetchAttendanceBySession);
 
 router.delete("/deleteAttendance/:attendanceId", deleteAttendanceByID);
 
-router.patch("/addStudentToTheAttendance/:attendanceId", deleteAttendanceByID);
+router.delete("/deleteAllTheAttendance", deleteAllAcedemicSessions);
 
+router.patch("/addStudentToTheAttendance/:attendanceId", deleteAttendanceByID);
 
 export default router;
