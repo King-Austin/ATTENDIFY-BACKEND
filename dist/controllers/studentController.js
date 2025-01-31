@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAStudent = exports.updateStudentData = exports.fetchStudentByLevel = exports.fetchStudentByYearOfAdmission = exports.fetchAllTheStudents = exports.createStudent = void 0;
+exports.deleteAllTheStudent = exports.deleteAStudent = exports.updateStudentData = exports.fetchStudentByID = exports.fetchStudentByLevel = exports.fetchStudentByYearOfAdmission = exports.fetchAllTheStudents = exports.createStudent = void 0;
 const appError_1 = require("src/errors/appError");
 const studentModel_1 = require("src/models/studentModel");
 const appResponse_1 = require("src/utils/appResponse");
@@ -22,6 +22,10 @@ exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(
     const { name, regNo, level, fingerPrint, addmissionYear } = req.body;
     if (!name || !regNo || !level || !fingerPrint || !addmissionYear) {
         return next(new appError_1.AppError("Please fill in the required field", 422));
+    }
+    const studentExist = yield studentModel_1.Students.findOne({ regNo });
+    if (studentExist) {
+        return next(new appError_1.AppError("Student already exist with the registrationj number", 400));
     }
     const newStudent = yield studentModel_1.Students.create({
         name,
@@ -67,6 +71,18 @@ exports.fetchStudentByLevel = (0, catchAsync_1.default)((req, res, next) => __aw
     }
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Students in ${level} level successfully fetched.`, students);
 }));
+//FETCH STUDENTS BY LEVEL
+exports.fetchStudentByID = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    if (!id) {
+        return next(new appError_1.AppError("Kindly provide the ID of the student", 400));
+    }
+    const student = yield studentModel_1.Students.findById(id);
+    if (!student) {
+        return next(new appError_1.AppError(`Could not fetch the student with this ID. Please try again`, 400));
+    }
+    return (0, appResponse_1.AppResponse)(res, 200, "success", `Student successfully fetched.`, student);
+}));
 //UPDATE A STUDENT DATA
 exports.updateStudentData = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
@@ -88,5 +104,10 @@ exports.updateStudentData = (0, catchAsync_1.default)((req, res, next) => __awai
 exports.deleteAStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     yield studentModel_1.Students.findByIdAndDelete(id);
+    return (0, appResponse_1.AppResponse)(res, 200, "success", "Student data successfully deleted", null);
+}));
+//DELETE ALL THE STUDENTS
+exports.deleteAllTheStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    yield studentModel_1.Students.deleteMany();
     return (0, appResponse_1.AppResponse)(res, 200, "success", "Student data successfully deleted", null);
 }));

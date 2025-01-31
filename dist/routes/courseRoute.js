@@ -120,4 +120,5 @@ router.route("/fetchCoursesBySemester/:semester").get(courseController_1.fetchCo
 router
     .route("/deleteACourse/:id")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), courseController_1.deleteACourse);
+router.route("/deleteAllCourses").delete(courseController_1.deleteAllCourses);
 exports.default = router;

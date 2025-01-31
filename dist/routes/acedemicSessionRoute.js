@@ -80,6 +80,12 @@ router.route("/fetchallAcedemicSession").get(acedemicSessionController_1.fetchAl
  *         description: Access forbidden
  */
 router
-    .route("/deleteAcedemicSession")
+    .route("/deleteAcedemicSession/:id")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAcedemicSession);
+//DELETE ALL ACEDEMIC SESSION ROUTE
+router
+    .route("/deleteAllAcedemicSessions")
+    .delete(acedemicSessionController_1.deleteAllAcedemicSessions);
+//FECH ACEDEMIC SESSION BY ID
+router.route("/fetchAcedemicSessionByID/:id").get(acedemicSessionController_1.fetchAcedemicSessionByID);
 exports.default = router;

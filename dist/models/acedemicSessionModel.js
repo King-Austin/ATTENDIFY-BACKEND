@@ -51,6 +51,11 @@ const sessionSchema = new Schema({
         type: [Schema.ObjectId],
         default: [],
         ref: 'Attendance'
+    },
+    active: {
+        type: Boolean,
+        required: [true, "Please provide the status of this acedemic session"],
+        default: true
     }
 });
 exports.AcedemicSession = (0, mongoose_1.model)("AcedemicSession", sessionSchema);

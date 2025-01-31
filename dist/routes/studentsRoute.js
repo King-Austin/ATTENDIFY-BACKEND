@@ -142,5 +142,7 @@ router.route("/updateStudentData").patch(studentController_1.updateStudentData);
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAStudent").post(studentController_1.deleteAStudent);
+router.route("/deleteAStudent/:id").delete(studentController_1.deleteAStudent);
+router.route("/deleteAllTheStudent").delete(studentController_1.deleteAllTheStudent);
+router.route("/fetchStudentByID/:id").get(studentController_1.fetchStudentByYearOfAdmission);
 exports.default = router;

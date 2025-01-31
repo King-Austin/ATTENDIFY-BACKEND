@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteACourse = exports.fetchCourseBySemester = exports.fetchCourseByLevel = exports.fetchAllCourse = exports.addNewCourse = void 0;
+exports.deleteAllCourses = exports.deleteACourse = exports.fetchCourseBySemester = exports.fetchCourseByLevel = exports.fetchAllCourse = exports.addNewCourse = void 0;
 const appError_1 = require("src/errors/appError");
 const courseModel_1 = require("src/models/courseModel");
 const appResponse_1 = require("src/utils/appResponse");
@@ -64,5 +64,10 @@ exports.fetchCourseBySemester = (0, catchAsync_1.default)((req, res, next) => __
 exports.deleteACourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     yield courseModel_1.Course.findByIdAndDelete(id);
+    return (0, appResponse_1.AppResponse)(res, 200, "success", "A course successfully deleted", null);
+}));
+//DELETE A PARTICULAR COURSE USING ITS ID
+exports.deleteAllCourses = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    yield courseModel_1.Course.deleteMany();
     return (0, appResponse_1.AppResponse)(res, 200, "success", "A course successfully deleted", null);
 }));

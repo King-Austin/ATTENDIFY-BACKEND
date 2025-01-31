@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const acedemicSessionController_1 = require("src/controllers/acedemicSessionController");
 const attendanceController_1 = require("src/controllers/attendanceController");
 const router = express_1.default.Router();
 /**
@@ -145,4 +146,7 @@ router.get("/fetchAllAttendance", attendanceController_1.fetchAllAttendance);
  */
 router.get("/fetchAttendanceBySession/:sessionId", attendanceController_1.fetchAttendanceBySession);
 router.delete("/deleteAttendance/:attendanceId", attendanceController_1.deleteAttendanceByID);
+router.delete("/deleteAllTheAttendance", acedemicSessionController_1.deleteAllAcedemicSessions);
+router.patch("/addStudentToTheAttendance/:attendanceId", attendanceController_1.deleteAttendanceByID);
+router.patch("/markAbsent/:attendanceId", attendanceController_1.markAbsent);
 exports.default = router;

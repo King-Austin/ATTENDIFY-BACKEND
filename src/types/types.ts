@@ -45,6 +45,7 @@ export interface sessionType{
   end: string | Date | number
   semesters: string[]
   attendance: string[] | ObjectId[] | any[]
+  active : boolean
 }
 
 export interface attendanceType{
