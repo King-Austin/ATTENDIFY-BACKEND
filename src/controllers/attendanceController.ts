@@ -189,6 +189,7 @@ export const markAttendance = catchAsync(async (req, res, next) => {
   );
 });
 
+
 //DEACTIVATE ATTENDANCE
 export const deactivateAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
@@ -230,7 +231,7 @@ export const fetchAllAttendance = catchAsync(async (req, res, next) => {
   );
 });
 
-//FETCH ATTENDANCE BY SESSION
+//DELETE ATTENDANCE BY ID
 export const deleteAttendanceByID = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
 
@@ -283,6 +284,8 @@ export const fetchAttendanceBySession = catchAsync(async (req, res, next) => {
   );
 });
 
+
+//ADD STUDENT TO ATTENDANCE
 export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params; // Attendance ID
   const { studentId } = req.body;

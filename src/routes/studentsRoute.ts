@@ -157,4 +157,7 @@ router.route("/updateStudentData").patch(updateStudentData);
  */
 router.route("/deleteAStudent").post(deleteAStudent);
 
+router.route("/fetchStudentByID/:id").get(fetchStudentByYearOfAdmission);
+
+
 export default router;

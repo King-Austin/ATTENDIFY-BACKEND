@@ -11,6 +11,14 @@ export const createStudent = catchAsync(async (req, res, next) => {
     return next(new AppError("Please fill in the required field", 422));
   }
 
+  const studentExist = await Students.findOne({ regNo });
+
+  if (studentExist) {
+    return next(
+      new AppError("Student already exist with the registrationj number", 400)
+    );
+  }
+
   const newStudent = await Students.create({
     name,
     regNo,
@@ -108,6 +116,34 @@ export const fetchStudentByLevel = catchAsync(async (req, res, next) => {
     "success",
     `Students in ${level} level successfully fetched.`,
     students
+  );
+});
+
+//FETCH STUDENTS BY LEVEL
+export const fetchStudentByID = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return next(new AppError("Kindly provide the ID of the student", 400));
+  }
+
+  const student = await Students.findById(id);
+
+  if (!student) {
+    return next(
+      new AppError(
+        `Could not fetch the student with this ID. Please try again`,
+        400
+      )
+    );
+  }
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    `Student successfully fetched.`,
+    student
   );
 });
 
