@@ -13,7 +13,7 @@ export const addNewCourse = catchAsync(async (req, res, next) => {
 
   const newCourse = await Course.create({
     courseTitle,
-    courseCode,
+    courseCode, 
     level,
     semester,
   });

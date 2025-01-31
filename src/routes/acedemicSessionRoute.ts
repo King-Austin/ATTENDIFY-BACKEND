@@ -3,8 +3,9 @@ import express from "express";
 import {
   createAcedemicSession,
   deleteAcedemicSession,
+  fetchAcedemicSessionByID,
   fetchAllAcedemicSession,
-} from "../controllers/acedemicSessionController"; 
+} from "../controllers/acedemicSessionController";
 
 import {
   protectedRoute,
@@ -12,7 +13,7 @@ import {
 } from "src/controllers/authController";
 
 const router = express.Router();
-  
+
 /**
  * @swagger
  * /api/v1/acedemicSession/createAcedemicSession:
@@ -47,7 +48,7 @@ const router = express.Router();
  */
 router
   .route("/createAcedemicSession")
-  .post(/*protectedRoute, restrictedRoute(["admin"]), */createAcedemicSession);
+  .post(/*protectedRoute, restrictedRoute(["admin"]), */ createAcedemicSession);
 
 /**
  * @swagger
@@ -90,5 +91,7 @@ router.route("/fetchallAcedemicSession").get(fetchAllAcedemicSession);
 router
   .route("/deleteAcedemicSession")
   .delete(protectedRoute, restrictedRoute(["admin"]), deleteAcedemicSession);
+
+router.route("/fetchAcedemicSessionByID/:id").get(fetchAcedemicSessionByID);
 
 export default router;

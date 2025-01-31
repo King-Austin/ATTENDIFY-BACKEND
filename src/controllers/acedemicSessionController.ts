@@ -18,7 +18,7 @@ export const createAcedemicSession = catchAsync(async (req, res, next) => {
         "Please provide the required fields to create this session",
         422
       ) 
-    );  
+    );   
   }
 
   // Check if the session already exists
@@ -87,6 +87,25 @@ export const fetchAllAcedemicSession = catchAsync(async (req, res, next) => {
     );
 });
   
+
+//FETCH A PARTICULAR ACEDEMIC SESSION USING ITS ID
+export const fetchAcedemicSessionByID = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const particularSession = await AcedemicSession.findById(id);
+
+  if (!particularSession) {
+    return next(new AppError("No acedemic session exist with this ID", 404))
+  }
+
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "An Acedemic session successfully fetched.",
+    particularSession
+  );
+});
 
 
 //DELETE A PARTICULAR ACEDEMIC SESSION USING ITS ID
