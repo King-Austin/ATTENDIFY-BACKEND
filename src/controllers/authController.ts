@@ -54,7 +54,7 @@ const createAndSendTokenToUser = async (
   });
 };
 
-//REGISTER USER
+//REGISTER USER(LECTURER)
 export const registerUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { fullName, email, password, confirmPassword } = req.body;
@@ -94,6 +94,10 @@ export const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return next(new AppError("Please provid ethe required field", 422));
+    }
+
     const user = await User.findOne({ email: email }).select("+password");
 
     if (!user || !(await user.correctPassword(password, user.password))) {
@@ -111,40 +115,10 @@ export const loginUser = catchAsync(
       );
     }
 
-    if (!user.emailVerified) {
-      const verificationCode = await generatEmailVerificationCode();
-      const verificationMessage =
-        "You have not verified your email since you were approved. kindly verify your email th";
-
-      user.emailVerificationCode = verificationCode;
-      user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
-
-      await user.save({ validateBeforeSave: false });
-
-      sendEmail({
-        name: user.fullName,
-        email: user.email,
-        subject: "VERIFY YOUR EMAIL",
-        message: verificationMessage,
-        vCode: verificationCode,
-        link: ORIGIN_URL,
-        linkName: "Visit our website",
-      });
-    }
-
-    if (user.emailVerified) {
-      createAndSendTokenToUser(user, 200, "Login successful.", res);
-    } else {
-      return AppResponse(
-        res,
-        200,
-        "success",
-        "Login successful. Kindly verify your email to access your dashboard",
-        user.id
-      );
-    }
+    return createAndSendTokenToUser(user, 200, "Login successful.", res);
   }
 );
+
 
 //FETCH AUTHENTICATED USER INFORMATION
 export const fetchMe = catchAsync(async (req, res, next) => {
@@ -162,14 +136,10 @@ export const fetchMe = catchAsync(async (req, res, next) => {
     return next(new AppError("An error occured. Please try again", 400));
   }
 
-  res.status(200).json({
-    status: "success",
-    message: "user fetched successfully",
-    data: {
-      user,
-    },
-  });
+  return AppResponse(res, 200, "success", "user fetched successfully", user);
 });
+
+
 
 //PROTECTED ROUTE
 export const protectedRoute = catchAsync(async (req, res, next) => {
