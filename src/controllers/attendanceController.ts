@@ -58,8 +58,6 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     students,
   });
 
-
-
   // Step 4: Send a success response
 
   return AppResponse(
@@ -73,8 +71,8 @@ export const createAttendance = catchAsync(async (req, res, next) => {
 
 // Activate attendance and mark all students as absent for the day
 export const activateAttendance = catchAsync(async (req, res, next) => {
+
   const { attendanceId } = req.params;
-  const { courseId, sessionId } = req.body;
 
   // Find the attendance record for the specific course
   const attendanceRecord = await Attendance.findById(attendanceId)
@@ -191,7 +189,6 @@ export const markAttendance = catchAsync(async (req, res, next) => {
   );
 });
 
-
 //MARK ABSENT
 export const markAbsent = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
@@ -263,7 +260,6 @@ export const markAbsent = catchAsync(async (req, res, next) => {
     student
   );
 });
-
 
 //DEACTIVATE ATTENDANCE
 export const deactivateAttendance = catchAsync(async (req, res, next) => {
@@ -359,7 +355,6 @@ export const fetchAttendanceBySession = catchAsync(async (req, res, next) => {
   );
 });
 
-
 //ADD STUDENT TO ATTENDANCE
 export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params; // Attendance ID
@@ -418,7 +413,6 @@ export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
 
 //DELETE ALL ATTENDANCE
 export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {
-  
   await Attendance.deleteMany();
 
   return AppResponse(
@@ -428,7 +422,7 @@ export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {
     "An Acedemic session successfully deleted.",
     null
   );
-})
+});
 
 // export const getAttendanceWithPagination = catchAsync(async (req, res, next) => {
 //   const { sessionId } = req.params; // Academic session ID passed as parameter
