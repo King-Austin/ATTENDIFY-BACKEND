@@ -123,7 +123,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
 //MARK ATTENDANCE
 export const markAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
-  const { fingerprint, level, regNo } = req.body; // Include level in the request body
+  const { fingerprint, regNo } = req.body; // Include level in the request body
 
   // Find the attendance record
   const attendance = await Attendance.findById(attendanceId);
