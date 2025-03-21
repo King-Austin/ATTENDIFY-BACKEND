@@ -123,7 +123,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
 //MARK ATTENDANCE
 export const markAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
-  const { fingerprint, regNo } = req.body; // Include level in the request body
+  const { fingerprint, regNo, level } = req.body; // Include level in the request body
 
   // Find the attendance record
   const attendance = await Attendance.findById(attendanceId);
@@ -138,11 +138,11 @@ export const markAttendance = catchAsync(async (req, res, next) => {
   }
 
   // // Check if the level in the request matches the level in the attendance record
-  // if (attendance.level !== level) {
-  //   return next(
-  //     new AppError("Attendance cannot be marked for this level.", 400)
-  //   );
-  // }
+  if (attendance.level !== level) {
+    return next(
+      new AppError("Attendance cannot be marked for this level.", 400)
+    );
+  }
 
   // Find the student by matching the fingerprint
   const student = attendance.students.find(
@@ -192,7 +192,7 @@ export const markAttendance = catchAsync(async (req, res, next) => {
 //MARK ABSENT
 export const markAbsent = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
-  const { fingerprint, level, regNo } = req.body; // Include level in the request body
+  const { fingerprint, regNo } = req.body;
 
   // Find the attendance record
   const attendance = await Attendance.findById(attendanceId);
@@ -206,12 +206,6 @@ export const markAbsent = catchAsync(async (req, res, next) => {
     return next(new AppError("Attendance is not active.", 400));
   }
 
-  // // Check if the level in the request matches the level in the attendance record
-  // if (attendance.level !== level) {
-  //   return next(
-  //     new AppError("Attendance cannot be marked for this level.", 400)
-  //   );
-  // }
 
   // Find the student by matching the fingerprint
   const student = attendance.students.find(

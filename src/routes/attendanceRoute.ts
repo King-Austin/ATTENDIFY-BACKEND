@@ -12,7 +12,7 @@ import {
 } from "src/controllers/attendanceController";
 
 const router = express.Router();
-
+ 
 /**
  * @swagger
  * /api/v1/attendance/createAttendance:
@@ -41,6 +41,7 @@ const router = express.Router();
  *       403:
  *         description: Access forbidden
  */
+
 router.post("/createAttendance", createAttendance);
 
 /**
@@ -64,6 +65,7 @@ router.post("/createAttendance", createAttendance);
  *       403:
  *         description: Access forbidden
  */
+
 router.patch("/activateAttendance/:attendanceId", activateAttendance);
 
 /**
@@ -134,8 +136,9 @@ router.patch("/deactivateAttendance/:attendanceId", deactivateAttendance);
  *       403:
  *         description: Access forbidden
  */
-router.get("/fetchAllAttendance", fetchAllAttendance);
 
+router.get("/fetchAllAttendance", fetchAllAttendance);
+ 
 /**
  * @swagger
  * /api/v1/attendance/fetchAttendanceBySession/{sessionId}:
