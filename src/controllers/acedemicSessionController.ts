@@ -68,7 +68,7 @@ import { Students } from "src/models/studentModel";
 // });
 
 // CREATE A NEW SESSION
-export const createAcedemicSession = catchAsync(async (req, res, next) => {
+export const createAcedemicSession : any = catchAsync(async (req, res, next) => {
   const { name, start, end } = req.body;
 
   // Fetch all students
@@ -145,6 +145,7 @@ export const createAcedemicSession = catchAsync(async (req, res, next) => {
 
 //FETCH ALL ACEDEMIC SESSION
 export const fetchAllAcedemicSession = catchAsync(async (req, res, next) => {
+
   const allAcedemicSession = await AcedemicSession.find();
 
   if (!allAcedemicSession) {
@@ -193,7 +194,7 @@ export const deleteAcedemicSession = catchAsync(async (req, res, next) => {
     null
   );
 });
-
+ 
 //DELETE ALL ACEDEMIC SESSION
 export const deleteAllAcedemicSessions = catchAsync(async (req, res, next) => {
   await AcedemicSession.deleteMany();

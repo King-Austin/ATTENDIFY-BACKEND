@@ -286,6 +286,10 @@ export const fetchAllAttendance = catchAsync(async (req, res, next) => {
   const attendanceRecords = await Attendance.find()
     .populate("course")
     .populate("acedemicSession");
+  
+  if (!attendanceRecords) {
+    return next(new AppError("Could not find attendance records", 404))
+  }
 
   return AppResponse(
     res,
