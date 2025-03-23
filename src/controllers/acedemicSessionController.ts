@@ -1,8 +1,8 @@
-import { AppError } from "src/errors/appError";
-import { AcedemicSession } from "src/models/acedemicSessionModel";
-import { AppResponse } from "src/utils/appResponse";
-import catchAsync from "src/utils/catchAsync";
-import { Students } from "src/models/studentModel";
+import { AppError } from "../errors/appError";
+import { AcedemicSession } from "../models/acedemicSessionModel";
+import { AppResponse } from "../utils/appResponse";
+import catchAsync from "../utils/catchAsync";
+import { Students } from "../models/studentModel"; 
 
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {

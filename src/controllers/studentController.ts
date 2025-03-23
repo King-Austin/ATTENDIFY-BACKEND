@@ -1,7 +1,7 @@
-import { AppError } from "src/errors/appError";
-import { Students } from "src/models/studentModel";
-import { AppResponse } from "src/utils/appResponse";
-import catchAsync from "src/utils/catchAsync";
+import { AppError } from "../errors/appError";
+import { Students } from "../models/studentModel";
+import { AppResponse } from "../utils/appResponse";
+import catchAsync from "../utils/catchAsync";
 
 //CREATE A NEW STUDENT
 export const createStudent = catchAsync(async (req, res, next) => {

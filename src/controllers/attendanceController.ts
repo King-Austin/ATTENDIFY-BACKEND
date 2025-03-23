@@ -1,10 +1,10 @@
-import { AppError } from "src/errors/appError";
-import { AcedemicSession } from "src/models/acedemicSessionModel";
-import { Attendance } from "src/models/attendanceModel";
-import { Course } from "src/models/courseModel";
-import { Students } from "src/models/studentModel";
-import { AppResponse } from "src/utils/appResponse";
-import catchAsync from "src/utils/catchAsync";
+import { AppError } from "../errors/appError";
+import { AcedemicSession } from "../models/acedemicSessionModel";
+import { Attendance } from "../models/attendanceModel";
+import { Course } from "../models/courseModel";
+import { Students } from "../models/studentModel";
+import { AppResponse } from "../utils/appResponse";
+import catchAsync from "../utils/catchAsync";
 
 //CREATE ATTENDANCE
 export const createAttendance = catchAsync(async (req, res, next) => {
@@ -75,7 +75,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
 
   // Find the attendance record for the specific course
-  const attendanceRecord = await Attendance.findById(attendanceId)
+  const attendanceRecord : any = await Attendance.findById(attendanceId)
     .populate("course")
     .populate("acedemicSession");
 
@@ -94,7 +94,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   // Mark all students as absent for today, but only if they don't already have an attendance record for today
-  attendanceRecord.students.forEach((student) => {
+  attendanceRecord.students.forEach((student: any) => {
     const alreadyMarked = student.attendanceStatus.some(
       (record: any) => record.date.toISOString().split("T")[0] === today
     );
@@ -195,7 +195,7 @@ export const markAbsent = catchAsync(async (req, res, next) => {
   const { fingerprint, regNo } = req.body;
 
   // Find the attendance record
-  const attendance = await Attendance.findById(attendanceId);
+  const attendance: any = await Attendance.findById(attendanceId);
 
   if (!attendance) {
     return next(new AppError("Attendance not found.", 404));
@@ -208,8 +208,8 @@ export const markAbsent = catchAsync(async (req, res, next) => {
 
 
   // Find the student by matching the fingerprint
-  const student = attendance.students.find(
-    (student) => student.fingerPrint === fingerprint || student.regNo === regNo
+  const student : any = attendance.students.find(
+    (student: any) => student.fingerPrint === fingerprint || student.regNo === regNo
   );
 
   if (!student) {

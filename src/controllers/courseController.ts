@@ -1,7 +1,7 @@
-import { AppError } from "src/errors/appError";
-import { Course } from "src/models/courseModel";
-import { AppResponse } from "src/utils/appResponse";
-import catchAsync from "src/utils/catchAsync";
+import { AppError } from "../errors/appError";
+import { Course } from "../models/courseModel";
+import { AppResponse } from "../utils/appResponse";
+import catchAsync from "../utils/catchAsync";
 
 //ADD NEW COURSE
 export const addNewCourse = catchAsync(async (req, res, next) => {
