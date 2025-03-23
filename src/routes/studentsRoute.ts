@@ -1,8 +1,5 @@
 import express from "express";
-import {
-  protectedRoute,
-  restrictedRoute,
-} from "../controllers/authController";
+import { protectedRoute, restrictedRoute } from "../controllers/authController";
 import {
   createStudent,
   deleteAllTheStudent,
@@ -47,7 +44,7 @@ const router = express.Router();
  */
 router
   .route("/createStudent")
-  .post(/*protectedRoute, restrictedRoute(["admin"]), */createStudent);
+  .post(/*protectedRoute, restrictedRoute(["admin"]), */ createStudent);
 
 /**
  * @swagger
@@ -82,7 +79,9 @@ router.route("/fetchAllTheStudents").get(fetchAllTheStudents);
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByYearOfAdmission").get(fetchStudentByYearOfAdmission);
+router
+  .route("/fetchStudentByYearOfAdmission")
+  .get(fetchStudentByYearOfAdmission);
 
 /**
  * @swagger
@@ -156,11 +155,14 @@ router.route("/updateStudentData").patch(updateStudentData);
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAStudent/:id").delete(deleteAStudent);
+router
+  .route("/deleteAStudent/:id")
+  .delete(protectedRoute, restrictedRoute(["admin"]), deleteAStudent);
 
-router.route("/deleteAllTheStudent").delete(deleteAllTheStudent);
+router
+  .route("/deleteAllTheStudent")
+  .delete(protectedRoute, restrictedRoute(["admin"]), deleteAllTheStudent);
 
 router.route("/fetchStudentByID/:id").get(fetchStudentByYearOfAdmission);
-
 
 export default router;

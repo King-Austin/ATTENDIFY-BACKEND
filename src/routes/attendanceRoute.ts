@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteAllAcedemicSessions } from "src/controllers/acedemicSessionController";
+import { deleteAllAcedemicSessions } from "../controllers/acedemicSessionController";
 import {
   activateAttendance,
   createAttendance,

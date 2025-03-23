@@ -2,7 +2,7 @@ import express from "express";
 import {
   protectedRoute,
   restrictedRoute,
-} from "src/controllers/authController";
+} from "../controllers/authController";
 import {
   addNewCourse,
   deleteACourse,

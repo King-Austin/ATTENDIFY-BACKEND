@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const authController_1 = require("../controllers/authController");
 const studentController_1 = require("../controllers/studentController");
 const router = express_1.default.Router();
 /**
@@ -71,7 +72,9 @@ router.route("/fetchAllTheStudents").get(studentController_1.fetchAllTheStudents
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByYearOfAdmission").get(studentController_1.fetchStudentByYearOfAdmission);
+router
+    .route("/fetchStudentByYearOfAdmission")
+    .get(studentController_1.fetchStudentByYearOfAdmission);
 /**
  * @swagger
  * /api/v1/student/fetchStudentByLevel:
@@ -142,7 +145,11 @@ router.route("/updateStudentData").patch(studentController_1.updateStudentData);
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAStudent/:id").delete(studentController_1.deleteAStudent);
-router.route("/deleteAllTheStudent").delete(studentController_1.deleteAllTheStudent);
+router
+    .route("/deleteAStudent/:id")
+    .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), studentController_1.deleteAStudent);
+router
+    .route("/deleteAllTheStudent")
+    .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), studentController_1.deleteAllTheStudent);
 router.route("/fetchStudentByID/:id").get(studentController_1.fetchStudentByYearOfAdmission);
 exports.default = router;
