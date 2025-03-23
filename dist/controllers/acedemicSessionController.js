@@ -13,11 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllAcedemicSessions = exports.deleteAcedemicSession = exports.fetchAcedemicSessionByID = exports.fetchAllAcedemicSession = exports.createAcedemicSession = void 0;
-const appError_1 = require("src/errors/appError");
-const acedemicSessionModel_1 = require("src/models/acedemicSessionModel");
-const appResponse_1 = require("src/utils/appResponse");
-const catchAsync_1 = __importDefault(require("src/utils/catchAsync"));
-const studentModel_1 = require("src/models/studentModel");
+const appError_1 = require("../errors/appError");
+const acedemicSessionModel_1 = require("../models/acedemicSessionModel");
+const appResponse_1 = require("../utils/appResponse");
+const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const studentModel_1 = require("../models/studentModel");
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {
 //   const { name, start, end } = req.body;

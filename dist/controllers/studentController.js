@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllTheStudent = exports.deleteAStudent = exports.updateStudentData = exports.fetchStudentByID = exports.fetchStudentByLevel = exports.fetchStudentByYearOfAdmission = exports.fetchAllTheStudents = exports.createStudent = void 0;
-const appError_1 = require("src/errors/appError");
-const studentModel_1 = require("src/models/studentModel");
-const appResponse_1 = require("src/utils/appResponse");
-const catchAsync_1 = __importDefault(require("src/utils/catchAsync"));
+const appError_1 = require("../errors/appError");
+const studentModel_1 = require("../models/studentModel");
+const appResponse_1 = require("../utils/appResponse");
+const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 //CREATE A NEW STUDENT
 exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, regNo, level, fingerPrint, addmissionYear } = req.body;

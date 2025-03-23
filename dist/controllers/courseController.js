@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllCourses = exports.deleteACourse = exports.fetchCourseBySemester = exports.fetchCourseByLevel = exports.fetchAllCourse = exports.addNewCourse = void 0;
-const appError_1 = require("src/errors/appError");
-const courseModel_1 = require("src/models/courseModel");
-const appResponse_1 = require("src/utils/appResponse");
-const catchAsync_1 = __importDefault(require("src/utils/catchAsync"));
+const appError_1 = require("../errors/appError");
+const courseModel_1 = require("../models/courseModel");
+const appResponse_1 = require("../utils/appResponse");
+const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 //ADD NEW COURSE
 exports.addNewCourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { courseTitle, courseCode, semester, level } = req.body;
