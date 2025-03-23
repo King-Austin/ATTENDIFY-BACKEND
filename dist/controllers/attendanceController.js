@@ -60,7 +60,6 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
 // Activate attendance and mark all students as absent for the day
 exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
-    const { courseId, sessionId } = req.body;
     // Find the attendance record for the specific course
     const attendanceRecord = yield attendanceModel_1.Attendance.findById(attendanceId)
         .populate("course")
@@ -90,7 +89,7 @@ exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
 //MARK ATTENDANCE
 exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
-    const { fingerprint, level, regNo } = req.body; // Include level in the request body
+    const { fingerprint, regNo, level } = req.body; // Include level in the request body
     // Find the attendance record
     const attendance = yield attendanceModel_1.Attendance.findById(attendanceId);
     if (!attendance) {
@@ -101,11 +100,9 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
         return next(new appError_1.AppError("Attendance is not active.", 400));
     }
     // // Check if the level in the request matches the level in the attendance record
-    // if (attendance.level !== level) {
-    //   return next(
-    //     new AppError("Attendance cannot be marked for this level.", 400)
-    //   );
-    // }
+    if (attendance.level !== level) {
+        return next(new appError_1.AppError("Attendance cannot be marked for this level.", 400));
+    }
     // Find the student by matching the fingerprint
     const student = attendance.students.find((student) => student.fingerPrint === fingerprint || student.regNo === regNo);
     if (!student) {
@@ -128,7 +125,7 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
 //MARK ABSENT
 exports.markAbsent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
-    const { fingerprint, level, regNo } = req.body; // Include level in the request body
+    const { fingerprint, regNo } = req.body;
     // Find the attendance record
     const attendance = yield attendanceModel_1.Attendance.findById(attendanceId);
     if (!attendance) {
@@ -138,12 +135,6 @@ exports.markAbsent = (0, catchAsync_1.default)((req, res, next) => __awaiter(voi
     if (!attendance.active) {
         return next(new appError_1.AppError("Attendance is not active.", 400));
     }
-    // // Check if the level in the request matches the level in the attendance record
-    // if (attendance.level !== level) {
-    //   return next(
-    //     new AppError("Attendance cannot be marked for this level.", 400)
-    //   );
-    // }
     // Find the student by matching the fingerprint
     const student = attendance.students.find((student) => student.fingerPrint === fingerprint || student.regNo === regNo);
     if (!student) {
@@ -186,6 +177,9 @@ exports.fetchAllAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
     const attendanceRecords = yield attendanceModel_1.Attendance.find()
         .populate("course")
         .populate("acedemicSession");
+    if (!attendanceRecords) {
+        return next(new appError_1.AppError("Could not find attendance records", 404));
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance fetched successfully.`, attendanceRecords);
 }));
 //DELETE ATTENDANCE BY ID

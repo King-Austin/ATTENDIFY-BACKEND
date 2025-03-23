@@ -30,32 +30,32 @@ const sessionSchema = new Schema({
     name: {
         type: String,
         required: [true, "Please provide the name of this session"],
-        unique: true
+        unique: true,
     },
     start: {
         type: String,
         required: [true, "Please provide date that this session starts."],
-        unique: true
+        unique: true,
     },
     end: {
         type: String,
         required: [true, "Please provide date that this session ends."],
-        unique: true
+        unique: true,
     },
     semesters: {
         type: [String],
         required: [true, "Please provide the semesters in this session"],
-        default: ["first semester", "second semester"]
+        default: ["first semester", "second semester"],
     },
     attendance: {
         type: [Schema.ObjectId],
         default: [],
-        ref: 'Attendance'
+        ref: "Attendance",
     },
     active: {
         type: Boolean,
         required: [true, "Please provide the status of this acedemic session"],
-        default: true
-    }
+        default: true,
+    },
 });
 exports.AcedemicSession = (0, mongoose_1.model)("AcedemicSession", sessionSchema);

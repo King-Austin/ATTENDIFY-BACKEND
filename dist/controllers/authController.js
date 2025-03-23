@@ -48,7 +48,7 @@ const createAndSendTokenToUser = (user, statusCode, message, res) => __awaiter(v
         },
     });
 });
-//REGISTER USER
+//REGISTER USER(LECTURER)
 exports.registerUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { fullName, email, password, confirmPassword } = req.body;
     const userExist = yield userModel_1.default.findOne({ email: email });
@@ -72,6 +72,9 @@ exports.registerUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
 //LOGIN USER
 exports.loginUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
+    if (!email || !password) {
+        return next(new appError_1.AppError("Please provid ethe required field", 422));
+    }
     const user = yield userModel_1.default.findOne({ email: email }).select("+password");
     if (!user || !(yield user.correctPassword(password, user.password))) {
         return next(new appError_1.AppError("invalid email or password. Kindly try again", 400));
@@ -79,28 +82,7 @@ exports.loginUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void
     if (user.access !== "approved") {
         return next(new appError_1.AppError("You are not yet approved to login. Kindly wait for approval", 400));
     }
-    if (!user.emailVerified) {
-        const verificationCode = yield (0, emailVerificationCode_1.generatEmailVerificationCode)();
-        const verificationMessage = "You have not verified your email since you were approved. kindly verify your email th";
-        user.emailVerificationCode = verificationCode;
-        user.emailVerificationCodeExpires = Date.now() + 30 * 60 * 1000;
-        yield user.save({ validateBeforeSave: false });
-        (0, sendEmail_1.sendEmail)({
-            name: user.fullName,
-            email: user.email,
-            subject: "VERIFY YOUR EMAIL",
-            message: verificationMessage,
-            vCode: verificationCode,
-            link: ORIGIN_URL,
-            linkName: "Visit our website",
-        });
-    }
-    if (user.emailVerified) {
-        createAndSendTokenToUser(user, 200, "Login successful.", res);
-    }
-    else {
-        return (0, appResponse_1.AppResponse)(res, 200, "success", "Login successful. Kindly verify your email to access your dashboard", user.id);
-    }
+    return createAndSendTokenToUser(user, 200, "Login successful.", res);
 }));
 //FETCH AUTHENTICATED USER INFORMATION
 exports.fetchMe = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -112,13 +94,7 @@ exports.fetchMe = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0
     if (!user) {
         return next(new appError_1.AppError("An error occured. Please try again", 400));
     }
-    res.status(200).json({
-        status: "success",
-        message: "user fetched successfully",
-        data: {
-            user,
-        },
-    });
+    return (0, appResponse_1.AppResponse)(res, 200, "success", "user fetched successfully", user);
 }));
 //PROTECTED ROUTE
 exports.protectedRoute = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
