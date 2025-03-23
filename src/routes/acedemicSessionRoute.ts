@@ -11,7 +11,7 @@ import {
 import {
   protectedRoute,
   restrictedRoute,
-} from "src/controllers/authController";
+} from "../controllers/authController";
 
 const router = express.Router();
 

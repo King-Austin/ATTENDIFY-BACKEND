@@ -10,7 +10,7 @@ import {
   fetchAllCourse,
   fetchCourseByLevel,
   fetchCourseBySemester,
-} from "src/controllers/courseController";
+} from "../controllers/courseController";
 
 const router = express.Router();
 

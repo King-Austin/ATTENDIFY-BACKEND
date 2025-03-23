@@ -9,7 +9,7 @@ import {
   fetchAttendanceBySession,
   markAbsent,
   markAttendance,
-} from "src/controllers/attendanceController";
+} from "../controllers/attendanceController";
 
 const router = express.Router();
  

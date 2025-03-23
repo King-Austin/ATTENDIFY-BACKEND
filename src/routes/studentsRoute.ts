@@ -11,7 +11,7 @@ import {
   fetchStudentByLevel,
   fetchStudentByYearOfAdmission,
   updateStudentData,
-} from "src/controllers/studentController";
+} from "../controllers/studentController";
 
 const router = express.Router();
 
