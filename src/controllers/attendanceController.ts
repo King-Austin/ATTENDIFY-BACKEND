@@ -280,9 +280,9 @@ export const deactivateAttendance = catchAsync(async (req, res, next) => {
   );
 });
 
-//FETCH ATTENDANCE BY SESSION
+//FETCH ALL ATTENDANCE RECORDS
 export const fetchAllAttendance = catchAsync(async (req, res, next) => {
-  // Fetch all attendance records for the specified academic session
+  // Fetch all attendance records 
   const attendanceRecords = await Attendance.find()
     .populate("course")
     .populate("acedemicSession");

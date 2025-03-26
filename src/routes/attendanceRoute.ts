@@ -41,7 +41,6 @@ const router = express.Router();
  *       403:
  *         description: Access forbidden
  */
-
 router.post("/createAttendance", createAttendance);
 
 /**
@@ -65,7 +64,6 @@ router.post("/createAttendance", createAttendance);
  *       403:
  *         description: Access forbidden
  */
-
 router.patch("/activateAttendance/:attendanceId", activateAttendance);
 
 /**
@@ -136,7 +134,6 @@ router.patch("/deactivateAttendance/:attendanceId", deactivateAttendance);
  *       403:
  *         description: Access forbidden
  */
-
 router.get("/fetchAllAttendance", fetchAllAttendance);
  
 /**
@@ -160,13 +157,60 @@ router.get("/fetchAllAttendance", fetchAllAttendance);
  */
 router.get("/fetchAttendanceBySession/:sessionId", fetchAttendanceBySession);
 
+/**
+ * @swagger
+ * /api/v1/attendance/deleteAttendance/{attendanceId}:
+ *   delete:
+ *     summary: Delete an attendance record by ID
+ *     tags: [Attendance]
+ *     parameters:
+ *       - in: path
+ *         name: attendanceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: ID of the attendance record to delete
+ *     responses:
+ *       200:
+ *         description: Attendance record deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
 router.delete("/deleteAttendance/:attendanceId", deleteAttendanceByID);
 
-router.delete("/deleteAllTheAttendance", deleteAllAcedemicSessions);
+/**
+ * @swagger
+ * /api/v1/attendance/deleteAllAttendance:
+ *   delete:
+ *     summary: Delete all attendance records
+ *     tags: [Attendance]
+ *     responses:
+ *       200:
+ *         description: All attendance records deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
+router.delete("/deleteAllAttendance", deleteAllAcedemicSessions);
 
-router.patch("/addStudentToTheAttendance/:attendanceId", deleteAttendanceByID);
-
+/**
+ * @swagger
+ * /api/v1/attendance/markAbsent/{attendanceId}:
+ *   patch:
+ *     summary: Mark a student as absent
+ *     tags: [Attendance]
+ *     parameters:
+ *       - in: path
+ *         name: attendanceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: ID of the attendance record
+ *     responses:
+ *       200:
+ *         description: Student marked as absent
+ *       403:
+ *         description: Access forbidden
+ */
 router.patch("/markAbsent/:attendanceId", markAbsent);
-
 
 export default router;

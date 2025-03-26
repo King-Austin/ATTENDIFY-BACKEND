@@ -145,8 +145,57 @@ router.get("/fetchAllAttendance", attendanceController_1.fetchAllAttendance);
  *         description: Access forbidden
  */
 router.get("/fetchAttendanceBySession/:sessionId", attendanceController_1.fetchAttendanceBySession);
+/**
+ * @swagger
+ * /api/v1/attendance/deleteAttendance/{attendanceId}:
+ *   delete:
+ *     summary: Delete an attendance record by ID
+ *     tags: [Attendance]
+ *     parameters:
+ *       - in: path
+ *         name: attendanceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: ID of the attendance record to delete
+ *     responses:
+ *       200:
+ *         description: Attendance record deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
 router.delete("/deleteAttendance/:attendanceId", attendanceController_1.deleteAttendanceByID);
-router.delete("/deleteAllTheAttendance", acedemicSessionController_1.deleteAllAcedemicSessions);
-router.patch("/addStudentToTheAttendance/:attendanceId", attendanceController_1.deleteAttendanceByID);
+/**
+ * @swagger
+ * /api/v1/attendance/deleteAllAttendance:
+ *   delete:
+ *     summary: Delete all attendance records
+ *     tags: [Attendance]
+ *     responses:
+ *       200:
+ *         description: All attendance records deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
+router.delete("/deleteAllAttendance", acedemicSessionController_1.deleteAllAcedemicSessions);
+/**
+ * @swagger
+ * /api/v1/attendance/markAbsent/{attendanceId}:
+ *   patch:
+ *     summary: Mark a student as absent
+ *     tags: [Attendance]
+ *     parameters:
+ *       - in: path
+ *         name: attendanceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: ID of the attendance record
+ *     responses:
+ *       200:
+ *         description: Student marked as absent
+ *       403:
+ *         description: Access forbidden
+ */
 router.patch("/markAbsent/:attendanceId", attendanceController_1.markAbsent);
 exports.default = router;

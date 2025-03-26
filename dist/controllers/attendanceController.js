@@ -171,9 +171,9 @@ exports.deactivateAttendance = (0, catchAsync_1.default)((req, res, next) => __a
     yield attendance.save();
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance deactivated successfully.`, attendance);
 }));
-//FETCH ATTENDANCE BY SESSION
+//FETCH ALL ATTENDANCE RECORDS
 exports.fetchAllAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // Fetch all attendance records for the specified academic session
+    // Fetch all attendance records 
     const attendanceRecords = yield attendanceModel_1.Attendance.find()
         .populate("course")
         .populate("acedemicSession");

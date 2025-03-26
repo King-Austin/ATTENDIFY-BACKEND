@@ -132,6 +132,20 @@ router
   .route("/deleteACourse/:id")
   .delete(protectedRoute, restrictedRoute(["admin"]), deleteACourse);
 
-router.route("/deleteAllCourses").delete(deleteAllCourses);
+/**
+ * @swagger
+ * /api/v1/course/deleteAllCourses:
+ *   delete:
+ *     summary: Delete all courses
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All courses deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
+router.route("/deleteAllCourses").delete(protectedRoute, restrictedRoute(["admin"]), deleteAllCourses);
 
 export default router;

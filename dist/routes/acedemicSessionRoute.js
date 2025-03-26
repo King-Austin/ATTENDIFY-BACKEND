@@ -41,7 +41,7 @@ const router = express_1.default.Router();
  */
 router
     .route("/createAcedemicSession")
-    .post(/*protectedRoute, restrictedRoute(["admin"]), */ acedemicSessionController_1.createAcedemicSession);
+    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.createAcedemicSession);
 /**
  * @swagger
  * /api/v1/acedemicSession/fetchallAcedemicSession:
@@ -57,22 +57,19 @@ router
 router.route("/fetchallAcedemicSession").get(acedemicSessionController_1.fetchAllAcedemicSession);
 /**
  * @swagger
- * /api/v1/acedemicSession/deleteAcedemicSession:
+ * /api/v1/acedemicSession/deleteAcedemicSession/{id}:
  *   delete:
  *     summary: Delete an academic session
  *     tags: [Academic Sessions]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               sessionId:
- *                 type: string
- *                 description: ID of the session to delete
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the session to delete
  *     responses:
  *       200:
  *         description: Academic session deleted successfully
@@ -82,10 +79,39 @@ router.route("/fetchallAcedemicSession").get(acedemicSessionController_1.fetchAl
 router
     .route("/deleteAcedemicSession/:id")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAcedemicSession);
-//DELETE ALL ACEDEMIC SESSION ROUTE
-router
-    .route("/deleteAllAcedemicSessions")
-    .delete(acedemicSessionController_1.deleteAllAcedemicSessions);
-//FECH ACEDEMIC SESSION BY ID
+/**
+ * @swagger
+ * /api/v1/acedemicSession/deleteAllAcedemicSessions:
+ *   delete:
+ *     summary: Delete all academic sessions
+ *     tags: [Academic Sessions]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All academic sessions deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
+router.route("/deleteAllAcedemicSessions").delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAllAcedemicSessions);
+/**
+ * @swagger
+ * /api/v1/acedemicSession/fetchAcedemicSessionByID/{id}:
+ *   get:
+ *     summary: Fetch an academic session by ID
+ *     tags: [Academic Sessions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the academic session
+ *     responses:
+ *       200:
+ *         description: Academic session fetched successfully
+ *       404:
+ *         description: Academic session not found
+ */
 router.route("/fetchAcedemicSessionByID/:id").get(acedemicSessionController_1.fetchAcedemicSessionByID);
 exports.default = router;

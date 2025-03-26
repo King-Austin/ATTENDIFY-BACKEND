@@ -120,5 +120,19 @@ router.route("/fetchCoursesBySemester/:semester").get(courseController_1.fetchCo
 router
     .route("/deleteACourse/:id")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), courseController_1.deleteACourse);
-router.route("/deleteAllCourses").delete(courseController_1.deleteAllCourses);
+/**
+ * @swagger
+ * /api/v1/course/deleteAllCourses:
+ *   delete:
+ *     summary: Delete all courses
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All courses deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
+router.route("/deleteAllCourses").delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), courseController_1.deleteAllCourses);
 exports.default = router;

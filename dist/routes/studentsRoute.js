@@ -123,22 +123,19 @@ router.route("/fetchStudentByLevel").get(studentController_1.fetchStudentByLevel
 router.route("/updateStudentData").patch(studentController_1.updateStudentData);
 /**
  * @swagger
- * /api/v1/student/deleteAStudent:
- *   post:
- *     summary: Delete a student
+ * /api/v1/student/deleteAStudent/{id}:
+ *   delete:
+ *     summary: Delete a student by ID
  *     tags: [Students]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               studentId:
- *                 type: string
- *                 description: ID of the student to delete
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: ID of the student to delete
  *     responses:
  *       200:
  *         description: Student deleted successfully
@@ -148,8 +145,41 @@ router.route("/updateStudentData").patch(studentController_1.updateStudentData);
 router
     .route("/deleteAStudent/:id")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), studentController_1.deleteAStudent);
+/**
+ * @swagger
+ * /api/v1/student/deleteAllTheStudent:
+ *   delete:
+ *     summary: Delete all students
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All students deleted successfully
+ *       403:
+ *         description: Access forbidden
+ */
 router
     .route("/deleteAllTheStudent")
     .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), studentController_1.deleteAllTheStudent);
+/**
+ * @swagger
+ * /api/v1/student/fetchStudentByID/{id}:
+ *   get:
+ *     summary: Fetch student by ID
+ *     tags: [Students]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: ID of the student
+ *     responses:
+ *       200:
+ *         description: Student data retrieved successfully
+ *       403:
+ *         description: Access forbidden
+ */
 router.route("/fetchStudentByID/:id").get(studentController_1.fetchStudentByYearOfAdmission);
 exports.default = router;
