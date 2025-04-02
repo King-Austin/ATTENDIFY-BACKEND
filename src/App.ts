@@ -46,11 +46,11 @@ const swaggerOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
     info: {
-      title: "Academic Management System API",
+      title: "Academic Attendance Management System API",
       version: "1.0.0",
       description: "API for managing users, courses, attendance, and sessions.",
     },
-    servers: [
+    servers: [ 
       {
         url: process.env.BACKEND_URL,
       },

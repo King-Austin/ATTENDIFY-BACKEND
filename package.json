@@ -2,11 +2,11 @@
   "name": "backend-smart-attendance-system",
   "version": "1.0.0",
   "description": "",
-  "main": "nodemon src/Server.ts",
+  "main": "nodemon  dist/Server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/Server.ts",
-    "start": "nodemon --exec ts-node -r tsconfig-paths/register src/Server.ts"
+    "dev": "nodemon dist/Server.js",
+    "start": "nodemon --exec ts-node -r tsconfig-paths/register dist/Server.js"
   },
   "keywords": [],
   "author": "",
