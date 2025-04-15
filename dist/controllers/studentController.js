@@ -19,8 +19,8 @@ const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 //CREATE A NEW STUDENT
 exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, regNo, level, fingerPrint, addmissionYear } = req.body;
-    if (!name || !regNo || !level || !fingerPrint || !addmissionYear) {
+    const { name, regNo, level, fingerPrint, addmissionYear, email } = req.body;
+    if (!name || !regNo || !level || !addmissionYear || !email) {
         return next(new appError_1.AppError("Please fill in the required field", 422));
     }
     const studentExist = yield studentModel_1.Students.findOne({ regNo });
@@ -33,6 +33,7 @@ exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(
         level,
         fingerPrint,
         addmissionYear,
+        email
     });
     if (!newStudent) {
         return next(new appError_1.AppError("Could not create student. Please try again", 400));

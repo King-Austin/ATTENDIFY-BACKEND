@@ -141,7 +141,7 @@ const swaggerOptions = {
             },
         },
     },
-    apis: ["./dist/routes/*.js"], // Ensures compatibility with TypeScript and JavaScript
+    apis: ["./src/routes/*.ts"], // Ensures compatibility with TypeScript and JavaScript
 };
 // module.exports = swaggerOptions;
 // const swaggerOptions = {

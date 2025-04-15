@@ -2,7 +2,7 @@ import { AppError } from "../errors/appError";
 import { AcedemicSession } from "../models/acedemicSessionModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
-import { Students } from "../models/studentModel"; 
+import { Students } from "../models/studentModel";
 
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {
@@ -68,7 +68,7 @@ import { Students } from "../models/studentModel";
 // });
 
 // CREATE A NEW SESSION
-export const createAcedemicSession : any = catchAsync(async (req, res, next) => {
+export const createAcedemicSession: any = catchAsync(async (req, res, next) => {
   const { name, start, end } = req.body;
 
   // Fetch all students
@@ -83,12 +83,15 @@ export const createAcedemicSession : any = catchAsync(async (req, res, next) => 
     );
   }
 
+  const parsedStart = new Date(start);
+  const parsedEnd = new Date(end);
+
   // Check if the session dates fall within any existing session
   const overlappingSession = await AcedemicSession.findOne({
     $or: [
-      { start: { $lte: start }, end: { $gte: start } }, // Check if the start date overlaps
-      { start: { $lte: end }, end: { $gte: end } }, // Check if the end date overlaps
-      { start: { $gte: start }, end: { $lte: end } }, // Check if the session is fully within another session
+      { start: { $lte: parsedStart }, end: { $gte: parsedStart } },
+      { start: { $lte: parsedEnd }, end: { $gte: parsedEnd } },
+      { start: { $gte: parsedStart }, end: { $lte: parsedEnd } },
     ],
   });
 
@@ -102,7 +105,11 @@ export const createAcedemicSession : any = catchAsync(async (req, res, next) => 
   }
 
   // Create new session
-  const newSession = await AcedemicSession.create({ name, start, end });
+  const newSession = await AcedemicSession.create({
+    name,
+    start: parsedStart,
+    end: parsedEnd,
+  });
 
   if (!newSession) {
     return next(
@@ -129,9 +136,11 @@ export const createAcedemicSession : any = catchAsync(async (req, res, next) => 
       student.level = "500";
     } else if (student.level === "500") {
       student.level = "graduated"; // Mark students as graduated
+    } else if (student.level === "graduated") {
+       student.level = "graduated";
     }
 
-    await student.save(); // Save the updated student level
+    await student.save({validateBeforeSave : false}); // Save the updated student level
   }
 
   return AppResponse(
@@ -145,7 +154,6 @@ export const createAcedemicSession : any = catchAsync(async (req, res, next) => 
 
 //FETCH ALL ACEDEMIC SESSION
 export const fetchAllAcedemicSession = catchAsync(async (req, res, next) => {
-
   const allAcedemicSession = await AcedemicSession.find();
 
   if (!allAcedemicSession) {
@@ -194,7 +202,7 @@ export const deleteAcedemicSession = catchAsync(async (req, res, next) => {
     null
   );
 });
- 
+
 //DELETE ALL ACEDEMIC SESSION
 export const deleteAllAcedemicSessions = catchAsync(async (req, res, next) => {
   await AcedemicSession.deleteMany();

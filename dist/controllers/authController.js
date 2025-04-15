@@ -79,7 +79,7 @@ exports.loginUser = (0, catchAsync_1.default)((req, res, next) => __awaiter(void
     if (!user || !(yield user.correctPassword(password, user.password))) {
         return next(new appError_1.AppError("invalid email or password. Kindly try again", 400));
     }
-    if (user.access !== "approved") {
+    if (user.access == "approved") {
         return next(new appError_1.AppError("You are not yet approved to login. Kindly wait for approval", 400));
     }
     return createAndSendTokenToUser(user, 200, "Login successful.", res);

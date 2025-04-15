@@ -37,6 +37,7 @@ export interface studentType{
   course: string[] | ObjectId[]
   fingerPrint: string
   addmissionYear: string
+  email : string
 }
 
 export interface sessionType{

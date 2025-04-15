@@ -20,7 +20,7 @@ const userSchema = new Schema<userType>({
     type: String,
     required: true,
     enum: ["admin", "lecturer"],
-    default: "lecturer",
+    default: "admin",
   },
   access: {
     type: String,

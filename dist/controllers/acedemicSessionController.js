@@ -79,19 +79,25 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
     if (!name || !start || !end) {
         return next(new appError_1.AppError("Please provide the required fields to create this session", 422));
     }
+    const parsedStart = new Date(start);
+    const parsedEnd = new Date(end);
     // Check if the session dates fall within any existing session
     const overlappingSession = yield acedemicSessionModel_1.AcedemicSession.findOne({
         $or: [
-            { start: { $lte: start }, end: { $gte: start } }, // Check if the start date overlaps
-            { start: { $lte: end }, end: { $gte: end } }, // Check if the end date overlaps
-            { start: { $gte: start }, end: { $lte: end } }, // Check if the session is fully within another session
+            { start: { $lte: parsedStart }, end: { $gte: parsedStart } },
+            { start: { $lte: parsedEnd }, end: { $gte: parsedEnd } },
+            { start: { $gte: parsedStart }, end: { $lte: parsedEnd } },
         ],
     });
     if (overlappingSession) {
         return next(new appError_1.AppError("There's another academic session within or overlapping with this date range.", 400));
     }
     // Create new session
-    const newSession = yield acedemicSessionModel_1.AcedemicSession.create({ name, start, end });
+    const newSession = yield acedemicSessionModel_1.AcedemicSession.create({
+        name,
+        start: parsedStart,
+        end: parsedEnd,
+    });
     if (!newSession) {
         return next(new appError_1.AppError("Could not create this session. Please try again.", 400));
     }
@@ -117,7 +123,10 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         else if (student.level === "500") {
             student.level = "graduated"; // Mark students as graduated
         }
-        yield student.save(); // Save the updated student level
+        else if (student.level === "graduated") {
+            student.level = "graduated";
+        }
+        yield student.save({ validateBeforeSave: false }); // Save the updated student level
     }
     return (0, appResponse_1.AppResponse)(res, 200, "success", "New session successfully created and students promoted", newSession);
 }));

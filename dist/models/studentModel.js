@@ -45,7 +45,11 @@ const StudentSchema = new Schema({
     },
     fingerPrint: {
         type: String,
-        required: [true, "Please input the student name"]
+        required: [true, "Please input the student fingerprint"]
+    },
+    email: {
+        type: String,
+        required: [true, "Please input the student email"]
     },
 });
 exports.Students = (0, mongoose_1.model)("students", StudentSchema);

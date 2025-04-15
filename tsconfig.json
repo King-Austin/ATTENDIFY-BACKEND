@@ -13,5 +13,5 @@
     "allowJs": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "findIndex.ts", "fixIndexes.ts"]
 }

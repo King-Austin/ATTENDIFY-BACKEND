@@ -25,7 +25,7 @@ console.log("The origin", ORIGIN_URL);
 
 const app = express();
 // CORS configuration
-const corsOptions = {
+const corsOptions = { 
   origin: ORIGIN_URL,
   credentials: true,
   methods: "GET,POST,DELETE,PATCH",

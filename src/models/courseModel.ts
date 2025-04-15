@@ -16,14 +16,14 @@ const courseSchema = new Schema<courseType>({
     },
     semester: {
         type: String,
-        required: [true, "Kindly provide the semester this course is offer"],
-        enum: ["first semester", "second semester"]
-    },
+        required: [true, "Kindly provide the semester this course is offered"],
+       enum: ["first semester", "second semester"],
+    }, 
     level: {
         type: String,
         required: [true, "Kindly provide the course code"],
         enum: ["100", "200", "300", "400", "500"],
-    },
+    }, 
 })
 
 export const Course = model("courses", courseSchema)

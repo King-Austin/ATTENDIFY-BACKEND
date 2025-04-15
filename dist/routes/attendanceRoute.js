@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const acedemicSessionController_1 = require("../controllers/acedemicSessionController");
 const attendanceController_1 = require("../controllers/attendanceController");
+const authController_1 = require("../controllers/authController");
 const router = express_1.default.Router();
 /**
  * @swagger
@@ -89,7 +90,7 @@ router.patch("/activateAttendance/:attendanceId", attendanceController_1.activat
  *       403:
  *         description: Access forbidden
  */
-router.patch("/markAttendance/:attendanceId", attendanceController_1.markAttendance);
+router.patch("/markAttendance/:attendanceId", authController_1.protectedRoute, attendanceController_1.markAttendance);
 /**
  * @swagger
  * /api/v1/attendance/deactivateAttendance/{attendanceId}:
@@ -111,7 +112,7 @@ router.patch("/markAttendance/:attendanceId", attendanceController_1.markAttenda
  *       403:
  *         description: Access forbidden
  */
-router.patch("/deactivateAttendance/:attendanceId", attendanceController_1.deactivateAttendance);
+router.patch("/deactivateAttendance/:attendanceId", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), attendanceController_1.deactivateAttendance);
 /**
  * @swagger
  * /api/v1/attendance/fetchAllAttendance:
@@ -164,7 +165,7 @@ router.get("/fetchAttendanceBySession/:sessionId", attendanceController_1.fetchA
  *       403:
  *         description: Access forbidden
  */
-router.delete("/deleteAttendance/:attendanceId", attendanceController_1.deleteAttendanceByID);
+router.delete("/deleteAttendance/:attendanceId", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), attendanceController_1.deleteAttendanceByID);
 /**
  * @swagger
  * /api/v1/attendance/deleteAllAttendance:
@@ -177,7 +178,7 @@ router.delete("/deleteAttendance/:attendanceId", attendanceController_1.deleteAt
  *       403:
  *         description: Access forbidden
  */
-router.delete("/deleteAllAttendance", acedemicSessionController_1.deleteAllAcedemicSessions);
+router.delete("/deleteAllAttendance", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAllAcedemicSessions);
 /**
  * @swagger
  * /api/v1/attendance/markAbsent/{attendanceId}:

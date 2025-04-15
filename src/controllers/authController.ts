@@ -41,7 +41,7 @@ const createAndSendTokenToUser = async (
     httpOnly: true,
     sameSite: "none",
     secure: true,
-  };
+  }; 
 
   res.cookie("jwt", token, theCookieOptions);
 
@@ -106,7 +106,7 @@ export const loginUser = catchAsync(
       );
     }
 
-    if (user.access !== "approved") {
+    if (user.access == "approved") {
       return next(
         new AppError(
           "You are not yet approved to login. Kindly wait for approval",

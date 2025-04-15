@@ -33,12 +33,12 @@ const sessionSchema = new Schema({
         unique: true,
     },
     start: {
-        type: String,
+        type: Date,
         required: [true, "Please provide date that this session starts."],
         unique: true,
     },
     end: {
-        type: String,
+        type: Date,
         required: [true, "Please provide date that this session ends."],
         unique: true,
     },
