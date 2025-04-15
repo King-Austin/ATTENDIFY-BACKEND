@@ -34,6 +34,6 @@ const sessionSchema = new Schema<sessionType>({
     required: [true, "Please provide the status of this acedemic session"],
     default: true,
   },
-});
-
+}); 
+ 
 export const AcedemicSession = model("AcedemicSession", sessionSchema);

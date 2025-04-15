@@ -121,7 +121,7 @@ export const createAcedemicSession: any = catchAsync(async (req, res, next) => {
   await AcedemicSession.updateMany({ active: true }, { active: false });
 
   // Set the new session as active
-  newSession.active = true;
+  newSession.active = true; 
   await newSession.save();
 
   // Promote students to the next level

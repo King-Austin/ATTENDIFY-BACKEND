@@ -49,7 +49,7 @@ const router = express.Router();
  */
 router
   .route("/createAcedemicSession")
-  .post(protectedRoute, restrictedRoute(["admin"]), createAcedemicSession);
+  .post(protectedRoute, /*restrictedRoute(["admin"]),*/ createAcedemicSession);
 
 /**
  * @swagger
