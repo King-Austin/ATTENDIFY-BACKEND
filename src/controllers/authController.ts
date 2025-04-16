@@ -236,7 +236,7 @@ export const changeUserPassword = catchAsync(async (req, res, next) => {
   if (!currentPassword || !newPassword || !confirmNewPassword) {
     return next(new AppError("Please provide the required field", 400));
   }
-
+ 
   if (newPassword !== confirmNewPassword) {
     return next(
       new AppError("new password and confirm password must be the same.", 400)

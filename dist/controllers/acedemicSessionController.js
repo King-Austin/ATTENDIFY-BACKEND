@@ -102,7 +102,7 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         return next(new appError_1.AppError("Could not create this session. Please try again.", 400));
     }
     // Set all existing active sessions to false
-    yield acedemicSessionModel_1.AcedemicSession.updateMany({ active: true }, { active: false });
+    yield acedemicSessionModel_1.AcedemicSession.updateMany({ active: false });
     // Set the new session as active
     newSession.active = true;
     yield newSession.save();

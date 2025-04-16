@@ -118,7 +118,7 @@ export const createAcedemicSession: any = catchAsync(async (req, res, next) => {
   }
 
   // Set all existing active sessions to false
-  await AcedemicSession.updateMany({ active: true }, { active: false });
+  await AcedemicSession.updateMany({ active: false });
 
   // Set the new session as active
   newSession.active = true; 

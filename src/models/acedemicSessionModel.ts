@@ -28,7 +28,7 @@ const sessionSchema = new Schema<sessionType>({
     type: [Schema.ObjectId],
     default: [],
     ref: "Attendance",
-  },
+  }, 
   active: {
     type: Boolean,
     required: [true, "Please provide the status of this acedemic session"],

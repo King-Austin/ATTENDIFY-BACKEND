@@ -65,7 +65,7 @@ export const createALecturer = catchAsync(async (req, res, next) => {
 
   return AppResponse(
     res,
-    201,
+    200,
     "success",
     "Lecturer registration successful.",
    user
@@ -106,7 +106,7 @@ export const updateLecturer = catchAsync(async (req, res, next) => {
 });
 
 export const deleteALecturer = catchAsync(async (req, res, next) => {
-  await User.findByIdAndUpdate(req.params.id, { active: false });
+  await User.findByIdAndDelete(req.params.id);
 
-  return AppResponse(res, 204, "success", "deleted successfully", null);
-});
+  return AppResponse(res, 200, "success", "deleted successfully", null);
+}); 

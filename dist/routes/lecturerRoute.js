@@ -96,7 +96,7 @@ router
  *         description: Lecturer not found
  */
 router
-    .route("/deleteALecturer")
+    .route("/deleteALecturer/:id")
     .patch(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), lecturerController_1.deleteALecturer);
 /**
  * @swagger

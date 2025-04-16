@@ -23,6 +23,10 @@ const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 //CREATE ATTENDANCE
 exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { course, acedemicSession, semester, level } = req.body;
+    if (!course || !acedemicSession || !semester || !level) {
+        return next(new appError_1.AppError("please fill in the required field", 422));
+    }
+    //const semesterlowercase = semester.toLowerCase()
     // Step 1: Validate inputs and fetch related data
     const studentsOfferingTheCourse = yield studentModel_1.Students.find({ level });
     if (!studentsOfferingTheCourse || studentsOfferingTheCourse.length === 0) {
@@ -50,7 +54,7 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
     const newAttendance = yield attendanceModel_1.Attendance.create({
         course,
         acedemicSession,
-        semester,
+        semester, //: semesterlowercase,
         level,
         students,
     });
@@ -89,7 +93,7 @@ exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
 //MARK ATTENDANCE
 exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
-    const { fingerprint, regNo, level } = req.body; // Include level in the request body
+    const { regNo, level } = req.body; // Include level in the request body
     // Find the attendance record
     const attendance = yield attendanceModel_1.Attendance.findById(attendanceId);
     if (!attendance) {
@@ -104,7 +108,7 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
         return next(new appError_1.AppError("Attendance cannot be marked for this level.", 400));
     }
     // Find the student by matching the fingerprint
-    const student = attendance.students.find((student) => student.fingerPrint === fingerprint || student.regNo === regNo);
+    const student = attendance.students.find((student) => /*student.fingerPrint === fingerprint || */ student.regNo === regNo);
     if (!student) {
         return next(new appError_1.AppError("Student not found with the reg no or fingerprint mismatch.", 404));
     }
@@ -246,7 +250,7 @@ exports.addStudentToTheAttendance = (0, catchAsync_1.default)((req, res, next) =
 //DELETE ALL ATTENDANCE
 exports.deleteAllTheAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield attendanceModel_1.Attendance.deleteMany();
-    return (0, appResponse_1.AppResponse)(res, 200, "success", "An Acedemic session successfully deleted.", null);
+    return (0, appResponse_1.AppResponse)(res, 200, "success", "All attendance successfully deleted.", null);
 }));
 // export const getAttendanceWithPagination = catchAsync(async (req, res, next) => {
 //   const { sessionId } = req.params; // Academic session ID passed as parameter

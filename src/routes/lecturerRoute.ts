@@ -102,7 +102,7 @@ router
  *         description: Lecturer not found
  */
 router
-  .route("/deleteALecturer")
+  .route("/deleteALecturer/:id")
   .patch(protectedRoute, restrictedRoute(["admin"]), deleteALecturer);
 
 /**

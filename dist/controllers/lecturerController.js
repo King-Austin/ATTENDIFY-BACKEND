@@ -59,7 +59,7 @@ exports.createALecturer = (0, catchAsync_1.default)((req, res, next) => __awaite
         return next(new appError_1.AppError("Kindly fill in the required field", 400));
     }
     const user = yield userModel_1.default.create(lecturerDetails);
-    return (0, appResponse_1.AppResponse)(res, 201, "success", "Lecturer registration successful.", user);
+    return (0, appResponse_1.AppResponse)(res, 200, "success", "Lecturer registration successful.", user);
 }));
 //FOR UPDATING USER INFO
 exports.updateLecturer = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -81,6 +81,6 @@ exports.updateLecturer = (0, catchAsync_1.default)((req, res, next) => __awaiter
     return (0, appResponse_1.AppResponse)(res, 200, "success", "User successfully updated", updatedUser);
 }));
 exports.deleteALecturer = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    yield userModel_1.default.findByIdAndUpdate(req.params.id, { active: false });
-    return (0, appResponse_1.AppResponse)(res, 204, "success", "deleted successfully", null);
+    yield userModel_1.default.findByIdAndDelete(req.params.id);
+    return (0, appResponse_1.AppResponse)(res, 200, "success", "deleted successfully", null);
 }));

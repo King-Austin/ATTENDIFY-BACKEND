@@ -10,6 +10,11 @@ import catchAsync from "../utils/catchAsync";
 export const createAttendance = catchAsync(async (req, res, next) => {
   const { course, acedemicSession, semester, level } = req.body;
 
+  if (!course || !acedemicSession || !semester || !level) {
+    return next(new AppError("please fill in the required field", 422))
+  }
+
+  //const semesterlowercase = semester.toLowerCase()
   // Step 1: Validate inputs and fetch related data
   const studentsOfferingTheCourse = await Students.find({ level });
 
@@ -53,7 +58,7 @@ export const createAttendance = catchAsync(async (req, res, next) => {
   const newAttendance = await Attendance.create({
     course,
     acedemicSession,
-    semester,
+    semester,//: semesterlowercase,
     level,
     students,
   });
@@ -123,7 +128,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
 //MARK ATTENDANCE
 export const markAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
-  const { fingerprint, regNo, level } = req.body; // Include level in the request body
+  const { regNo, level } = req.body; // Include level in the request body
 
   // Find the attendance record
   const attendance = await Attendance.findById(attendanceId);
@@ -146,7 +151,7 @@ export const markAttendance = catchAsync(async (req, res, next) => {
 
   // Find the student by matching the fingerprint
   const student = attendance.students.find(
-    (student) => student.fingerPrint === fingerprint || student.regNo === regNo
+    (student) => /*student.fingerPrint === fingerprint || */student.regNo === regNo
   );
 
   if (!student) {
@@ -417,7 +422,7 @@ export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {
     res,
     200,
     "success",
-    "An Acedemic session successfully deleted.",
+    "All attendance successfully deleted.",
     null
   );
 });

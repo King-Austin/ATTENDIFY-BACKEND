@@ -4,6 +4,7 @@ import {
   activateAttendance,
   createAttendance,
   deactivateAttendance,
+  deleteAllTheAttendance,
   deleteAttendanceByID,
   fetchAllAttendance,
   fetchAttendanceBySession,
@@ -178,7 +179,7 @@ router.get("/fetchAttendanceBySession/:sessionId", fetchAttendanceBySession);
  *         description: Access forbidden
  */
 router.delete("/deleteAttendance/:attendanceId", protectedRoute, restrictedRoute(["admin"]), deleteAttendanceByID);
-
+ 
 /**
  * @swagger
  * /api/v1/attendance/deleteAllAttendance:
@@ -191,7 +192,7 @@ router.delete("/deleteAttendance/:attendanceId", protectedRoute, restrictedRoute
  *       403:
  *         description: Access forbidden
  */
-router.delete("/deleteAllAttendance", protectedRoute, restrictedRoute(["admin"]), deleteAllAcedemicSessions);
+router.delete("/deleteAllAttendance", protectedRoute, restrictedRoute(["admin"]), deleteAllTheAttendance);
 
 /**
  * @swagger
