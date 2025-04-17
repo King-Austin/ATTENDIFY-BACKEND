@@ -19,7 +19,7 @@ const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const studentModel_1 = require("../models/studentModel");
 const activitiesController_1 = require("./activitiesController");
-const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
+const verifyTokenAndGetUser_1 = require("../utils/verifyTokenAndGetUser");
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {
 //   const { name, start, end } = req.body;

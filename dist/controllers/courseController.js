@@ -18,7 +18,7 @@ const courseModel_1 = require("../models/courseModel");
 const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const activitiesController_1 = require("./activitiesController");
-const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
+const verifyTokenAndGetUser_1 = require("../utils/verifyTokenAndGetUser");
 //ADD NEW COURSE
 exports.addNewCourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { courseTitle, courseCode, semester, level } = req.body;

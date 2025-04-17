@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchAllActivities = exports.createActivitiesController = void 0;
-const appError_1 = require("src/errors/appError");
-const activitiesModel_1 = __importDefault(require("src/models/activitiesModel"));
-const appResponse_1 = require("src/utils/appResponse");
-const catchAsync_1 = __importDefault(require("src/utils/catchAsync"));
+const appError_1 = require("../errors/appError");
+const activitiesModel_1 = __importDefault(require("../models/activitiesModel"));
+const appResponse_1 = require("../utils/appResponse");
+const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 //ACTIVITY CONTROLLER
 const createActivitiesController = (activityData) => __awaiter(void 0, void 0, void 0, function* () {
     try {

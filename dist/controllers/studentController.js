@@ -18,7 +18,7 @@ const studentModel_1 = require("../models/studentModel");
 const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const activitiesController_1 = require("./activitiesController");
-const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
+const verifyTokenAndGetUser_1 = require("../utils/verifyTokenAndGetUser");
 //CREATE A NEW STUDENT
 exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, regNo, level, fingerPrint, addmissionYear, email } = req.body;
