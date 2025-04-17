@@ -17,6 +17,8 @@ const appError_1 = require("../errors/appError");
 const courseModel_1 = require("../models/courseModel");
 const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const activitiesController_1 = require("./activitiesController");
+const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
 //ADD NEW COURSE
 exports.addNewCourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { courseTitle, courseCode, semester, level } = req.body;
@@ -31,6 +33,32 @@ exports.addNewCourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
     });
     if (!newCourse) {
         return next(new appError_1.AppError("Could not add this course. Please try agaim", 400));
+    }
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} added a new ${newCourse.level} course. ${newCourse.courseCode}`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
     }
     return (0, appResponse_1.AppResponse)(res, 200, "success", "New course successfully added", newCourse);
 }));
@@ -64,6 +92,33 @@ exports.fetchCourseBySemester = (0, catchAsync_1.default)((req, res, next) => __
 exports.deleteACourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     yield courseModel_1.Course.findByIdAndDelete(id);
+    const findCourse = yield courseModel_1.Course.findById(id);
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} deleted a ${findCourse === null || findCourse === void 0 ? void 0 : findCourse.level} course. ${findCourse === null || findCourse === void 0 ? void 0 : findCourse.courseCode}`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", "A course successfully deleted", null);
 }));
 //DELETE A PARTICULAR COURSE USING ITS ID

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllTheAttendance = exports.addStudentToTheAttendance = exports.fetchAttendanceBySession = exports.deleteAttendanceByID = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAbsent = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
+const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
 const appError_1 = require("../errors/appError");
 const acedemicSessionModel_1 = require("../models/acedemicSessionModel");
 const attendanceModel_1 = require("../models/attendanceModel");
@@ -20,6 +21,7 @@ const courseModel_1 = require("../models/courseModel");
 const studentModel_1 = require("../models/studentModel");
 const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const activitiesController_1 = require("./activitiesController");
 //CREATE ATTENDANCE
 exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { course, acedemicSession, semester, level } = req.body;
@@ -58,6 +60,32 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
         level,
         students,
     });
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} just created a new attendance`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     // Step 4: Send a success response
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance for ${theCourse.courseCode} successfully created.`, newAttendance);
 }));
@@ -88,6 +116,32 @@ exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
     // Activate the attendance
     attendanceRecord.active = true;
     yield attendanceRecord.save();
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} activated ${attendanceRecord.course.courseCode} attendance for student to mark.`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance activated for students to mark`, attendanceRecord);
 }));
 //MARK ATTENDANCE
@@ -173,6 +227,32 @@ exports.deactivateAttendance = (0, catchAsync_1.default)((req, res, next) => __a
     }
     attendance.active = false;
     yield attendance.save();
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} Deactivated attendance`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance deactivated successfully.`, attendance);
 }));
 //FETCH ALL ATTENDANCE RECORDS
@@ -194,6 +274,32 @@ exports.deleteAttendanceByID = (0, catchAsync_1.default)((req, res, next) => __a
         return next(new appError_1.AppError("Attendance not found.", 404));
     }
     yield attendanceModel_1.Attendance.findByIdAndDelete(attendanceId);
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} deleted a ${attendance.level} attendance`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance deleted successfully.`, null);
 }));
 //FETCH ATTENDANCE BY SESSION

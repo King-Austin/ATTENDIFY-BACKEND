@@ -1,7 +1,10 @@
+import { activityType } from "src/types/types";
 import { AppError } from "../errors/appError";
 import { Students } from "../models/studentModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
+import { createActivitiesController } from "./activitiesController";
+import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
 
 //CREATE A NEW STUDENT
 export const createStudent = catchAsync(async (req, res, next) => {
@@ -18,20 +21,52 @@ export const createStudent = catchAsync(async (req, res, next) => {
       new AppError("Student already exist with the registrationj number", 400)
     );
   }
- 
+
   const newStudent = await Students.create({
     name,
     regNo,
     level,
     fingerPrint,
     addmissionYear,
-    email
+    email,
   });
 
   if (!newStudent) {
     return next(
       new AppError("Could not create student. Please try again", 400)
     );
+  }
+
+  const token = req.cookies.jwt;
+
+  if (!token) {
+    return next(
+      new AppError("You are not authorized to perform this action.", 401)
+    );
+  }
+
+  const user = await verifyTokenAndGetUser(token, next);
+
+  // if (!user) {
+  //   return next(
+  //     new AppError(
+  //       "Could not find user with this token. please login again.",
+  //       404
+  //     )
+  //   );
+  // }
+
+  const activityData: activityType = {
+    userName: user?.fullName,
+    userRole: user?.role,
+    action: `${user?.fullName} added a new student with a reg no ${regNo}`,
+  };
+  if (user) {
+    try {
+      createActivitiesController(activityData);
+    } catch (error) {
+      return next(new AppError("Failed to add activities", 400));
+    }
   }
 
   return AppResponse(
@@ -197,7 +232,6 @@ export const deleteAStudent = catchAsync(async (req, res, next) => {
 
 //DELETE ALL THE STUDENTS
 export const deleteAllTheStudent = catchAsync(async (req, res, next) => {
-
   await Students.deleteMany();
 
   return AppResponse(

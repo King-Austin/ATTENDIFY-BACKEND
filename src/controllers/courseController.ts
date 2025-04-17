@@ -1,7 +1,10 @@
+import { activityType } from "src/types/types";
 import { AppError } from "../errors/appError";
 import { Course } from "../models/courseModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
+import { createActivitiesController } from "./activitiesController";
+import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
 
 //ADD NEW COURSE
 export const addNewCourse = catchAsync(async (req, res, next) => {
@@ -23,6 +26,38 @@ export const addNewCourse = catchAsync(async (req, res, next) => {
       new AppError("Could not add this course. Please try agaim", 400)
     );
   }
+
+  const token = req.cookies.jwt;
+    
+      if (!token) {
+        return next(
+          new AppError("You are not authorized to perform this action.", 401)
+        );
+      }
+    
+      const user = await verifyTokenAndGetUser(token, next);
+    
+      // if (!user) {
+      //   return next(
+      //     new AppError(
+      //       "Could not find user with this token. please login again.",
+      //       404
+      //     )
+      //   );
+      // }
+  
+    const activityData: activityType = {
+      userName: user?.fullName,
+      userRole: user?.role,
+      action: `${user?.fullName} added a new ${newCourse.level} course. ${newCourse.courseCode}`
+    }
+    if (user) {
+      try {
+        createActivitiesController(activityData)
+      } catch (error) {
+        return next(new AppError("Failed to add activities", 400))
+      }
+    }
 
   return AppResponse(
     res,
@@ -104,6 +139,41 @@ export const deleteACourse = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   await Course.findByIdAndDelete(id);
+
+
+  const findCourse = await Course.findById(id);
+
+  const token = req.cookies.jwt;
+    
+      if (!token) {
+        return next(
+          new AppError("You are not authorized to perform this action.", 401)
+        );
+      }
+    
+      const user = await verifyTokenAndGetUser(token, next);
+    
+      // if (!user) {
+      //   return next(
+      //     new AppError(
+      //       "Could not find user with this token. please login again.",
+      //       404
+      //     )
+      //   );
+      // }
+  
+    const activityData: activityType = {
+      userName: user?.fullName,
+      userRole: user?.role,
+      action: `${user?.fullName} deleted a ${findCourse?.level} course. ${findCourse?.courseCode}`
+    }
+    if (user) {
+      try {
+        createActivitiesController(activityData)
+      } catch (error) {
+        return next(new AppError("Failed to add activities", 400))
+      }
+    }
 
   return AppResponse(
     res,

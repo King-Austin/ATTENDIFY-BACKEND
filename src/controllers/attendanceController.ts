@@ -1,3 +1,4 @@
+import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
 import { AppError } from "../errors/appError";
 import { AcedemicSession } from "../models/acedemicSessionModel";
 import { Attendance } from "../models/attendanceModel";
@@ -5,6 +6,8 @@ import { Course } from "../models/courseModel";
 import { Students } from "../models/studentModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
+import { createActivitiesController } from "./activitiesController";
+import { activityType } from "src/types/types";
 
 //CREATE ATTENDANCE
 export const createAttendance = catchAsync(async (req, res, next) => {
@@ -63,6 +66,38 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     students,
   });
 
+  const token = req.cookies.jwt;
+  
+    if (!token) {
+      return next(
+        new AppError("You are not authorized to perform this action.", 401)
+      );
+    }
+  
+    const user = await verifyTokenAndGetUser(token, next);
+  
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+
+  const activityData: activityType = {
+    userName: user?.fullName,
+    userRole: user?.role,
+    action: `${user?.fullName} just created a new attendance`
+  }
+  if (user) {
+    try {
+      createActivitiesController(activityData)
+    } catch (error) {
+      return next(new AppError("Failed to add activities", 400))
+    }
+  }
+
   // Step 4: Send a success response
 
   return AppResponse(
@@ -83,7 +118,7 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   const attendanceRecord : any = await Attendance.findById(attendanceId)
     .populate("course")
     .populate("acedemicSession");
-
+ 
   if (!attendanceRecord) {
     return next(
       new AppError("Attendance record not found for the course.", 404)
@@ -115,6 +150,38 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   // Activate the attendance
   attendanceRecord.active = true;
   await attendanceRecord.save();
+
+  const token = req.cookies.jwt;
+  
+    if (!token) {
+      return next(
+        new AppError("You are not authorized to perform this action.", 401)
+      );
+    }
+  
+    const user = await verifyTokenAndGetUser(token, next);
+  
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+
+  const activityData: activityType = {
+    userName: user?.fullName,
+    userRole: user?.role,
+    action: `${user?.fullName} activated ${attendanceRecord.course.courseCode} attendance for student to mark.`
+  }
+  if (user) {
+    try {
+      createActivitiesController(activityData)
+    } catch (error) {
+      return next(new AppError("Failed to add activities", 400))
+    }
+  }
 
   return AppResponse(
     res,
@@ -276,6 +343,38 @@ export const deactivateAttendance = catchAsync(async (req, res, next) => {
   attendance.active = false;
   await attendance.save();
 
+  const token = req.cookies.jwt;
+  
+    if (!token) {
+      return next(
+        new AppError("You are not authorized to perform this action.", 401)
+      );
+    }
+  
+    const user = await verifyTokenAndGetUser(token, next);
+  
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+
+  const activityData: activityType = {
+    userName: user?.fullName,
+    userRole: user?.role,
+    action: `${user?.fullName} Deactivated attendance`
+  }
+  if (user) {
+    try {
+      createActivitiesController(activityData)
+    } catch (error) {
+      return next(new AppError("Failed to add activities", 400))
+    }
+  }
+
   return AppResponse(
     res,
     200,
@@ -315,6 +414,38 @@ export const deleteAttendanceByID = catchAsync(async (req, res, next) => {
   }
 
   await Attendance.findByIdAndDelete(attendanceId);
+
+  const token = req.cookies.jwt;
+  
+    if (!token) {
+      return next(
+        new AppError("You are not authorized to perform this action.", 401)
+      );
+    }
+  
+    const user = await verifyTokenAndGetUser(token, next);
+  
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+
+  const activityData: activityType = {
+    userName: user?.fullName,
+    userRole: user?.role,
+    action: `${user?.fullName} deleted a ${attendance.level} attendance`
+  }
+  if (user) {
+    try {
+      createActivitiesController(activityData)
+    } catch (error) {
+      return next(new AppError("Failed to add activities", 400))
+    }
+  }
 
   return AppResponse(
     res,

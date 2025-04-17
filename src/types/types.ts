@@ -57,3 +57,9 @@ export interface attendanceType{
   active: boolean
   level: string | number
 }
+
+export interface activityType{
+  userName: string
+  userRole: string
+  action: string
+}

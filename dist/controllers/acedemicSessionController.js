@@ -18,6 +18,8 @@ const acedemicSessionModel_1 = require("../models/acedemicSessionModel");
 const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const studentModel_1 = require("../models/studentModel");
+const activitiesController_1 = require("./activitiesController");
+const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {
 //   const { name, start, end } = req.body;
@@ -128,6 +130,32 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         }
         yield student.save({ validateBeforeSave: false }); // Save the updated student level
     }
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} created a new academic session. ${acedemicSessionModel_1.AcedemicSession.name}`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", "New session successfully created and students promoted", newSession);
 }));
 //FETCH ALL ACEDEMIC SESSION
@@ -151,6 +179,33 @@ exports.fetchAcedemicSessionByID = (0, catchAsync_1.default)((req, res, next) =>
 exports.deleteAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     yield acedemicSessionModel_1.AcedemicSession.findByIdAndDelete(id);
+    const findAcad = yield acedemicSessionModel_1.AcedemicSession.findById(id);
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} just deleted ${findAcad === null || findAcad === void 0 ? void 0 : findAcad.name} session.`
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
+    }
     return (0, appResponse_1.AppResponse)(res, 200, "success", "An Acedemic session successfully deleted.", null);
 }));
 //DELETE ALL ACEDEMIC SESSION

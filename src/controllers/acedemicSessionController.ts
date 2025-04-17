@@ -3,6 +3,9 @@ import { AcedemicSession } from "../models/acedemicSessionModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
 import { Students } from "../models/studentModel";
+import { createActivitiesController } from "./activitiesController";
+import { activityType } from "src/types/types";
+import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
 
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {
@@ -143,6 +146,38 @@ export const createAcedemicSession: any = catchAsync(async (req, res, next) => {
     await student.save({validateBeforeSave : false}); // Save the updated student level
   }
 
+  const token = req.cookies.jwt;
+    
+      if (!token) {
+        return next(
+          new AppError("You are not authorized to perform this action.", 401)
+        );
+      }
+    
+      const user = await verifyTokenAndGetUser(token, next);
+    
+      // if (!user) {
+      //   return next(
+      //     new AppError(
+      //       "Could not find user with this token. please login again.",
+      //       404
+      //     )
+      //   );
+      // }
+  
+    const activityData: activityType = {
+      userName: user?.fullName,
+      userRole: user?.role,
+      action: `${user?.fullName} created a new academic session. ${AcedemicSession.name}`
+    }
+    if (user) {
+      try {
+        createActivitiesController(activityData)
+      } catch (error) {
+        return next(new AppError("Failed to add activities", 400))
+      }
+    }
+
   return AppResponse(
     res,
     200,
@@ -193,6 +228,42 @@ export const deleteAcedemicSession = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   await AcedemicSession.findByIdAndDelete(id);
+
+  const findAcad = await AcedemicSession.findById(id);
+
+  const token = req.cookies.jwt;
+    
+      if (!token) {
+        return next(
+          new AppError("You are not authorized to perform this action.", 401)
+        );
+      }
+    
+      const user = await verifyTokenAndGetUser(token, next);
+    
+      // if (!user) {
+      //   return next(
+      //     new AppError(
+      //       "Could not find user with this token. please login again.",
+      //       404
+      //     )
+      //   );
+      // }
+  
+    const activityData: activityType = {
+      userName: user?.fullName,
+      userRole: user?.role,
+      action: `${user?.fullName} just deleted ${findAcad?.name} session.`
+    }
+    if (user) {
+      try {
+        createActivitiesController(activityData)
+      } catch (error) {
+        return next(new AppError("Failed to add activities", 400))
+      }
+    }
+
+
 
   return AppResponse(
     res,

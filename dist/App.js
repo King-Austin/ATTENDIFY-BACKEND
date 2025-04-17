@@ -11,6 +11,7 @@ const attendanceRoute_1 = __importDefault(require("./routes/attendanceRoute"));
 const courseRoute_1 = __importDefault(require("./routes/courseRoute"));
 const studentsRoute_1 = __importDefault(require("./routes/studentsRoute"));
 const lecturerRoute_1 = __importDefault(require("./routes/lecturerRoute"));
+const activitiesRoute_1 = __importDefault(require("./routes/activitiesRoute"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
@@ -273,6 +274,7 @@ app.use("/api/v1/attendance", attendanceRoute_1.default);
 app.use("/api/v1/course", courseRoute_1.default);
 app.use("/api/v1/student", studentsRoute_1.default);
 app.use("/api/v1/lecturer", lecturerRoute_1.default);
+app.use("/api/v1/activities", activitiesRoute_1.default);
 app.all("*", (req, res, next) => {
     throw new Error("This route does not exist");
 });

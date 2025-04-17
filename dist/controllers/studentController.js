@@ -17,6 +17,8 @@ const appError_1 = require("../errors/appError");
 const studentModel_1 = require("../models/studentModel");
 const appResponse_1 = require("../utils/appResponse");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const activitiesController_1 = require("./activitiesController");
+const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
 //CREATE A NEW STUDENT
 exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, regNo, level, fingerPrint, addmissionYear, email } = req.body;
@@ -33,10 +35,36 @@ exports.createStudent = (0, catchAsync_1.default)((req, res, next) => __awaiter(
         level,
         fingerPrint,
         addmissionYear,
-        email
+        email,
     });
     if (!newStudent) {
         return next(new appError_1.AppError("Could not create student. Please try again", 400));
+    }
+    const token = req.cookies.jwt;
+    if (!token) {
+        return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
+    }
+    const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
+    // if (!user) {
+    //   return next(
+    //     new AppError(
+    //       "Could not find user with this token. please login again.",
+    //       404
+    //     )
+    //   );
+    // }
+    const activityData = {
+        userName: user === null || user === void 0 ? void 0 : user.fullName,
+        userRole: user === null || user === void 0 ? void 0 : user.role,
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} added a new student with a reg no ${regNo}`,
+    };
+    if (user) {
+        try {
+            (0, activitiesController_1.createActivitiesController)(activityData);
+        }
+        catch (error) {
+            return next(new appError_1.AppError("Failed to add activities", 400));
+        }
     }
     return (0, appResponse_1.AppResponse)(res, 201, "success", "Student successfully created", newStudent);
 }));

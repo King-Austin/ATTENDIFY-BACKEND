@@ -6,6 +6,7 @@ import attendanceRoute from "./routes/attendanceRoute";
 import courseRoute from "./routes/courseRoute";
 import studentRoute from "./routes/studentsRoute";
 import lecturerRoute from "./routes/lecturerRoute";
+import activitiesrRoute from "./routes/activitiesRoute";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import swaggerJsDoc from "swagger-jsdoc";
@@ -315,6 +316,7 @@ app.use("/api/v1/attendance", attendanceRoute);
 app.use("/api/v1/course", courseRoute);
 app.use("/api/v1/student", studentRoute);
 app.use("/api/v1/lecturer", lecturerRoute);
+app.use("/api/v1/activities", activitiesrRoute);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   throw new Error("This route does not exist");
