@@ -4,7 +4,7 @@ import { Course } from "../models/courseModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
 import { createActivitiesController } from "./activitiesController";
-import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
+import { verifyTokenAndGetUser } from "../utils/verifyTokenAndGetUser";
 
 //ADD NEW COURSE
 export const addNewCourse = catchAsync(async (req, res, next) => {

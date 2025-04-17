@@ -4,7 +4,7 @@ import { Students } from "../models/studentModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
 import { createActivitiesController } from "./activitiesController";
-import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
+import { verifyTokenAndGetUser } from "../utils/verifyTokenAndGetUser";
 
 //CREATE A NEW STUDENT
 export const createStudent = catchAsync(async (req, res, next) => {

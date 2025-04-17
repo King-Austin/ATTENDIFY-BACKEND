@@ -1,8 +1,8 @@
-import { AppError } from "src/errors/appError";
-import Activity from "src/models/activitiesModel";
-import { activityType } from "src/types/types";
-import { AppResponse } from "src/utils/appResponse";
-import catchAsync from "src/utils/catchAsync";
+import { AppError } from "../errors/appError";
+import Activity from "../models/activitiesModel";
+import { activityType } from "../types/types";
+import { AppResponse } from "../utils/appResponse";
+import catchAsync from "../utils/catchAsync";
 
 //ACTIVITY CONTROLLER
 export const createActivitiesController = async (activityData: activityType) => {

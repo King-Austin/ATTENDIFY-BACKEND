@@ -7,7 +7,7 @@ import { Students } from "../models/studentModel";
 import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
 import { createActivitiesController } from "./activitiesController";
-import { activityType } from "src/types/types";
+import { activityType } from "../types/types";
 
 //CREATE ATTENDANCE
 export const createAttendance = catchAsync(async (req, res, next) => {

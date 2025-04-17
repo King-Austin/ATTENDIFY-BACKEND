@@ -4,8 +4,8 @@ import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
 import { Students } from "../models/studentModel";
 import { createActivitiesController } from "./activitiesController";
-import { activityType } from "src/types/types";
-import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
+import { activityType } from "../types/types";
+import { verifyTokenAndGetUser } from "../utils/verifyTokenAndGetUser";
 
 // // CREATE A NEW SESSION
 // export const createAcedemicSession = catchAsync(async (req, res, next) => {
