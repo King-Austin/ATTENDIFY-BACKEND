@@ -1,4 +1,4 @@
-import { activityType } from "src/types/types";
+import { activityType } from "../types/types";
 import { AppError } from "../errors/appError";
 import { Course } from "../models/courseModel";
 import { AppResponse } from "../utils/appResponse";

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllTheAttendance = exports.addStudentToTheAttendance = exports.fetchAttendanceBySession = exports.deleteAttendanceByID = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAbsent = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
-const verifyTokenAndGetUser_1 = require("src/utils/verifyTokenAndGetUser");
+const verifyTokenAndGetUser_1 = require("../utils/verifyTokenAndGetUser");
 const appError_1 = require("../errors/appError");
 const acedemicSessionModel_1 = require("../models/acedemicSessionModel");
 const attendanceModel_1 = require("../models/attendanceModel");

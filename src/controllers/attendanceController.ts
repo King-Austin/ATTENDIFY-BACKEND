@@ -1,4 +1,4 @@
-import { verifyTokenAndGetUser } from "src/utils/verifyTokenAndGetUser";
+import { verifyTokenAndGetUser } from "../utils/verifyTokenAndGetUser";
 import { AppError } from "../errors/appError";
 import { AcedemicSession } from "../models/acedemicSessionModel";
 import { Attendance } from "../models/attendanceModel";
