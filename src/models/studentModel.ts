@@ -1,5 +1,5 @@
 import mongoose, { model } from "mongoose";
-import { studentType } from "src/types/types";
+import { studentType } from "../types/types";
 
 const { Schema } = mongoose;
  

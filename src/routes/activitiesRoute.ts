@@ -1,7 +1,7 @@
 
 import express from "express";
 import { protectedRoute } from "../controllers/authController";
-import { fetchAllActivities } from "src/controllers/activitiesController";
+import { fetchAllActivities } from "../controllers/activitiesController";
 
 const router = express.Router();
  
