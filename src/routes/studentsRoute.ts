@@ -58,7 +58,7 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchAllTheStudents").get(fetchAllTheStudents);
+router.route("/fetchAllTheStudents").get(protectedRoute, fetchAllTheStudents);
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByLevel").get(fetchStudentByLevel);
+router.route("/fetchStudentByLevel").get(protectedRoute,  fetchStudentByLevel);
 
 /**
  * @swagger
@@ -129,7 +129,7 @@ router.route("/fetchStudentByLevel").get(fetchStudentByLevel);
  *       403:
  *         description: Access forbidden
  */
-router.route("/updateStudentData").patch(updateStudentData);
+router.route("/updateStudentData").patch(protectedRoute, updateStudentData);
 
 /**
  * @swagger
@@ -193,6 +193,6 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByID/:id").get(fetchStudentByYearOfAdmission);
+router.route("/fetchStudentByID/:id").get(protectedRoute, fetchStudentByYearOfAdmission);
 
 export default router;

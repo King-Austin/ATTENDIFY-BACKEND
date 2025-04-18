@@ -35,7 +35,7 @@ const router = express_1.default.Router();
  *       403:
  *         description: Access forbidden
  */
-router.post("/createAttendance", attendanceController_1.createAttendance);
+router.post("/createAttendance", authController_1.protectedRoute, attendanceController_1.createAttendance);
 /**
  * @swagger
  * /api/v1/attendance/activateAttendance/{attendanceId}:
@@ -57,7 +57,7 @@ router.post("/createAttendance", attendanceController_1.createAttendance);
  *       403:
  *         description: Access forbidden
  */
-router.patch("/activateAttendance/:attendanceId", attendanceController_1.activateAttendance);
+router.patch("/activateAttendance/:attendanceId", authController_1.protectedRoute, attendanceController_1.activateAttendance);
 /**
  * @swagger
  * /api/v1/attendance/markAttendance/{attendanceId}:

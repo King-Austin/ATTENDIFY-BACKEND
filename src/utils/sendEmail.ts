@@ -17,7 +17,7 @@ if (
   throw new AppError(
     "Please make sure that these environmental variables exist",
     400
-  );
+  ); 
 }
 
 export const sendEmail = async (options: any) => {
@@ -128,7 +128,7 @@ export const sendEmail = async (options: any) => {
             <div class="email-container">
               <!-- Header Section with Logo and Company Name -->
               <div class="header">
-                <h1>The Uevents</h1>
+                <h1>ATTENDIFY</h1>
               </div>
         
               <!-- Main Content Area -->
@@ -142,8 +142,8 @@ export const sendEmail = async (options: any) => {
         
               <!-- Footer Section -->
               <div class="footer">
-                <p>The Uevent | Enugu, Nigeria | nzubechukwu@gmail.com</p>
-                <p>&copy; 2024 The Uevents. All rights reserved.</p>
+                <p>Attendify | Nnamdi Azikiwe University, Awka.</p>
+                <p>&copy; 2025 Attendify. All rights reserved.</p>
               </div>
             </div>
           </body>

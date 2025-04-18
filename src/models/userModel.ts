@@ -19,7 +19,7 @@ const userSchema = new Schema<userType>({
   role: {
     type: String,
     required: true,
-    enum: ["admin", "lecturer"],
+    enum: ["admin", "lecturer", "user"],
     default: "lecturer",
   },
   access: {

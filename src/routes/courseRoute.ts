@@ -63,7 +63,7 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchAllCourse").get(fetchAllCourse);
+router.route("/fetchAllCourse").get(protectedRoute, fetchAllCourse);
 
 /**
  * @swagger
@@ -84,7 +84,7 @@ router.route("/fetchAllCourse").get(fetchAllCourse);
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchCoursesByLevel/:level").get(fetchCourseByLevel);
+router.route("/fetchCoursesByLevel/:level").get(protectedRoute, fetchCourseByLevel);
 
 /**
  * @swagger
@@ -105,7 +105,7 @@ router.route("/fetchCoursesByLevel/:level").get(fetchCourseByLevel);
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchCoursesBySemester/:semester").get(fetchCourseBySemester);
+router.route("/fetchCoursesBySemester/:semester").get(protectedRoute, fetchCourseBySemester);
 
 /**
  * @swagger

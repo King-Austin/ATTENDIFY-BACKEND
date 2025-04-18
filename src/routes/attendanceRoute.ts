@@ -43,7 +43,7 @@ const router = express.Router();
  *       403:
  *         description: Access forbidden
  */
-router.post("/createAttendance", createAttendance);
+router.post("/createAttendance", protectedRoute, createAttendance);
 
 /**
  * @swagger
@@ -66,7 +66,7 @@ router.post("/createAttendance", createAttendance);
  *       403:
  *         description: Access forbidden
  */
-router.patch("/activateAttendance/:attendanceId", activateAttendance);
+router.patch("/activateAttendance/:attendanceId", protectedRoute, activateAttendance);
 
 /**
  * @swagger
