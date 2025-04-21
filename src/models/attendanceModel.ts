@@ -6,14 +6,42 @@ const { Schema } = mongoose;
 const attendanceSchema = new Schema<attendanceType>(
   {
     course: {
-      type: Schema.ObjectId,
-      ref: "courses",
-      required: [true, "Course is required."],
+      courseTitle: {
+        type: String,
+      },
+      courseCode: {
+        type: String,
+      },
+      semester: {
+        type: String,
+      },
+      level: {
+        type: String,
+      },
+      id: {
+        type: Schema.ObjectId, required: true
+      },
     },
     acedemicSession: {
-      type: Schema.ObjectId,
-      ref: "AcedemicSession",
-      required: [true, "Session is required."],
+      name: {
+        type: String,
+      },
+      start: {
+        type: Date,
+      },
+      end: {
+        type: Date,
+      },
+      semesters: {
+        type: [String],
+      },
+      active: {
+        type: Boolean,
+        default: true,
+      },
+      id: {
+        type: Schema.ObjectId, required: true
+      }
     },
     semester: {
       type: String,
@@ -48,7 +76,7 @@ const attendanceSchema = new Schema<attendanceType>(
         ],
       },
     ],
-  },                                  
+  },
   { timestamps: true }
 );
 

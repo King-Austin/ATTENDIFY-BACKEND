@@ -8,6 +8,7 @@ import { AppResponse } from "../utils/appResponse";
 import catchAsync from "../utils/catchAsync";
 import { createActivitiesController } from "./activitiesController";
 import { activityType } from "../types/types";
+import { start } from "repl";
 
 //CREATE ATTENDANCE
 export const createAttendance = catchAsync(async (req, res, next) => {
@@ -27,11 +28,11 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     );
   }
 
-  const theCourseAcedemicSession = await AcedemicSession.findById(
+  const findAcedemicSession = await AcedemicSession.findById(
     acedemicSession
   );
 
-  if (!theCourseAcedemicSession) {
+  if (!findAcedemicSession) {
     return next(
       new AppError(
         "The academic session that you selected does not exist in the database any longer.",
@@ -40,12 +41,29 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     );
   }
 
-  const theCourse = await Course.findById(course);
+  const theAcademicSession = {
+    name: findAcedemicSession.name,
+    start: findAcedemicSession.start,
+    end: findAcedemicSession.end,
+    active: findAcedemicSession.active,
+    id: findAcedemicSession._id
+  }
 
-  if (!theCourse) {
+
+
+  const findCourse = await Course.findById(course);
+
+  if (!findCourse) {
     return next(new AppError("This course does not exist.", 404));
   }
 
+  const theCourse = {
+    courseTitle: findCourse.courseTitle,
+    courseCode: findCourse.courseCode,
+    semester: findCourse.semester,
+    level: findCourse.level,
+    id: findCourse._id
+  }
   // Step 2: Prepare the `students` array for the attendance record
   const students = studentsOfferingTheCourse.map((student) => ({
     studentId: student._id,
@@ -59,8 +77,8 @@ export const createAttendance = catchAsync(async (req, res, next) => {
 
   // Step 3: Create the attendance record
   const newAttendance = await Attendance.create({
-    course,
-    acedemicSession,
+    course: theCourse,
+    acedemicSession: theAcademicSession,
     semester,//: semesterlowercase,
     level,
     students,
@@ -117,13 +135,13 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   // Find the attendance record for the specific course
   const attendanceRecord : any = await Attendance.findById(attendanceId)
     .populate("course")
-    .populate("acedemicSession");
+    .populate("acedemicSession"); 
  
   if (!attendanceRecord) {
     return next(
       new AppError("Attendance record not found for the course.", 404)
     );
-  }
+  } 
 
   if (attendanceRecord.active) {
     return next(
@@ -388,8 +406,8 @@ export const deactivateAttendance = catchAsync(async (req, res, next) => {
 export const fetchAllAttendance = catchAsync(async (req, res, next) => {
   // Fetch all attendance records 
   const attendanceRecords = await Attendance.find()
-    .populate("course")
-    .populate("acedemicSession");
+  .populate("course")
+  .populate("acedemicSession");
   
   if (!attendanceRecords) {
     return next(new AppError("Could not find attendance records", 404))
@@ -402,7 +420,7 @@ export const fetchAllAttendance = catchAsync(async (req, res, next) => {
     `Attendance fetched successfully.`,
     attendanceRecords
   );
-});
+});  
 
 //DELETE ATTENDANCE BY ID
 export const deleteAttendanceByID = catchAsync(async (req, res, next) => {

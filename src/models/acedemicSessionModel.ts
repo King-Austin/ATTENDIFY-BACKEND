@@ -13,7 +13,7 @@ const sessionSchema = new Schema<sessionType>({
     type: Date,
     required: [true, "Please provide date that this session starts."],
     unique: true,
-  },
+  }, 
   end: {
     type: Date,
     required: [true, "Please provide date that this session ends."],

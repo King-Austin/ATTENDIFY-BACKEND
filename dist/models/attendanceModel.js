@@ -28,14 +28,42 @@ const mongoose_1 = __importStar(require("mongoose"));
 const { Schema } = mongoose_1.default;
 const attendanceSchema = new Schema({
     course: {
-        type: Schema.ObjectId,
-        ref: "courses",
-        required: [true, "Course is required."],
+        courseTitle: {
+            type: String,
+        },
+        courseCode: {
+            type: String,
+        },
+        semester: {
+            type: String,
+        },
+        level: {
+            type: String,
+        },
+        id: {
+            type: Schema.ObjectId, required: true
+        },
     },
     acedemicSession: {
-        type: Schema.ObjectId,
-        ref: "AcedemicSession",
-        required: [true, "Session is required."],
+        name: {
+            type: String,
+        },
+        start: {
+            type: Date,
+        },
+        end: {
+            type: Date,
+        },
+        semesters: {
+            type: [String],
+        },
+        active: {
+            type: Boolean,
+            default: true,
+        },
+        id: {
+            type: Schema.ObjectId, required: true
+        }
     },
     semester: {
         type: String,

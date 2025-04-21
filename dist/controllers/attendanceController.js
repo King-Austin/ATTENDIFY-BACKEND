@@ -34,14 +34,28 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
     if (!studentsOfferingTheCourse || studentsOfferingTheCourse.length === 0) {
         return next(new appError_1.AppError("Could not find students offering this course.", 404));
     }
-    const theCourseAcedemicSession = yield acedemicSessionModel_1.AcedemicSession.findById(acedemicSession);
-    if (!theCourseAcedemicSession) {
+    const findAcedemicSession = yield acedemicSessionModel_1.AcedemicSession.findById(acedemicSession);
+    if (!findAcedemicSession) {
         return next(new appError_1.AppError("The academic session that you selected does not exist in the database any longer.", 404));
     }
-    const theCourse = yield courseModel_1.Course.findById(course);
-    if (!theCourse) {
+    const theAcademicSession = {
+        name: findAcedemicSession.name,
+        start: findAcedemicSession.start,
+        end: findAcedemicSession.end,
+        active: findAcedemicSession.active,
+        id: findAcedemicSession._id
+    };
+    const findCourse = yield courseModel_1.Course.findById(course);
+    if (!findCourse) {
         return next(new appError_1.AppError("This course does not exist.", 404));
     }
+    const theCourse = {
+        courseTitle: findCourse.courseTitle,
+        courseCode: findCourse.courseCode,
+        semester: findCourse.semester,
+        level: findCourse.level,
+        id: findCourse._id
+    };
     // Step 2: Prepare the `students` array for the attendance record
     const students = studentsOfferingTheCourse.map((student) => ({
         studentId: student._id,
@@ -54,8 +68,8 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
     }));
     // Step 3: Create the attendance record
     const newAttendance = yield attendanceModel_1.Attendance.create({
-        course,
-        acedemicSession,
+        course: theCourse,
+        acedemicSession: theAcademicSession,
         semester, //: semesterlowercase,
         level,
         students,
@@ -258,9 +272,9 @@ exports.deactivateAttendance = (0, catchAsync_1.default)((req, res, next) => __a
 //FETCH ALL ATTENDANCE RECORDS
 exports.fetchAllAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // Fetch all attendance records 
-    const attendanceRecords = yield attendanceModel_1.Attendance.find()
-        .populate("course")
-        .populate("acedemicSession");
+    const attendanceRecords = yield attendanceModel_1.Attendance.find();
+    //// .populate("course")
+    //// .populate("acedemicSession");
     if (!attendanceRecords) {
         return next(new appError_1.AppError("Could not find attendance records", 404));
     }
