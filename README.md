@@ -190,3 +190,11 @@ npm start
 - Robust error handling
 
 ---
+
+## Author
+
+**Desmond Nzubechukwu**  
+Software Engineer | Creating Value and Solutions  
+[LinkedIn](https://www.linkedin.com/in/desmondnzubechukwu/)  
+
+---
