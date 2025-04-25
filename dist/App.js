@@ -49,7 +49,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: process.env.BACKEND_URL,
+                url: process.env.BACKEND_URL || "https://smart-attendance-system-backend.vercel.app/",
             },
         ],
         components: {
@@ -229,118 +229,9 @@ const swaggerOptions = {
             },
         },
     },
-    apis: ["./src/routes/*.ts"], // Ensures compatibility with TypeScript and JavaScript
+    apis: ["./src/routes/*.js"],
 };
-// module.exports = swaggerOptions;
-// const swaggerOptions = {
-//   swaggerDefinition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "Academic Management System API",
-//       version: "1.0.0",
-//       description: "API for managing users, courses, attendance, and sessions.",
-//     },
-//     servers: [
-//       {
-//         url: process.env.backendUrl || "http://localhost:3000",
-//       },
-//     ],
-//     components: {
-//       schemas: {
-//         user: {
-//           type: "object",
-//           required: [
-//             "fullName",
-//             "email",
-//             "password",
-//             "role",
-//             "emailVerified",
-//             "active",
-//           ],
-//           properties: {
-//             fullName: { type: "string", description: "Full name of the user" },
-//             email: { type: "string", format: "email", description: "User email address" },
-//             password: { type: "string", format: "password", description: "User password" },
-//             role: { type: "string", description: "Role of the user (e.g., admin, student)" },
-//             id: { type: "string", format: "objectId", description: "Unique identifier for the user" },
-//             emailVerified: { type: "boolean", description: "Indicates if the user email is verified" },
-//             active: { type: "boolean", description: "Indicates if the user account is active" },
-//             access: { type: "string", description: "Access level of the user" },
-//           },
-//         },
-//         course: {
-//           type: "object",
-//           required: ["courseTitle", "courseCode", "semester", "level"],
-//           properties: {
-//             courseTitle: { type: "string", description: "Title of the course" },
-//             courseCode: { type: "string", description: "Code of the course" },
-//             semester: { type: "string", description: "Semester the course is offered" },
-//             level: { type: "string", description: "Academic level for the course" },
-//           },
-//         },
-//         student: {
-//           type: "object",
-//           required: ["name", "regNo", "level", "course", "fingerPrint", "addmissionYear"],
-//           properties: {
-//             name: { type: "string", description: "Full name of the student" },
-//             regNo: { type: "string", description: "Registration number of the student" },
-//             level: { type: "string", description: "Academic level of the student" },
-//             course: {
-//               type: "array",
-//               items: { type: "string", format: "objectId" },
-//               description: "Courses the student is enrolled in",
-//             },
-//             fingerPrint: { type: "string", description: "Fingerprint data of the student" },
-//             addmissionYear: { type: "string", description: "Year of admission" },
-//           },
-//         },
-//         session: {
-//           type: "object",
-//           required: ["name", "start", "end", "semesters", "attendance"],
-//           properties: {
-//             name: { type: "string", description: "Name of the session" },
-//             start: { type: "string", format: "date", description: "Start date of the session" },
-//             end: { type: "string", format: "date", description: "End date of the session" },
-//             semesters: {
-//               type: "array",
-//               items: { type: "string" },
-//               description: "Semesters included in the session",
-//             },
-//             attendance: {
-//               type: "array",
-//               items: { type: "string", format: "objectId" },
-//               description: "Attendance records for the session",
-//             },
-//           },
-//         },
-//         attendance: {
-//           type: "object",
-//           required: ["course", "acedemicSession", "semester", "students", "active", "level"],
-//           properties: {
-//             course: { type: "string", format: "objectId", description: "Course associated with attendance" },
-//             acedemicSession: { type: "string", format: "objectId", description: "Academic session of attendance" },
-//             semester: { type: "string", description: "Semester for the attendance record" },
-//             students: {
-//               type: "array",
-//               items: { $ref: "#/components/schemas/student" },
-//               description: "Students associated with the attendance record",
-//             },
-//             active: { type: "boolean", description: "Indicates if attendance is active" },
-//             level: { type: "string", description: "Level of students in the attendance record" },
-//           },
-//         },
-//       },
-//     },
-//   },
-//   apis: ["./src/routes/*.ts"], // Path to your route files
-// };
 const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
-// app.use(
-//   "/api-docs",
-//   express.static("node_modules/swagger-ui-dist/", { index: false }),
-//   swaggerUi.serve,
-//   swaggerUi.setup(swaggerDocs)
-// );
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs, {
     customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
 }));
