@@ -41,7 +41,7 @@ const createAndSendTokenToUser = async (
     httpOnly: true,
     sameSite: "none",
     secure: true,
-  }; 
+  };
 
   res.cookie("jwt", token, theCookieOptions);
 
@@ -119,7 +119,6 @@ export const loginUser = catchAsync(
   }
 );
 
-
 //FETCH AUTHENTICATED USER INFORMATION
 export const fetchMe = catchAsync(async (req, res, next) => {
   const token = req.cookies.jwt;
@@ -138,8 +137,6 @@ export const fetchMe = catchAsync(async (req, res, next) => {
 
   return AppResponse(res, 200, "success", "user fetched successfully", user);
 });
-
-
 
 //PROTECTED ROUTE
 export const protectedRoute = catchAsync(async (req, res, next) => {
@@ -236,7 +233,7 @@ export const changeUserPassword = catchAsync(async (req, res, next) => {
   if (!currentPassword || !newPassword || !confirmNewPassword) {
     return next(new AppError("Please provide the required field", 400));
   }
- 
+
   if (newPassword !== confirmNewPassword) {
     return next(
       new AppError("new password and confirm password must be the same.", 400)

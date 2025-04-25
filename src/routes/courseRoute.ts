@@ -1,8 +1,5 @@
 import express from "express";
-import {
-  protectedRoute,
-  restrictedRoute,
-} from "../controllers/authController";
+import { protectedRoute, restrictedRoute } from "../controllers/authController";
 import {
   addNewCourse,
   deleteACourse,
@@ -84,7 +81,9 @@ router.route("/fetchAllCourse").get(protectedRoute, fetchAllCourse);
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchCoursesByLevel/:level").get(protectedRoute, fetchCourseByLevel);
+router
+  .route("/fetchCoursesByLevel/:level")
+  .get(protectedRoute, fetchCourseByLevel);
 
 /**
  * @swagger
@@ -105,7 +104,9 @@ router.route("/fetchCoursesByLevel/:level").get(protectedRoute, fetchCourseByLev
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchCoursesBySemester/:semester").get(protectedRoute, fetchCourseBySemester);
+router
+  .route("/fetchCoursesBySemester/:semester")
+  .get(protectedRoute, fetchCourseBySemester);
 
 /**
  * @swagger
@@ -146,6 +147,8 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAllCourses").delete(protectedRoute, restrictedRoute(["admin"]), deleteAllCourses);
+router
+  .route("/deleteAllCourses")
+  .delete(protectedRoute, restrictedRoute(["admin"]), deleteAllCourses);
 
 export default router;

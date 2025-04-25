@@ -16,50 +16,50 @@ export interface userType {
   passwordChangeAt?: Date;
   passwordResetToken?: string;
   passwordResetTokenExpires?: Date;
-  emailVerificationCode?: number | null
-  emailVerificationCodeExpires?: Date | unknown | any
-  emailVerified: boolean
-  active: boolean
-  access : string
+  emailVerificationCode?: number | null;
+  emailVerificationCodeExpires?: Date | unknown | any;
+  emailVerified: boolean;
+  active: boolean;
+  access: string;
 }
 
 export interface courseType {
-  courseTitle: string
-  courseCode: string
-  semester: string
-  level: string
+  courseTitle: string;
+  courseCode: string;
+  semester: string;
+  level: string;
 }
 
-export interface studentType{
-  name: string
-  regNo: number | string
-  level: number | string
-  course: string[] | ObjectId[]
-  fingerPrint: string
-  addmissionYear: string
-  email : string
+export interface studentType {
+  name: string;
+  regNo: number | string;
+  level: number | string;
+  course: string[] | ObjectId[];
+  fingerPrint: string;
+  addmissionYear: string;
+  email: string;
 }
 
-export interface sessionType{
-  name: string | Date | number
-  start: string | Date | number
-  end: string | Date | number
-  semesters: string[]
-  attendance: string[] | ObjectId[] | any[]
-  active : boolean
+export interface sessionType {
+  name: string | Date | number;
+  start: string | Date | number;
+  end: string | Date | number;
+  semesters: string[];
+  attendance: string[] | ObjectId[] | any[];
+  active: boolean;
 }
 
-export interface attendanceType{
-  course: string | ObjectId
-  acedemicSession: ObjectId | string
-  semester: string 
-  students: any[] | studentType[]
-  active: boolean
-  level: string | number
+export interface attendanceType {
+  course: string | ObjectId;
+  acedemicSession: ObjectId | string;
+  semester: string;
+  students: any[] | studentType[];
+  active: boolean;
+  level: string | number;
 }
 
-export interface activityType{
-  userName: string
-  userRole: string
-  action: string
+export interface activityType {
+  userName: string;
+  userRole: string;
+  action: string;
 }

@@ -19,7 +19,8 @@ const attendanceSchema = new Schema<attendanceType>(
         type: String,
       },
       id: {
-        type: Schema.ObjectId, required: true
+        type: Schema.ObjectId,
+        required: true,
       },
     },
     acedemicSession: {
@@ -40,8 +41,9 @@ const attendanceSchema = new Schema<attendanceType>(
         default: true,
       },
       id: {
-        type: Schema.ObjectId, required: true
-      }
+        type: Schema.ObjectId,
+        required: true,
+      },
     },
     semester: {
       type: String,

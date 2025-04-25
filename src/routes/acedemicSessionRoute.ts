@@ -8,10 +8,7 @@ import {
   fetchAllAcedemicSession,
 } from "../controllers/acedemicSessionController";
 
-import {
-  protectedRoute,
-  restrictedRoute,
-} from "../controllers/authController";
+import { protectedRoute, restrictedRoute } from "../controllers/authController";
 
 const router = express.Router();
 
@@ -104,7 +101,13 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAllAcedemicSessions").delete(protectedRoute, restrictedRoute(["admin"]), deleteAllAcedemicSessions);
+router
+  .route("/deleteAllAcedemicSessions")
+  .delete(
+    protectedRoute,
+    restrictedRoute(["admin"]),
+    deleteAllAcedemicSessions
+  );
 
 /**
  * @swagger

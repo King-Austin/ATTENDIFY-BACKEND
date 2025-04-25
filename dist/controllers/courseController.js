@@ -39,18 +39,10 @@ exports.addNewCourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
         return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
     }
     const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} added a new ${newCourse.level} course. ${newCourse.courseCode}`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} added a new ${newCourse.level} course. ${newCourse.courseCode}`,
     };
     if (user) {
         try {
@@ -98,18 +90,10 @@ exports.deleteACourse = (0, catchAsync_1.default)((req, res, next) => __awaiter(
         return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
     }
     const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} deleted a ${findCourse === null || findCourse === void 0 ? void 0 : findCourse.level} course. ${findCourse === null || findCourse === void 0 ? void 0 : findCourse.courseCode}`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} deleted a ${findCourse === null || findCourse === void 0 ? void 0 : findCourse.level} course. ${findCourse === null || findCourse === void 0 ? void 0 : findCourse.courseCode}`,
     };
     if (user) {
         try {

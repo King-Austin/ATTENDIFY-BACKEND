@@ -65,13 +65,29 @@ const swaggerOptions = {
                         "active",
                     ],
                     properties: {
-                        id: { type: "string", description: "Unique identifier (MongoDB ObjectId)" },
+                        id: {
+                            type: "string",
+                            description: "Unique identifier (MongoDB ObjectId)",
+                        },
                         fullName: { type: "string", description: "Full name of the user" },
-                        email: { type: "string", format: "email", description: "User email address" },
+                        email: {
+                            type: "string",
+                            format: "email",
+                            description: "User email address",
+                        },
                         password: { type: "string", description: "User password (hashed)" },
-                        role: { type: "string", description: "Role of the user (e.g., admin, student)" },
-                        emailVerified: { type: "boolean", description: "Indicates if the user's email is verified" },
-                        active: { type: "boolean", description: "Indicates if the user account is active" },
+                        role: {
+                            type: "string",
+                            description: "Role of the user (e.g., admin, student)",
+                        },
+                        emailVerified: {
+                            type: "boolean",
+                            description: "Indicates if the user's email is verified",
+                        },
+                        active: {
+                            type: "boolean",
+                            description: "Indicates if the user account is active",
+                        },
                         access: { type: "string", description: "Access level of the user" },
                     },
                 },
@@ -79,27 +95,58 @@ const swaggerOptions = {
                     type: "object",
                     required: ["courseTitle", "courseCode", "semester", "level"],
                     properties: {
-                        id: { type: "string", description: "Unique identifier (MongoDB ObjectId)" },
+                        id: {
+                            type: "string",
+                            description: "Unique identifier (MongoDB ObjectId)",
+                        },
                         courseTitle: { type: "string", description: "Title of the course" },
                         courseCode: { type: "string", description: "Code of the course" },
-                        semester: { type: "string", description: "Semester the course is offered" },
-                        level: { type: "string", description: "Academic level for the course" },
+                        semester: {
+                            type: "string",
+                            description: "Semester the course is offered",
+                        },
+                        level: {
+                            type: "string",
+                            description: "Academic level for the course",
+                        },
                     },
                 },
                 student: {
                     type: "object",
-                    required: ["name", "regNo", "level", "course", "fingerPrint", "admissionYear"],
+                    required: [
+                        "name",
+                        "regNo",
+                        "level",
+                        "course",
+                        "fingerPrint",
+                        "admissionYear",
+                    ],
                     properties: {
-                        id: { type: "string", description: "Unique identifier (MongoDB ObjectId)" },
+                        id: {
+                            type: "string",
+                            description: "Unique identifier (MongoDB ObjectId)",
+                        },
                         name: { type: "string", description: "Full name of the student" },
-                        regNo: { type: "string", description: "Registration number of the student" },
-                        level: { type: "string", description: "Academic level of the student" },
+                        regNo: {
+                            type: "string",
+                            description: "Registration number of the student",
+                        },
+                        level: {
+                            type: "string",
+                            description: "Academic level of the student",
+                        },
                         course: {
                             type: "array",
-                            items: { type: "string", description: "Course ID (MongoDB ObjectId)" },
+                            items: {
+                                type: "string",
+                                description: "Course ID (MongoDB ObjectId)",
+                            },
                             description: "Courses the student is enrolled in",
                         },
-                        fingerPrint: { type: "string", description: "Fingerprint data of the student" },
+                        fingerPrint: {
+                            type: "string",
+                            description: "Fingerprint data of the student",
+                        },
                         admissionYear: { type: "string", description: "Year of admission" },
                     },
                 },
@@ -107,10 +154,21 @@ const swaggerOptions = {
                     type: "object",
                     required: ["name", "start", "end", "semesters", "attendance"],
                     properties: {
-                        id: { type: "string", description: "Unique identifier (MongoDB ObjectId)" },
+                        id: {
+                            type: "string",
+                            description: "Unique identifier (MongoDB ObjectId)",
+                        },
                         name: { type: "string", description: "Name of the session" },
-                        start: { type: "string", format: "date-time", description: "Start date of the session" },
-                        end: { type: "string", format: "date-time", description: "End date of the session" },
+                        start: {
+                            type: "string",
+                            format: "date-time",
+                            description: "Start date of the session",
+                        },
+                        end: {
+                            type: "string",
+                            format: "date-time",
+                            description: "End date of the session",
+                        },
                         semesters: {
                             type: "array",
                             items: { type: "string" },
@@ -118,26 +176,54 @@ const swaggerOptions = {
                         },
                         attendance: {
                             type: "array",
-                            items: { type: "string", description: "Attendance record ID (MongoDB ObjectId)" },
+                            items: {
+                                type: "string",
+                                description: "Attendance record ID (MongoDB ObjectId)",
+                            },
                             description: "Attendance records for the session",
                         },
                     },
                 },
                 attendance: {
                     type: "object",
-                    required: ["course", "academicSession", "semester", "students", "active", "level"],
+                    required: [
+                        "course",
+                        "academicSession",
+                        "semester",
+                        "students",
+                        "active",
+                        "level",
+                    ],
                     properties: {
-                        id: { type: "string", description: "Unique identifier (MongoDB ObjectId)" },
-                        course: { type: "string", description: "Course ID (MongoDB ObjectId)" },
-                        academicSession: { type: "string", description: "Academic session ID (MongoDB ObjectId)" },
-                        semester: { type: "string", description: "Semester for the attendance record" },
+                        id: {
+                            type: "string",
+                            description: "Unique identifier (MongoDB ObjectId)",
+                        },
+                        course: {
+                            type: "string",
+                            description: "Course ID (MongoDB ObjectId)",
+                        },
+                        academicSession: {
+                            type: "string",
+                            description: "Academic session ID (MongoDB ObjectId)",
+                        },
+                        semester: {
+                            type: "string",
+                            description: "Semester for the attendance record",
+                        },
                         students: {
                             type: "array",
                             items: { $ref: "#/components/schemas/student" },
                             description: "Students associated with the attendance record",
                         },
-                        active: { type: "boolean", description: "Indicates if attendance is active" },
-                        level: { type: "string", description: "Level of students in the attendance record" },
+                        active: {
+                            type: "boolean",
+                            description: "Indicates if attendance is active",
+                        },
+                        level: {
+                            type: "string",
+                            description: "Level of students in the attendance record",
+                        },
                     },
                 },
             },
@@ -255,8 +341,8 @@ const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
 //   swaggerUi.serve,
 //   swaggerUi.setup(swaggerDocs)
 // );
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs, {
-    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs, {
+    customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
 }));
 // Serve the Swagger UI static assets (CSS, JS, etc.)
 app.use("/api-docs", express_1.default.static(path_1.default.join(__dirname, "node_modules/swagger-ui-dist")));

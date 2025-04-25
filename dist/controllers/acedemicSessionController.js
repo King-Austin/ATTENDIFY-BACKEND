@@ -20,59 +20,6 @@ const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const studentModel_1 = require("../models/studentModel");
 const activitiesController_1 = require("./activitiesController");
 const verifyTokenAndGetUser_1 = require("../utils/verifyTokenAndGetUser");
-// // CREATE A NEW SESSION
-// export const createAcedemicSession = catchAsync(async (req, res, next) => {
-//   const { name, start, end } = req.body;
-//   // Fetch all students
-//   const students = await Students.find();
-//   if (!name || !start || !end) {
-//     return next(
-//       new AppError(
-//         "Please provide the required fields to create this session",
-//         422
-//       )
-//     );
-//   }
-//   // Check if the session already exists
-//   const sessionExist = await AcedemicSession.findOne({ start, end });
-//   if (sessionExist) {
-//     return next(
-//       new AppError(
-//         "This academic session you are trying to create already exists.",
-//         400
-//       )
-//     );
-//   }
-//   // Create new session
-//   const newSession = await AcedemicSession.create({ name, start, end });
-//   if (!newSession) {
-//     return next(
-//       new AppError("Could not create this session. Please try again.", 400)
-//     );
-//   }
-//   // Promote students to the next level
-//   for (const student of students) {
-//     if (student.level === "100") {
-//       student.level = "200";
-//     } else if (student.level === "200") {
-//       student.level = "300";
-//     } else if (student.level === "300") {
-//       student.level = "400";
-//     } else if (student.level === "400") {
-//       student.level = "500";
-//     } else if (student.level === "500") {
-//       student.level = "graduated"; // Mark students as graduated
-//     }
-//     await student.save(); // Save the updated student level
-//   }
-//   return AppResponse(
-//     res,
-//     200,
-//     "success",
-//     "New session successfully created and students promoted",
-//     newSession
-//   );
-// });
 // CREATE A NEW SESSION
 exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, start, end } = req.body;
@@ -135,18 +82,10 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
     }
     const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} created a new academic session. ${acedemicSessionModel_1.AcedemicSession.name}`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} created a new academic session. ${acedemicSessionModel_1.AcedemicSession.name}`,
     };
     if (user) {
         try {
@@ -185,18 +124,10 @@ exports.deleteAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         return next(new appError_1.AppError("You are not authorized to perform this action.", 401));
     }
     const user = yield (0, verifyTokenAndGetUser_1.verifyTokenAndGetUser)(token, next);
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} just deleted ${findAcad === null || findAcad === void 0 ? void 0 : findAcad.name} session.`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} just deleted ${findAcad === null || findAcad === void 0 ? void 0 : findAcad.name} session.`,
     };
     if (user) {
         try {

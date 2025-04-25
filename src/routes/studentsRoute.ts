@@ -44,7 +44,7 @@ const router = express.Router();
  */
 router
   .route("/createStudent")
-  .post(protectedRoute, restrictedRoute(["admin"]),  createStudent);
+  .post(protectedRoute, restrictedRoute(["admin"]), createStudent);
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByLevel").get(protectedRoute,  fetchStudentByLevel);
+router.route("/fetchStudentByLevel").get(protectedRoute, fetchStudentByLevel);
 
 /**
  * @swagger
@@ -193,6 +193,8 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByID/:id").get(protectedRoute, fetchStudentByYearOfAdmission);
+router
+  .route("/fetchStudentByID/:id")
+  .get(protectedRoute, fetchStudentByYearOfAdmission);
 
 export default router;

@@ -75,7 +75,9 @@ router.route("/fetchAllCourse").get(authController_1.protectedRoute, courseContr
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchCoursesByLevel/:level").get(authController_1.protectedRoute, courseController_1.fetchCourseByLevel);
+router
+    .route("/fetchCoursesByLevel/:level")
+    .get(authController_1.protectedRoute, courseController_1.fetchCourseByLevel);
 /**
  * @swagger
  * /api/v1/course/fetchCoursesBySemester/{semester}:
@@ -95,7 +97,9 @@ router.route("/fetchCoursesByLevel/:level").get(authController_1.protectedRoute,
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchCoursesBySemester/:semester").get(authController_1.protectedRoute, courseController_1.fetchCourseBySemester);
+router
+    .route("/fetchCoursesBySemester/:semester")
+    .get(authController_1.protectedRoute, courseController_1.fetchCourseBySemester);
 /**
  * @swagger
  * /api/v1/course/deleteACourse/{id}:
@@ -134,5 +138,7 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAllCourses").delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), courseController_1.deleteAllCourses);
+router
+    .route("/deleteAllCourses")
+    .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), courseController_1.deleteAllCourses);
 exports.default = router;

@@ -8,12 +8,12 @@ const sessionSchema = new Schema<sessionType>({
     type: String,
     required: [true, "Please provide the name of this session"],
     unique: true,
-  }, 
+  },
   start: {
     type: Date,
     required: [true, "Please provide date that this session starts."],
     unique: true,
-  }, 
+  },
   end: {
     type: Date,
     required: [true, "Please provide date that this session ends."],
@@ -28,12 +28,12 @@ const sessionSchema = new Schema<sessionType>({
     type: [Schema.ObjectId],
     default: [],
     ref: "Attendance",
-  }, 
+  },
   active: {
     type: Boolean,
     required: [true, "Please provide the status of this acedemic session"],
     default: true,
   },
-}); 
- 
+});
+
 export const AcedemicSession = model("AcedemicSession", sessionSchema);

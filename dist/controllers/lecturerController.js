@@ -49,7 +49,7 @@ exports.createALecturer = (0, catchAsync_1.default)((req, res, next) => __awaite
         fullName,
         email,
         password: `*12345${email}`,
-        confirmPassword: `*12345${email}`
+        confirmPassword: `*12345${email}`,
     };
     //if user already exist with the provided email, return an error message
     if (userExistWithEmail) {

@@ -17,7 +17,7 @@ if (
   throw new AppError(
     "Please make sure that these environmental variables exist",
     400
-  ); 
+  );
 }
 
 export const sendEmail = async (options: any) => {

@@ -93,7 +93,9 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/deleteAllAcedemicSessions").delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAllAcedemicSessions);
+router
+    .route("/deleteAllAcedemicSessions")
+    .delete(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), acedemicSessionController_1.deleteAllAcedemicSessions);
 /**
  * @swagger
  * /api/v1/acedemicSession/fetchAcedemicSessionByID/{id}:

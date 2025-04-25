@@ -181,5 +181,7 @@ router
  *       403:
  *         description: Access forbidden
  */
-router.route("/fetchStudentByID/:id").get(authController_1.protectedRoute, studentController_1.fetchStudentByYearOfAdmission);
+router
+    .route("/fetchStudentByID/:id")
+    .get(authController_1.protectedRoute, studentController_1.fetchStudentByYearOfAdmission);
 exports.default = router;

@@ -1,10 +1,8 @@
-
 import express from "express";
 import { protectedRoute } from "../controllers/authController";
 import { fetchAllActivities } from "../controllers/activitiesController";
 
 const router = express.Router();
- 
 
 /**
  * @swagger
@@ -19,7 +17,5 @@ const router = express.Router();
  *         description: Access forbidden
  */
 router.get("/fetchAllActivities", protectedRoute, fetchAllActivities);
- 
 
 export default router;
- 

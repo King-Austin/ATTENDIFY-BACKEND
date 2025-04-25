@@ -15,7 +15,7 @@ import {
 import { protectedRoute, restrictedRoute } from "../controllers/authController";
 
 const router = express.Router();
- 
+
 /**
  * @swagger
  * /api/v1/attendance/createAttendance:
@@ -67,7 +67,11 @@ router.post("/createAttendance", protectedRoute, createAttendance);
  *       403:
  *         description: Access forbidden
  */
-router.patch("/activateAttendance/:attendanceId", protectedRoute, activateAttendance);
+router.patch(
+  "/activateAttendance/:attendanceId",
+  protectedRoute,
+  activateAttendance
+);
 
 /**
  * @swagger
@@ -100,7 +104,7 @@ router.patch("/activateAttendance/:attendanceId", protectedRoute, activateAttend
  *       403:
  *         description: Access forbidden
  */
-router.patch("/markAttendance/:attendanceId",protectedRoute, markAttendance);
+router.patch("/markAttendance/:attendanceId", protectedRoute, markAttendance);
 
 /**
  * @swagger
@@ -123,7 +127,12 @@ router.patch("/markAttendance/:attendanceId",protectedRoute, markAttendance);
  *       403:
  *         description: Access forbidden
  */
-router.patch("/deactivateAttendance/:attendanceId", protectedRoute, restrictedRoute(["admin"]), deactivateAttendance);
+router.patch(
+  "/deactivateAttendance/:attendanceId",
+  protectedRoute,
+  restrictedRoute(["admin"]),
+  deactivateAttendance
+);
 
 /**
  * @swagger
@@ -138,7 +147,7 @@ router.patch("/deactivateAttendance/:attendanceId", protectedRoute, restrictedRo
  *         description: Access forbidden
  */
 router.get("/fetchAllAttendance", fetchAllAttendance);
- 
+
 /**
  * @swagger
  * /api/v1/attendance/fetchAttendanceBySession/{sessionId}:
@@ -179,8 +188,13 @@ router.get("/fetchAttendanceBySession/:sessionId", fetchAttendanceBySession);
  *       403:
  *         description: Access forbidden
  */
-router.delete("/deleteAttendance/:attendanceId", protectedRoute, restrictedRoute(["admin"]), deleteAttendanceByID);
- 
+router.delete(
+  "/deleteAttendance/:attendanceId",
+  protectedRoute,
+  restrictedRoute(["admin"]),
+  deleteAttendanceByID
+);
+
 /**
  * @swagger
  * /api/v1/attendance/deleteAllAttendance:
@@ -193,7 +207,12 @@ router.delete("/deleteAttendance/:attendanceId", protectedRoute, restrictedRoute
  *       403:
  *         description: Access forbidden
  */
-router.delete("/deleteAllAttendance", protectedRoute, restrictedRoute(["admin"]), deleteAllTheAttendance);
+router.delete(
+  "/deleteAllAttendance",
+  protectedRoute,
+  restrictedRoute(["admin"]),
+  deleteAllTheAttendance
+);
 
 /**
  * @swagger
@@ -216,6 +235,10 @@ router.delete("/deleteAllAttendance", protectedRoute, restrictedRoute(["admin"])
  */
 router.patch("/markAbsent/:attendanceId", markAbsent);
 
-router.patch("/addCarryoverStudentToTheAttendance/:attendanceId", protectedRoute, addCarryoverStudentToTheAttendance);
+router.patch(
+  "/addCarryoverStudentToTheAttendance/:attendanceId",
+  protectedRoute,
+  addCarryoverStudentToTheAttendance
+);
 
 export default router;

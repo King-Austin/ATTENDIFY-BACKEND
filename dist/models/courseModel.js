@@ -30,12 +30,12 @@ const courseSchema = new Schema({
     courseTitle: {
         type: String,
         required: [true, "Please provide the course tilte"],
-        unique: true
+        unique: true,
     },
     courseCode: {
         type: String,
         required: [true, "Kindly provide the course code"],
-        unique: true
+        unique: true,
     },
     semester: {
         type: String,

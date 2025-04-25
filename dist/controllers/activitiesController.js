@@ -21,11 +21,11 @@ const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const createActivitiesController = (activityData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newActivity = yield activitiesModel_1.default.create(activityData);
-        console.log('Activity logged successfully:', newActivity);
+        console.log("Activity logged successfully:", newActivity);
     }
     catch (error) {
-        console.error('Error logging activity:', error);
-        throw new Error('Failed to log activity');
+        console.error("Error logging activity:", error);
+        throw new Error("Failed to log activity");
     }
 });
 exports.createActivitiesController = createActivitiesController;
@@ -40,6 +40,6 @@ exports.deleteAllTheactivities = (0, catchAsync_1.default)((req, res, next) => _
     yield activitiesModel_1.default.deleteMany();
     res.status(200).json({
         status: "successful",
-        message: 'all activities successfully deleted'
+        message: "all activities successfully deleted",
     });
 }));

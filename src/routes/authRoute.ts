@@ -51,7 +51,6 @@ const router = express.Router();
  *           description: Date the user was created
  */
 
-
 /**
  * @swagger
  * /api/v1/auth/register:
@@ -222,7 +221,6 @@ router
   .route("/makeUserAdmin/:id")
   .patch(protectedRoute, restrictedRoute(["super-admin"]), makeUserAdmin);
 
-
 /**
  * @swagger
  * /api/v1/auth/resetPassword/{token}:
@@ -257,7 +255,6 @@ router
  *         description: Invalid token or password mismatch
  */
 router.route("/resetPassword/:token").patch(resetPassword);
-
 
 /**
  * @swagger

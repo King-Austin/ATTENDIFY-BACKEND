@@ -457,15 +457,6 @@ export const deleteAttendanceByID = catchAsync(async (req, res, next) => {
 
   const user = await verifyTokenAndGetUser(token, next);
 
-  // if (!user) {
-  //   return next(
-  //     new AppError(
-  //       "Could not find user with this token. please login again.",
-  //       404
-  //     )
-  //   );
-  // }
-
   const activityData: activityType = {
     userName: user?.fullName,
     userRole: user?.role,
@@ -541,12 +532,6 @@ export const addCarryoverStudentToTheAttendance = catchAsync(
       return next(new AppError("This attendance does not exist.", 404));
     }
 
-    // if (!theStudent) {
-    //   return next(
-    //     new AppError("This student does not exist. Kindly add the student.", 404)
-    //   );
-    // }
-
     // Check if the student is already in the attendance list
     const studentExists = theAttendance.students.some(
       (student) => student.studentId.toString() === studentId
@@ -597,43 +582,3 @@ export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {
     null
   );
 });
-
-// export const getAttendanceWithPagination = catchAsync(async (req, res, next) => {
-//   const { sessionId } = req.params; // Academic session ID passed as parameter
-//   const { page = 1, limit = 10 } = req.query; // Pagination parameters with default values
-
-//   // Validate academic session existence
-//   const academicSession = await AcedemicSession.findById(sessionId);
-//   if (!academicSession) {
-//     return next(new AppError("Academic session not found.", 404));
-//   }
-
-//   // Pagination calculation
-//   const skip = (page - 1) * limit;
-
-//   // Fetch attendance records with pagination
-//   const attendanceRecords = await Attendance.find({ acedemicSession: sessionId })
-//     .skip(skip)
-//     .limit(Number(limit))
-//     .populate('course') // Optional: populate the course details
-//     .populate('students.studentId'); // Optional: populate student details
-
-//   // Count total records for pagination metadata
-//   const totalRecords = await Attendance.countDocuments({ acedemicSession: sessionId });
-
-//   // Handle case when no records are found
-//   if (!attendanceRecords || attendanceRecords.length === 0) {
-//     return next(new AppError("No attendance records found for this academic session.", 404));
-//   }
-
-//   res.status(200).json({
-//     status: "success",
-//     data: attendanceRecords,
-//     pagination: {
-//       totalRecords,
-//       totalPages: Math.ceil(totalRecords / limit),
-//       currentPage: Number(page),
-//       pageSize: Number(limit),
-//     },
-//   });
-// });

@@ -22,7 +22,13 @@ export const getAllLecturer = catchAsync(async (req, res, next) => {
   if (!users) {
     return next(new AppError("Something went wrong. Please try again", 400));
   }
-  return AppResponse(res, 200, "success", "fetching lecturers succesful", users);
+  return AppResponse(
+    res,
+    200,
+    "success",
+    "fetching lecturers succesful",
+    users
+  );
 });
 
 //FOR FETCHING A USER USING ITS ID
@@ -48,8 +54,8 @@ export const createALecturer = catchAsync(async (req, res, next) => {
     fullName,
     email,
     password: `*12345${email}`,
-    confirmPassword: `*12345${email}`
-  }
+    confirmPassword: `*12345${email}`,
+  };
 
   //if user already exist with the provided email, return an error message
   if (userExistWithEmail) {
@@ -62,13 +68,12 @@ export const createALecturer = catchAsync(async (req, res, next) => {
 
   const user = await User.create(lecturerDetails);
 
-
   return AppResponse(
     res,
     200,
     "success",
     "Lecturer registration successful.",
-   user
+    user
   );
 });
 
@@ -109,4 +114,4 @@ export const deleteALecturer = catchAsync(async (req, res, next) => {
   await User.findByIdAndDelete(req.params.id);
 
   return AppResponse(res, 200, "success", "deleted successfully", null);
-}); 
+});
