@@ -2,6 +2,7 @@ import express from "express";
 import { deleteAllAcedemicSessions } from "../controllers/acedemicSessionController";
 import {
   activateAttendance,
+  addCarryoverStudentToTheAttendance,
   createAttendance,
   deactivateAttendance,
   deleteAllTheAttendance,
@@ -214,5 +215,7 @@ router.delete("/deleteAllAttendance", protectedRoute, restrictedRoute(["admin"])
  *         description: Access forbidden
  */
 router.patch("/markAbsent/:attendanceId", markAbsent);
+
+router.patch("/addCarryoverStudentToTheAttendance/:attendanceId", protectedRoute, addCarryoverStudentToTheAttendance);
 
 export default router;

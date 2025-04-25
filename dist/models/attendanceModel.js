@@ -80,7 +80,7 @@ const attendanceSchema = new Schema({
     },
     students: [
         {
-            studentId: { type: Schema.ObjectId, required: true },
+            studentId: { type: String, required: true },
             name: { type: String, required: true },
             regNo: { type: String, required: true },
             level: { type: String, required: true },

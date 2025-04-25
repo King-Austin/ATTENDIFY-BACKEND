@@ -15,7 +15,7 @@ export const createAttendance = catchAsync(async (req, res, next) => {
   const { course, acedemicSession, semester, level } = req.body;
 
   if (!course || !acedemicSession || !semester || !level) {
-    return next(new AppError("please fill in the required field", 422))
+    return next(new AppError("please fill in the required field", 422));
   }
 
   //const semesterlowercase = semester.toLowerCase()
@@ -28,9 +28,7 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     );
   }
 
-  const findAcedemicSession = await AcedemicSession.findById(
-    acedemicSession
-  );
+  const findAcedemicSession = await AcedemicSession.findById(acedemicSession);
 
   if (!findAcedemicSession) {
     return next(
@@ -46,10 +44,8 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     start: findAcedemicSession.start,
     end: findAcedemicSession.end,
     active: findAcedemicSession.active,
-    id: findAcedemicSession._id
-  }
-
-
+    id: findAcedemicSession._id,
+  };
 
   const findCourse = await Course.findById(course);
 
@@ -62,8 +58,8 @@ export const createAttendance = catchAsync(async (req, res, next) => {
     courseCode: findCourse.courseCode,
     semester: findCourse.semester,
     level: findCourse.level,
-    id: findCourse._id
-  }
+    id: findCourse._id,
+  };
   // Step 2: Prepare the `students` array for the attendance record
   const students = studentsOfferingTheCourse.map((student) => ({
     studentId: student._id,
@@ -79,40 +75,40 @@ export const createAttendance = catchAsync(async (req, res, next) => {
   const newAttendance = await Attendance.create({
     course: theCourse,
     acedemicSession: theAcademicSession,
-    semester,//: semesterlowercase,
+    semester, //: semesterlowercase,
     level,
     students,
   });
 
   const token = req.cookies.jwt;
-  
-    if (!token) {
-      return next(
-        new AppError("You are not authorized to perform this action.", 401)
-      );
-    }
-  
-    const user = await verifyTokenAndGetUser(token, next);
-  
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
+
+  if (!token) {
+    return next(
+      new AppError("You are not authorized to perform this action.", 401)
+    );
+  }
+
+  const user = await verifyTokenAndGetUser(token, next);
+
+  // if (!user) {
+  //   return next(
+  //     new AppError(
+  //       "Could not find user with this token. please login again.",
+  //       404
+  //     )
+  //   );
+  // }
 
   const activityData: activityType = {
     userName: user?.fullName,
     userRole: user?.role,
-    action: `${user?.fullName} just created a new attendance`
-  }
+    action: `${user?.fullName} just created a new attendance`,
+  };
   if (user) {
     try {
-      createActivitiesController(activityData)
+      createActivitiesController(activityData);
     } catch (error) {
-      return next(new AppError("Failed to add activities", 400))
+      return next(new AppError("Failed to add activities", 400));
     }
   }
 
@@ -129,19 +125,18 @@ export const createAttendance = catchAsync(async (req, res, next) => {
 
 // Activate attendance and mark all students as absent for the day
 export const activateAttendance = catchAsync(async (req, res, next) => {
-
   const { attendanceId } = req.params;
 
   // Find the attendance record for the specific course
-  const attendanceRecord : any = await Attendance.findById(attendanceId)
+  const attendanceRecord: any = await Attendance.findById(attendanceId)
     .populate("course")
-    .populate("acedemicSession"); 
- 
+    .populate("acedemicSession");
+
   if (!attendanceRecord) {
     return next(
       new AppError("Attendance record not found for the course.", 404)
     );
-  } 
+  }
 
   if (attendanceRecord.active) {
     return next(
@@ -170,34 +165,34 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
   await attendanceRecord.save();
 
   const token = req.cookies.jwt;
-  
-    if (!token) {
-      return next(
-        new AppError("You are not authorized to perform this action.", 401)
-      );
-    }
-  
-    const user = await verifyTokenAndGetUser(token, next);
-  
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
+
+  if (!token) {
+    return next(
+      new AppError("You are not authorized to perform this action.", 401)
+    );
+  }
+
+  const user = await verifyTokenAndGetUser(token, next);
+
+  // if (!user) {
+  //   return next(
+  //     new AppError(
+  //       "Could not find user with this token. please login again.",
+  //       404
+  //     )
+  //   );
+  // }
 
   const activityData: activityType = {
     userName: user?.fullName,
     userRole: user?.role,
-    action: `${user?.fullName} activated ${attendanceRecord.course.courseCode} attendance for student to mark.`
-  }
+    action: `${user?.fullName} activated ${attendanceRecord.course.courseCode} attendance for student to mark.`,
+  };
   if (user) {
     try {
-      createActivitiesController(activityData)
+      createActivitiesController(activityData);
     } catch (error) {
-      return next(new AppError("Failed to add activities", 400))
+      return next(new AppError("Failed to add activities", 400));
     }
   }
 
@@ -214,6 +209,15 @@ export const activateAttendance = catchAsync(async (req, res, next) => {
 export const markAttendance = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
   const { regNo, level } = req.body; // Include level in the request body
+
+  if (!regNo || !level || !attendanceId) {
+    return next(
+      new AppError(
+        "Missing regNo or fingerprint or the attendance ID in request.",
+        400
+      )
+    );
+  }
 
   // Find the attendance record
   const attendance = await Attendance.findById(attendanceId);
@@ -236,7 +240,8 @@ export const markAttendance = catchAsync(async (req, res, next) => {
 
   // Find the student by matching the fingerprint
   const student = attendance.students.find(
-    (student) => /*student.fingerPrint === fingerprint || */student.regNo === regNo
+    (student) =>
+      /*student.fingerPrint === fingerprint || */ student.regNo === regNo
   );
 
   if (!student) {
@@ -258,11 +263,11 @@ export const markAttendance = catchAsync(async (req, res, next) => {
       record.status === "absent"
   );
 
-  if (attendanceRecordIndex === -1) {
-    return next(
-      new AppError("No absent record found for today to update.", 400)
-    );
-  }
+  // if (attendanceRecordIndex === -1) {
+  //   return next(
+  //     new AppError("No absent record found for today to update.", 400)
+  //   );
+  // }
 
   // Update the status to "present"
   student.attendanceStatus[attendanceRecordIndex].status = "present";
@@ -284,6 +289,15 @@ export const markAbsent = catchAsync(async (req, res, next) => {
   const { attendanceId } = req.params;
   const { fingerprint, regNo } = req.body;
 
+  if (!regNo || !attendanceId) {
+    return next(
+      new AppError(
+        "Missing regNo or fingerprint or the attendance ID in request.",
+        400
+      )
+    );
+  }
+
   // Find the attendance record
   const attendance: any = await Attendance.findById(attendanceId);
 
@@ -296,10 +310,10 @@ export const markAbsent = catchAsync(async (req, res, next) => {
     return next(new AppError("Attendance is not active.", 400));
   }
 
-
   // Find the student by matching the fingerprint
-  const student : any = attendance.students.find(
-    (student: any) => student.fingerPrint === fingerprint || student.regNo === regNo
+  const student: any = attendance.students.find(
+    (student: any) =>
+      student.fingerPrint === fingerprint || student.regNo === regNo
   );
 
   if (!student) {
@@ -321,11 +335,11 @@ export const markAbsent = catchAsync(async (req, res, next) => {
       record.status === "absent"
   );
 
-  if (attendanceRecordIndex !== -1) {
-    return next(
-      new AppError("Student is already marked as absent for today.", 400)
-    );
-  }
+  // if (attendanceRecordIndex !== -1) {
+  //   return next(
+  //     new AppError("Student is already marked as absent for today.", 400)
+  //   );
+  // }
 
   // Add a new record to mark the student as "absent"
   student.attendanceStatus.push({
@@ -362,34 +376,34 @@ export const deactivateAttendance = catchAsync(async (req, res, next) => {
   await attendance.save();
 
   const token = req.cookies.jwt;
-  
-    if (!token) {
-      return next(
-        new AppError("You are not authorized to perform this action.", 401)
-      );
-    }
-  
-    const user = await verifyTokenAndGetUser(token, next);
-  
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
+
+  if (!token) {
+    return next(
+      new AppError("You are not authorized to perform this action.", 401)
+    );
+  }
+
+  const user = await verifyTokenAndGetUser(token, next);
+
+  // if (!user) {
+  //   return next(
+  //     new AppError(
+  //       "Could not find user with this token. please login again.",
+  //       404
+  //     )
+  //   );
+  // }
 
   const activityData: activityType = {
     userName: user?.fullName,
     userRole: user?.role,
-    action: `${user?.fullName} Deactivated attendance`
-  }
+    action: `${user?.fullName} Deactivated attendance`,
+  };
   if (user) {
     try {
-      createActivitiesController(activityData)
+      createActivitiesController(activityData);
     } catch (error) {
-      return next(new AppError("Failed to add activities", 400))
+      return next(new AppError("Failed to add activities", 400));
     }
   }
 
@@ -404,13 +418,13 @@ export const deactivateAttendance = catchAsync(async (req, res, next) => {
 
 //FETCH ALL ATTENDANCE RECORDS
 export const fetchAllAttendance = catchAsync(async (req, res, next) => {
-  // Fetch all attendance records 
-  const attendanceRecords = await Attendance.find()
-  .populate("course")
-  .populate("acedemicSession");
-  
+  // Fetch all attendance records
+  const attendanceRecords = await Attendance.find();
+  //.populate("course")
+  //.populate("acedemicSession");
+
   if (!attendanceRecords) {
-    return next(new AppError("Could not find attendance records", 404))
+    return next(new AppError("Could not find attendance records", 404));
   }
 
   return AppResponse(
@@ -420,7 +434,7 @@ export const fetchAllAttendance = catchAsync(async (req, res, next) => {
     `Attendance fetched successfully.`,
     attendanceRecords
   );
-});  
+});
 
 //DELETE ATTENDANCE BY ID
 export const deleteAttendanceByID = catchAsync(async (req, res, next) => {
@@ -434,34 +448,34 @@ export const deleteAttendanceByID = catchAsync(async (req, res, next) => {
   await Attendance.findByIdAndDelete(attendanceId);
 
   const token = req.cookies.jwt;
-  
-    if (!token) {
-      return next(
-        new AppError("You are not authorized to perform this action.", 401)
-      );
-    }
-  
-    const user = await verifyTokenAndGetUser(token, next);
-  
-    // if (!user) {
-    //   return next(
-    //     new AppError(
-    //       "Could not find user with this token. please login again.",
-    //       404
-    //     )
-    //   );
-    // }
+
+  if (!token) {
+    return next(
+      new AppError("You are not authorized to perform this action.", 401)
+    );
+  }
+
+  const user = await verifyTokenAndGetUser(token, next);
+
+  // if (!user) {
+  //   return next(
+  //     new AppError(
+  //       "Could not find user with this token. please login again.",
+  //       404
+  //     )
+  //   );
+  // }
 
   const activityData: activityType = {
     userName: user?.fullName,
     userRole: user?.role,
-    action: `${user?.fullName} deleted a ${attendance.level} attendance`
-  }
+    action: `${user?.fullName} deleted a ${attendance.level} attendance`,
+  };
   if (user) {
     try {
-      createActivitiesController(activityData)
+      createActivitiesController(activityData);
     } catch (error) {
-      return next(new AppError("Failed to add activities", 400))
+      return next(new AppError("Failed to add activities", 400));
     }
   }
 
@@ -508,60 +522,68 @@ export const fetchAttendanceBySession = catchAsync(async (req, res, next) => {
 });
 
 //ADD STUDENT TO ATTENDANCE
-export const addStudentToTheAttendance = catchAsync(async (req, res, next) => {
-  const { attendanceId } = req.params; // Attendance ID
-  const { studentId } = req.body;
+export const addCarryoverStudentToTheAttendance = catchAsync(
+  async (req, res, next) => {
+    const { attendanceId } = req.params; // Attendance ID
 
-  // Find the attendance record
-  const theAttendance = await Attendance.findById(attendanceId);
-  const theStudent = await Students.findById(studentId);
+    const { name, regNo, level, fingerPrint, addmissionYear, email } = req.body;
 
-  if (!theAttendance) {
-    return next(new AppError("This attendance does not exist.", 404));
-  }
+    if (!name || !regNo || !level || !addmissionYear || !email) {
+      return next(new AppError("Please fill in the required field", 422));
+    }
 
-  if (!theStudent) {
-    return next(
-      new AppError("This student does not exist. Kindly add the student.", 404)
+    // Find the attendance record
+    const theAttendance = await Attendance.findById(attendanceId);
+
+    const studentId = regNo + email + addmissionYear;
+
+    if (!theAttendance) {
+      return next(new AppError("This attendance does not exist.", 404));
+    }
+
+    // if (!theStudent) {
+    //   return next(
+    //     new AppError("This student does not exist. Kindly add the student.", 404)
+    //   );
+    // }
+
+    // Check if the student is already in the attendance list
+    const studentExists = theAttendance.students.some(
+      (student) => student.studentId.toString() === studentId
+    );
+
+    if (studentExists) {
+      return next(
+        new AppError("Student is already added to this attendance.", 400)
+      );
+    }
+
+    // Create the student object
+    const newStudent: any = {
+      studentId: studentId,
+      name: name,
+      regNo: regNo,
+      level: level,
+      fingerPrint: fingerPrint,
+      addmissionYear: addmissionYear,
+      attendanceStatus: [], // Initially empty
+    };
+
+    // Add the new student to the attendance list
+    theAttendance.students.push(newStudent);
+
+    // Save the updated attendance record
+    await theAttendance.save();
+
+    return AppResponse(
+      res,
+      200,
+      "success",
+      "Student successfully added to attendance.",
+      theAttendance
     );
   }
-
-  // Check if the student is already in the attendance list
-  const studentExists = theAttendance.students.some(
-    (student) => student.studentId.toString() === studentId
-  );
-
-  if (studentExists) {
-    return next(
-      new AppError("Student is already added to this attendance.", 400)
-    );
-  }
-
-  // Create the student object
-  const newStudent: any = {
-    studentId: theStudent.id,
-    name: theStudent.name,
-    regNo: theStudent.regNo,
-    level: theStudent.level,
-    fingerPrint: theStudent.fingerPrint,
-    addmissionYear: theStudent.addmissionYear,
-    attendanceStatus: [], // Initially empty
-  };
-
-  // Add the new student to the attendance list
-  theAttendance.students.push(newStudent);
-
-  // Save the updated attendance record
-  await theAttendance.save();
-
-  return AppResponse(
-    res,
-    200,
-    "success",
-    "Student successfully added to attendance.",
-    theAttendance
-  );
-});
+);
 
 //DELETE ALL ATTENDANCE
 export const deleteAllTheAttendance = catchAsync(async (req, res, next) => {

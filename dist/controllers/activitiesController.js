@@ -21,10 +21,10 @@ const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const createActivitiesController = (activityData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newActivity = yield activitiesModel_1.default.create(activityData);
-        console.log('Activity logged successfully:', newActivity); // Debugging
+        console.log('Activity logged successfully:', newActivity);
     }
     catch (error) {
-        console.error('Error logging activity:', error); // Debugging
+        console.error('Error logging activity:', error);
         throw new Error('Failed to log activity');
     }
 });

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAllTheAttendance = exports.addStudentToTheAttendance = exports.fetchAttendanceBySession = exports.deleteAttendanceByID = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAbsent = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
+exports.deleteAllTheAttendance = exports.addCarryoverStudentToTheAttendance = exports.fetchAttendanceBySession = exports.deleteAttendanceByID = exports.fetchAllAttendance = exports.deactivateAttendance = exports.markAbsent = exports.markAttendance = exports.activateAttendance = exports.createAttendance = void 0;
 const verifyTokenAndGetUser_1 = require("../utils/verifyTokenAndGetUser");
 const appError_1 = require("../errors/appError");
 const acedemicSessionModel_1 = require("../models/acedemicSessionModel");
@@ -43,7 +43,7 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
         start: findAcedemicSession.start,
         end: findAcedemicSession.end,
         active: findAcedemicSession.active,
-        id: findAcedemicSession._id
+        id: findAcedemicSession._id,
     };
     const findCourse = yield courseModel_1.Course.findById(course);
     if (!findCourse) {
@@ -54,7 +54,7 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
         courseCode: findCourse.courseCode,
         semester: findCourse.semester,
         level: findCourse.level,
-        id: findCourse._id
+        id: findCourse._id,
     };
     // Step 2: Prepare the `students` array for the attendance record
     const students = studentsOfferingTheCourse.map((student) => ({
@@ -90,7 +90,7 @@ exports.createAttendance = (0, catchAsync_1.default)((req, res, next) => __await
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} just created a new attendance`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} just created a new attendance`,
     };
     if (user) {
         try {
@@ -146,7 +146,7 @@ exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} activated ${attendanceRecord.course.courseCode} attendance for student to mark.`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} activated ${attendanceRecord.course.courseCode} attendance for student to mark.`,
     };
     if (user) {
         try {
@@ -162,6 +162,9 @@ exports.activateAttendance = (0, catchAsync_1.default)((req, res, next) => __awa
 exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
     const { regNo, level } = req.body; // Include level in the request body
+    if (!regNo || !level || !attendanceId) {
+        return next(new appError_1.AppError("Missing regNo or fingerprint or the attendance ID in request.", 400));
+    }
     // Find the attendance record
     const attendance = yield attendanceModel_1.Attendance.findById(attendanceId);
     if (!attendance) {
@@ -176,7 +179,8 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
         return next(new appError_1.AppError("Attendance cannot be marked for this level.", 400));
     }
     // Find the student by matching the fingerprint
-    const student = attendance.students.find((student) => /*student.fingerPrint === fingerprint || */ student.regNo === regNo);
+    const student = attendance.students.find((student) => 
+    /*student.fingerPrint === fingerprint || */ student.regNo === regNo);
     if (!student) {
         return next(new appError_1.AppError("Student not found with the reg no or fingerprint mismatch.", 404));
     }
@@ -185,9 +189,11 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
     // Check if the student is marked absent for today
     const attendanceRecordIndex = student.attendanceStatus.findIndex((record) => record.date.toISOString().split("T")[0] === today &&
         record.status === "absent");
-    if (attendanceRecordIndex === -1) {
-        return next(new appError_1.AppError("No absent record found for today to update.", 400));
-    }
+    // if (attendanceRecordIndex === -1) {
+    //   return next(
+    //     new AppError("No absent record found for today to update.", 400)
+    //   );
+    // }
     // Update the status to "present"
     student.attendanceStatus[attendanceRecordIndex].status = "present";
     // Save the updated attendance record
@@ -198,6 +204,9 @@ exports.markAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter
 exports.markAbsent = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params;
     const { fingerprint, regNo } = req.body;
+    if (!regNo || !attendanceId) {
+        return next(new appError_1.AppError("Missing regNo or fingerprint or the attendance ID in request.", 400));
+    }
     // Find the attendance record
     const attendance = yield attendanceModel_1.Attendance.findById(attendanceId);
     if (!attendance) {
@@ -217,9 +226,11 @@ exports.markAbsent = (0, catchAsync_1.default)((req, res, next) => __awaiter(voi
     // Check if the student is already marked as absent for today
     const attendanceRecordIndex = student.attendanceStatus.findIndex((record) => record.date.toISOString().split("T")[0] === today &&
         record.status === "absent");
-    if (attendanceRecordIndex !== -1) {
-        return next(new appError_1.AppError("Student is already marked as absent for today.", 400));
-    }
+    // if (attendanceRecordIndex !== -1) {
+    //   return next(
+    //     new AppError("Student is already marked as absent for today.", 400)
+    //   );
+    // }
     // Add a new record to mark the student as "absent"
     student.attendanceStatus.push({
         date: new Date(),
@@ -257,7 +268,7 @@ exports.deactivateAttendance = (0, catchAsync_1.default)((req, res, next) => __a
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} Deactivated attendance`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} Deactivated attendance`,
     };
     if (user) {
         try {
@@ -271,10 +282,10 @@ exports.deactivateAttendance = (0, catchAsync_1.default)((req, res, next) => __a
 }));
 //FETCH ALL ATTENDANCE RECORDS
 exports.fetchAllAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // Fetch all attendance records 
+    // Fetch all attendance records
     const attendanceRecords = yield attendanceModel_1.Attendance.find();
-    //// .populate("course")
-    //// .populate("acedemicSession");
+    //.populate("course")
+    //.populate("acedemicSession");
     if (!attendanceRecords) {
         return next(new appError_1.AppError("Could not find attendance records", 404));
     }
@@ -304,7 +315,7 @@ exports.deleteAttendanceByID = (0, catchAsync_1.default)((req, res, next) => __a
     const activityData = {
         userName: user === null || user === void 0 ? void 0 : user.fullName,
         userRole: user === null || user === void 0 ? void 0 : user.role,
-        action: `${user === null || user === void 0 ? void 0 : user.fullName} deleted a ${attendance.level} attendance`
+        action: `${user === null || user === void 0 ? void 0 : user.fullName} deleted a ${attendance.level} attendance`,
     };
     if (user) {
         try {
@@ -334,18 +345,23 @@ exports.fetchAttendanceBySession = (0, catchAsync_1.default)((req, res, next) =>
     return (0, appResponse_1.AppResponse)(res, 200, "success", `Attendance fetched successfully.`, attendanceRecords);
 }));
 //ADD STUDENT TO ATTENDANCE
-exports.addStudentToTheAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.addCarryoverStudentToTheAttendance = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { attendanceId } = req.params; // Attendance ID
-    const { studentId } = req.body;
+    const { name, regNo, level, fingerPrint, addmissionYear, email } = req.body;
+    if (!name || !regNo || !level || !addmissionYear || !email) {
+        return next(new appError_1.AppError("Please fill in the required field", 422));
+    }
     // Find the attendance record
     const theAttendance = yield attendanceModel_1.Attendance.findById(attendanceId);
-    const theStudent = yield studentModel_1.Students.findById(studentId);
+    const studentId = regNo + email + addmissionYear;
     if (!theAttendance) {
         return next(new appError_1.AppError("This attendance does not exist.", 404));
     }
-    if (!theStudent) {
-        return next(new appError_1.AppError("This student does not exist. Kindly add the student.", 404));
-    }
+    // if (!theStudent) {
+    //   return next(
+    //     new AppError("This student does not exist. Kindly add the student.", 404)
+    //   );
+    // }
     // Check if the student is already in the attendance list
     const studentExists = theAttendance.students.some((student) => student.studentId.toString() === studentId);
     if (studentExists) {
@@ -353,12 +369,12 @@ exports.addStudentToTheAttendance = (0, catchAsync_1.default)((req, res, next) =
     }
     // Create the student object
     const newStudent = {
-        studentId: theStudent.id,
-        name: theStudent.name,
-        regNo: theStudent.regNo,
-        level: theStudent.level,
-        fingerPrint: theStudent.fingerPrint,
-        addmissionYear: theStudent.addmissionYear,
+        studentId: studentId,
+        name: name,
+        regNo: regNo,
+        level: level,
+        fingerPrint: fingerPrint,
+        addmissionYear: addmissionYear,
         attendanceStatus: [], // Initially empty
     };
     // Add the new student to the attendance list

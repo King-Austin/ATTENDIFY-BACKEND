@@ -198,4 +198,5 @@ router.delete("/deleteAllAttendance", authController_1.protectedRoute, (0, authC
  *         description: Access forbidden
  */
 router.patch("/markAbsent/:attendanceId", attendanceController_1.markAbsent);
+router.patch("/addCarryoverStudentToTheAttendance/:attendanceId", authController_1.protectedRoute, attendanceController_1.addCarryoverStudentToTheAttendance);
 exports.default = router;

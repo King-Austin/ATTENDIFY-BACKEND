@@ -10,9 +10,9 @@ export const createActivitiesController = async (activityData: activityType) => 
  
     try {
         const newActivity = await Activity.create(activityData)
-        console.log('Activity logged successfully:', newActivity); // Debugging
+        console.log('Activity logged successfully:', newActivity);
     } catch (error) {
-        console.error('Error logging activity:', error); // Debugging
+        console.error('Error logging activity:', error);
         throw new Error('Failed to log activity');
     }
 }; 
