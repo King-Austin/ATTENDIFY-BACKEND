@@ -16,7 +16,8 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: process.env.BACKEND_URL || "https://smart-attendance-system-backend.vercel.app/",
+                url: process.env.BACKEND_URL ||
+                    "https://smart-attendance-system-backend.vercel.app/",
             },
         ],
         components: {
@@ -196,14 +197,15 @@ const swaggerOptions = {
             },
         },
     },
-    apis: ["./src/routes/*.js"], // point to your route files
+    apis: ["./dist/routes/*.js"], // point to your route files
 };
 // Initialize swagger-jsdoc with options
 const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
 // Swagger setup function to be used
 const setupSwaggerDocs = (app) => {
     app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec, {
-        customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+        customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
+        swaggerUrl: "https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.52.5/swagger-ui-bundle.js",
     }));
 };
 exports.setupSwaggerDocs = setupSwaggerDocs;
