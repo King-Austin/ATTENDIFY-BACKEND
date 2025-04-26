@@ -202,6 +202,8 @@ const swaggerOptions = {
 const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
 // Swagger setup function to be used
 const setupSwaggerDocs = (app) => {
-    app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
+    app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec, {
+        customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    }));
 };
 exports.setupSwaggerDocs = setupSwaggerDocs;
