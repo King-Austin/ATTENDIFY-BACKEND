@@ -3,7 +3,7 @@
 
 ## Attendify Backend
 
-Attendify is a modern attendance management system that streamlines how lecturers and academic staff manage student attendance. This backend is built with Node.js, Express.js, Typescript, and MongoDB, providing a RESTful API for managing users, attendance sessions, activity logs, academic sessions, and more.
+Attendify is a modern attendance management system that streamlines how lecturers and academic staff manage student attendance. I developed this project to solve the challenges we face with paper attendance in my school. The idea is to manage attendance digitally, where students' attendance for each class is recorded online, stored safely, and can be downloaded anytime. With this system, the school management can also easily monitor students' attendance performance without dealing with lost papers. This is the backend built with Node.js, Express.js, Typescript, and MongoDB, providing a RESTful API for managing users, attendance sessions, activity logs, academic sessions, and more.
 
 ## Project Background
 Attendify was built to solve a real-life problem I faced as a class representative. Manually taking attendance was not only tedious but also unreliable — paper attendance could easily get lost or damaged. Lecturers often misplaced them, and the Head of Department found it difficult to track student performance from scattered records.
