@@ -89,7 +89,7 @@ router.patch("/activateAttendance/:attendanceId", authController_1.protectedRout
  *       403:
  *         description: Access forbidden
  */
-router.patch("/markAttendance/:attendanceId", authController_1.protectedRoute, attendanceController_1.markAttendance);
+router.patch("/markAttendance/:attendanceId", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), attendanceController_1.markAttendance);
 /**
  * @swagger
  * /api/v1/attendance/deactivateAttendance/{attendanceId}:
@@ -198,5 +198,5 @@ router.delete("/deleteAllAttendance", authController_1.protectedRoute, (0, authC
  *         description: Access forbidden
  */
 router.patch("/markAbsent/:attendanceId", attendanceController_1.markAbsent);
-router.patch("/addCarryoverStudentToTheAttendance/:attendanceId", authController_1.protectedRoute, attendanceController_1.addCarryoverStudentToTheAttendance);
+router.patch("/addCarryoverStudentToTheAttendance/:attendanceId", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), attendanceController_1.addCarryoverStudentToTheAttendance);
 exports.default = router;

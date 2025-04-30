@@ -44,7 +44,7 @@ const router = express.Router();
  */
 router
   .route("/createStudent")
-  .post(protectedRoute, restrictedRoute(["admin"]), createStudent);
+  .post(protectedRoute, restrictedRoute(["admin", "lecturer"]), createStudent);
 
 /**
  * @swagger

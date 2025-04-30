@@ -41,7 +41,7 @@ const router = express_1.default.Router();
  */
 router
     .route("/createAcedemicSession")
-    .post(authController_1.protectedRoute, /*restrictedRoute(["admin"]),*/ acedemicSessionController_1.createAcedemicSession);
+    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), acedemicSessionController_1.createAcedemicSession);
 /**
  * @swagger
  * /api/v1/acedemicSession/fetchallAcedemicSession:

@@ -196,7 +196,7 @@ const swaggerOptions = {
             },
         },
     },
-    apis: ["./dist/routes/*.js"], // point to your route files
+    apis: ["./src/routes/*.ts"], // point to your route files
 };
 // Initialize swagger-jsdoc with options
 const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);

@@ -104,7 +104,7 @@ router.patch(
  *       403:
  *         description: Access forbidden
  */
-router.patch("/markAttendance/:attendanceId", protectedRoute, markAttendance);
+router.patch("/markAttendance/:attendanceId", protectedRoute, restrictedRoute(["admin", "lecturer"]), markAttendance);
 
 /**
  * @swagger
@@ -238,6 +238,7 @@ router.patch("/markAbsent/:attendanceId", markAbsent);
 router.patch(
   "/addCarryoverStudentToTheAttendance/:attendanceId",
   protectedRoute,
+  restrictedRoute(["admin", "lecturer"]),
   addCarryoverStudentToTheAttendance
 );
 

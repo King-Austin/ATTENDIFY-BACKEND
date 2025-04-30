@@ -36,7 +36,7 @@ const router = express_1.default.Router();
  */
 router
     .route("/createLecturer")
-    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), lecturerController_1.createALecturer);
+    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), lecturerController_1.createALecturer);
 /**
  * @swagger
  * /api/v1/lecturer/getALecturer:

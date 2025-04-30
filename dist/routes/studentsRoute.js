@@ -39,7 +39,7 @@ const router = express_1.default.Router();
  */
 router
     .route("/createStudent")
-    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), studentController_1.createStudent);
+    .post(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), studentController_1.createStudent);
 /**
  * @swagger
  * /api/v1/student/fetchAllTheStudents:
