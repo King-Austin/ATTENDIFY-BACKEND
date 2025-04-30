@@ -130,7 +130,7 @@ router.patch("/markAttendance/:attendanceId", protectedRoute, restrictedRoute(["
 router.patch(
   "/deactivateAttendance/:attendanceId",
   protectedRoute,
-  restrictedRoute(["admin"]),
+  restrictedRoute(["admin", "lecturer"]),
   deactivateAttendance
 );
 

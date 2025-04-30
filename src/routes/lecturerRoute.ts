@@ -75,7 +75,7 @@ router
  */
 router
   .route("/getAllLecturer")
-  .get(protectedRoute, /*restrictedRoute(["admin"]),*/ getAllLecturer);
+  .get(protectedRoute, restrictedRoute(["admin", "lecturer"]), getAllLecturer);
 
 /**
  * @swagger

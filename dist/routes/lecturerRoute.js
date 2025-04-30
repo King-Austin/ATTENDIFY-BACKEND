@@ -70,7 +70,7 @@ router
  */
 router
     .route("/getAllLecturer")
-    .get(authController_1.protectedRoute, /*restrictedRoute(["admin"]),*/ lecturerController_1.getAllLecturer);
+    .get(authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), lecturerController_1.getAllLecturer);
 /**
  * @swagger
  * /api/v1/lecturer/deleteALecturer:

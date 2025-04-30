@@ -111,7 +111,7 @@ router.patch("/markAttendance/:attendanceId", authController_1.protectedRoute, (
  *       403:
  *         description: Access forbidden
  */
-router.patch("/deactivateAttendance/:attendanceId", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin"]), attendanceController_1.deactivateAttendance);
+router.patch("/deactivateAttendance/:attendanceId", authController_1.protectedRoute, (0, authController_1.restrictedRoute)(["admin", "lecturer"]), attendanceController_1.deactivateAttendance);
 /**
  * @swagger
  * /api/v1/attendance/fetchAllAttendance:
