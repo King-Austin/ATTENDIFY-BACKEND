@@ -42,7 +42,7 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         return next(new appError_1.AppError("There's another academic session within or overlapping with this date range.", 400));
     }
     // Create new session
-    const newSession = yield acedemicSessionModel_1.AcedemicSession.create({
+    let newSession = yield acedemicSessionModel_1.AcedemicSession.create({
         name,
         start: parsedStart,
         end: parsedEnd,
@@ -51,10 +51,14 @@ exports.createAcedemicSession = (0, catchAsync_1.default)((req, res, next) => __
         return next(new appError_1.AppError("Could not create this session. Please try again.", 400));
     }
     // Set all existing active sessions to false
-    yield acedemicSessionModel_1.AcedemicSession.updateMany({ active: false });
+    yield acedemicSessionModel_1.AcedemicSession.updateMany({}, { active: false });
     // Set the new session as active
-    newSession.active = true;
-    yield newSession.save();
+    const foundSession = yield acedemicSessionModel_1.AcedemicSession.findById(newSession._id);
+    if (!foundSession) {
+        return next(new appError_1.AppError("Could not retrieve the new session for activation.", 500));
+    }
+    foundSession.active = true;
+    yield foundSession.save({ validateBeforeSave: false });
     // Promote students to the next level
     for (const student of students) {
         if (student.level === "100") {

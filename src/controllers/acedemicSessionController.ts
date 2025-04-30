@@ -45,7 +45,7 @@ export const createAcedemicSession: any = catchAsync(async (req, res, next) => {
   }
 
   // Create new session
-  const newSession = await AcedemicSession.create({
+  let newSession = await AcedemicSession.create({
     name,
     start: parsedStart,
     end: parsedEnd,
@@ -58,11 +58,16 @@ export const createAcedemicSession: any = catchAsync(async (req, res, next) => {
   }
 
   // Set all existing active sessions to false
-  await AcedemicSession.updateMany({ active: false });
+  await AcedemicSession.updateMany({}, { active: false });
+
 
   // Set the new session as active
-  newSession.active = true;
-  await newSession.save();
+  const foundSession = await AcedemicSession.findById(newSession._id);
+  if (!foundSession) {
+    return next(new AppError("Could not retrieve the new session for activation.", 500));
+  }
+  foundSession.active = true;
+  await foundSession.save({ validateBeforeSave: false });
 
   // Promote students to the next level
   for (const student of students) {
